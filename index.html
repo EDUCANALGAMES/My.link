@@ -3,1523 +3,586 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Центр развития и творчества «Мозаика»</title>
+<title>EDUCANAL_ GAMES</title>
 <style>
-  :root {
-    --bg-color: #eef1f7;
-    --text-main: #1c1c1e;
-    --text-muted: #8e8e93;
-    --glass-bg: rgba(255, 255, 255, 0.45);
-    --glass-bg-strong: rgba(255, 255, 255, 0.65);
-    --glass-border: rgba(255, 255, 255, 0.85);
-    --glass-highlight: rgba(255, 255, 255, 0.9);
-    --glass-shadow: 0 8px 32px rgba(31, 38, 135, 0.10);
-    --glass-blur: blur(24px) saturate(180%);
-    --btn-glass-bg: rgba(255, 255, 255, 0.22);
-    --btn-glass-border: rgba(255, 255, 255, 0.9);
-    --btn-glass-blur: blur(20px) saturate(220%);
-    --btn-highlight-top: rgba(255, 255, 255, 1);
-    --btn-highlight-shine: rgba(255, 255, 255, 0.75);
-    --btn-dark-edge: rgba(0, 0, 0, 0.10);
-    --btn-primary: #007aff;
-    --btn-primary-hover: #0062cc;
-    --btn-radius: 999px;
-    --inner-card: rgba(255, 255, 255, 0.35);
-    --divider: rgba(0, 0, 0, 0.06);
-    --input-border: rgba(0, 0, 0, 0.1);
-    --color-green: #34c759;
-    --color-red: #ff3b30;
-    --color-gold: #ffcc00;
+  :root{
+    --c1:#2a0a4a; --c2:#4b1a8a; --c3:#8b5cf6;
+    --a1:#b794f6; --a2:#7c3aed;
+    --glow:180,130,255;
+    --tint:230,210,255;
   }
-  html[data-theme="dark"] {
-    --bg-color: #0a0a10;
-    --text-main: #f5f5f7;
-    --text-muted: #98989d;
-    --glass-bg: rgba(40, 42, 58, 0.45);
-    --glass-bg-strong: rgba(40, 42, 58, 0.65);
-    --glass-border: rgba(255, 255, 255, 0.12);
-    --glass-highlight: rgba(255, 255, 255, 0.15);
-    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-    --btn-primary-hover: #409cff;
-    --btn-glass-bg: rgba(80, 82, 105, 0.22);
-    --btn-glass-border: rgba(255, 255, 255, 0.25);
-    --btn-highlight-top: rgba(255, 255, 255, 0.45);
-    --btn-highlight-shine: rgba(255, 255, 255, 0.30);
-    --btn-dark-edge: rgba(0, 0, 0, 0.5);
-    --inner-card: rgba(255, 255, 255, 0.06);
-    --divider: rgba(255, 255, 255, 0.08);
-    --input-border: rgba(255, 255, 255, 0.15);
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
-  html, body { transition: background-color 0.5s ease, color 0.5s ease; }
-  body {
-    background-color: var(--bg-color);
-    color: var(--text-main);
-    min-height: 100vh;
-    display: flex; flex-direction: column;
-    overflow-x: hidden; position: relative;
-    background-image:
-      radial-gradient(circle at 15% 20%, rgba(255, 75, 75, 0.10), transparent 45%),
-      radial-gradient(circle at 85% 15%, rgba(255, 204, 0, 0.10), transparent 45%),
-      radial-gradient(circle at 20% 85%, rgba(0, 122, 255, 0.10), transparent 45%),
-      radial-gradient(circle at 85% 85%, rgba(52, 199, 89, 0.10), transparent 45%);
-    background-attachment: fixed;
-  }
-
-  /* ===== ЛОАДЕР ===== */
-  #loader {
-    position: fixed; inset: 0; z-index: 9999;
-    background: var(--bg-color);
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    transition: opacity 0.6s ease, visibility 0.6s ease;
-  }
-  #loader.hide { opacity: 0; visibility: hidden; }
-  .loader-hexes { position: relative; width: 120px; height: 120px; margin-bottom: 24px; }
-  .loader-hex { position: absolute; width: 45px; height: 45px; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); animation: loaderPop 1.4s ease-in-out infinite; }
-  .loader-hex.h1 { background: #ff4b4b; top: 0; left: 37px; animation-delay: 0s; }
-  .loader-hex.h2 { background: #ffcc00; top: 25px; left: 0; animation-delay: 0.15s; }
-  .loader-hex.h3 { background: #007aff; top: 25px; right: 0; animation-delay: 0.3s; }
-  .loader-hex.h4 { background: #34c759; bottom: 0; left: 37px; animation-delay: 0.45s; }
-  @keyframes loaderPop {
-    0%, 100% { transform: scale(0.85); opacity: 0.6; }
-    50% { transform: scale(1.15); opacity: 1; }
-  }
-  .loader-text { font-weight: 700; letter-spacing: 2px; font-size: 14px; color: var(--text-muted); text-transform: uppercase; }
-
-  /* ===== ФОН ===== */
-  .hex-bg { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
-  .hex { position: absolute; will-change: transform; animation-name: drift; animation-timing-function: ease-in-out; animation-iteration-count: infinite; filter: drop-shadow(0 4px 12px var(--hex-glow, rgba(0,0,0,0.15))); transition: opacity 0.5s ease; overflow: visible; }
-  @keyframes drift {
-    0% { transform: translate(0, 0) rotate(0deg); }
-    25% { transform: translate(var(--x1), var(--y1)) rotate(90deg); }
-    50% { transform: translate(var(--x2), var(--y2)) rotate(180deg); }
-    75% { transform: translate(var(--x3), var(--y3)) rotate(270deg); }
-    100% { transform: translate(0, 0) rotate(360deg); }
-  }
-
-  /* ===== ШАПКА ===== */
-  header {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 16px 24px;
-    background: var(--glass-bg-strong);
-    backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
-    border-bottom: 1px solid var(--glass-border);
-    box-shadow: 0 4px 24px rgba(31, 38, 135, 0.06), inset 0 -1px 0 var(--glass-highlight);
-    position: sticky; top: 0; z-index: 100;
-  }
-  .logo-text { font-weight: 800; font-size: 20px; letter-spacing: -0.5px; cursor: default; user-select: none; }
-  .subtitle { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
-  .header-actions { display: flex; align-items: center; gap: 10px; }
-  .theme-btn, .cart-btn, .add-btn, .btn-close, .hero-btn, .modal-btn {
-    position: relative; overflow: hidden; isolation: isolate;
-    transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
-  }
-  .theme-btn::before, .cart-btn::before, .add-btn::before, .btn-close::before, .hero-btn::before, .modal-btn::before {
-    content: ''; position: absolute; top: 0; left: 8%; right: 8%; height: 1px;
-    background: linear-gradient(90deg, transparent 0%, var(--btn-highlight-top) 50%, transparent 100%);
-    pointer-events: none; z-index: 2;
-  }
-  .theme-btn::after, .cart-btn::after, .add-btn::after, .btn-close::after, .hero-btn::after, .modal-btn::after {
-    content: ''; position: absolute; top: 0; left: -75%; width: 50%; height: 100%;
-    background: linear-gradient(115deg, transparent 0%, rgba(255,255,255,0) 30%, var(--btn-highlight-shine) 50%, rgba(255,255,255,0) 70%, transparent 100%);
-    transform: skewX(-20deg); pointer-events: none; z-index: 1;
-  }
-  .theme-btn:hover::after, .cart-btn:hover::after, .add-btn:hover::after, .btn-close:hover::after, .hero-btn:hover::after, .modal-btn:hover::after {
-    animation: shine 0.9s ease;
-  }
-  @keyframes shine { 0% { left: -75%; } 100% { left: 125%; } }
-  .theme-btn {
-    width: 44px; height: 44px;
-    background: var(--btn-glass-bg);
-    backdrop-filter: var(--btn-glass-blur); -webkit-backdrop-filter: var(--btn-glass-blur);
-    border: 1px solid var(--btn-glass-border);
-    box-shadow: 0 8px 24px rgba(31, 38, 135, 0.10), inset 0 1px 0 var(--btn-highlight-top), inset 0 -1px 0 var(--btn-dark-edge);
-    border-radius: 50%; cursor: pointer; font-size: 20px;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--text-main); z-index: 1;
-  }
-  .theme-btn:hover { transform: translateY(-2px) rotate(15deg); background: var(--glass-bg-strong); }
-  .theme-btn:active { transform: scale(0.9); }
-  .cart-btn {
-    background: var(--btn-glass-bg);
-    backdrop-filter: var(--btn-glass-blur); -webkit-backdrop-filter: var(--btn-glass-blur);
-    border: 1px solid var(--btn-glass-border);
-    box-shadow: 0 8px 24px rgba(31, 38, 135, 0.10), inset 0 1px 0 var(--btn-highlight-top), inset 0 -1px 0 var(--btn-dark-edge);
-    padding: 10px 18px; border-radius: var(--btn-radius);
-    font-size: 15px; font-weight: 600; color: var(--text-main); cursor: pointer;
-    display: flex; align-items: center; gap: 8px; z-index: 1;
-  }
-  .cart-btn:hover { transform: translateY(-2px); background: var(--glass-bg-strong); }
-  .cart-btn:active { transform: scale(0.95); }
-  main, .hero, .catalog, footer, section { position: relative; z-index: 1; }
-
-  /* ===== HERO ===== */
-  .hero { padding: 60px 24px 40px; text-align: center; max-width: 800px; margin: 0 auto; }
-  .hero h1 { font-size: 42px; font-weight: 800; letter-spacing: -1px; margin-bottom: 16px; line-height: 1.1; }
-  .hero p { font-size: 18px; color: var(--text-muted); margin-bottom: 32px; line-height: 1.5; }
-  .hero-btn {
-    background: linear-gradient(180deg, rgba(90, 170, 255, 0.85) 0%, var(--btn-primary) 100%);
-    backdrop-filter: var(--btn-glass-blur); -webkit-backdrop-filter: var(--btn-glass-blur);
-    color: #fff; border: 1px solid rgba(255, 255, 255, 0.55);
-    padding: 16px 32px; border-radius: var(--btn-radius);
-    font-size: 17px; font-weight: 600; cursor: pointer;
-    box-shadow: 0 8px 24px rgba(0, 122, 255, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.85), inset 0 -1px 0 rgba(0, 0, 0, 0.18);
-  }
-  .hero-btn:hover { transform: translateY(-2px); }
-  .hero-btn:active { transform: scale(0.96); }
-
-  /* ===== СТАТИСТИКА ===== */
-  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; padding: 24px; max-width: 900px; margin: 0 auto; width: 100%; }
-  .stat-card {
-    background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
-    border: 1px solid var(--glass-border);
-    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.10), inset 0 1px 0 var(--glass-highlight);
-    border-radius: 20px; padding: 20px 16px; text-align: center;
-  }
-  .stat-value {
-    font-size: 30px; font-weight: 800; letter-spacing: -1px;
-    background: linear-gradient(135deg, var(--btn-primary), var(--color-green));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text; margin-bottom: 4px;
-  }
-  .stat-label { font-size: 12px; color: var(--text-muted); font-weight: 500; }
-
-  /* ===== СЕКЦИИ ===== */
-  .section { padding: 40px 24px; max-width: 1200px; margin: 0 auto; width: 100%; }
-  .section-title { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 24px; text-align: center; }
-  .section-title small { display: block; font-size: 14px; color: var(--text-muted); font-weight: 500; margin-top: 6px; letter-spacing: 0; text-transform: none; }
-
-  /* ===== КАТАЛОГ ===== */
-  .catalog { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 24px; max-width: 1200px; margin: 0 auto; width: 100%; }
-  .card {
-    background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
-    border: 1px solid var(--glass-border);
-    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.10), inset 0 1px 0 var(--glass-highlight);
-    border-radius: 24px; padding: 24px;
-    display: flex; flex-direction: column; gap: 14px;
-    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-    position: relative; overflow: hidden;
-    opacity: 0; transform: translateY(20px);
-  }
-  .card.visible { opacity: 1; transform: translateY(0); }
-  .card::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 50%;
-    background: linear-gradient(180deg, var(--glass-highlight) 0%, transparent 100%);
-    opacity: 0.4; pointer-events: none; border-radius: 24px 24px 0 0;
-  }
-  .card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(31, 38, 135, 0.18), inset 0 1px 0 var(--glass-highlight); }
-  .card > * { position: relative; z-index: 1; }
-  .card .lesson-img { width: 100%; height: 180px; object-fit: cover; border-radius: 16px; display: block; box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
-  .card h3 { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
-  .card .desc { font-size: 14px; color: var(--text-muted); line-height: 1.4; }
-  .card .rating { display: flex; align-items: center; gap: 4px; font-size: 14px; color: var(--color-gold); }
-  .card .rating .star-empty { color: var(--text-muted); opacity: 0.4; }
-  .card .rating span.rating-num { color: var(--text-muted); font-size: 12px; margin-left: 6px; }
-  .card .price { font-size: 22px; font-weight: 800; color: var(--btn-primary); }
-  .add-btn {
-    background: var(--btn-glass-bg);
-    backdrop-filter: var(--btn-glass-blur); -webkit-backdrop-filter: var(--btn-glass-blur);
-    border: 1px solid var(--btn-glass-border);
-    box-shadow: inset 0 1px 0 var(--btn-highlight-top), inset 0 -1px 0 var(--btn-dark-edge), 0 4px 12px rgba(31, 38, 135, 0.08);
-    padding: 12px; border-radius: 16px; font-size: 15px; font-weight: 600;
-    color: var(--text-main); cursor: pointer; margin-top: auto; z-index: 1;
-  }
-  .add-btn:hover { transform: translateY(-1px); background: var(--glass-bg-strong); }
-  .add-btn:active { transform: scale(0.96); }
-  .add-btn.in-cart { background: rgba(52, 199, 89, 0.20); color: var(--color-green); border-color: rgba(52, 199, 89, 0.55); }
-
-  /* ===== ГАЛЕРЕЯ ===== */
-  .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
-  .gallery-item {
-    aspect-ratio: 1; border-radius: 20px; overflow: hidden;
-    background: var(--glass-bg); border: 1px solid var(--glass-border);
-    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.10);
-    cursor: pointer; position: relative;
-    opacity: 0; transform: scale(0.95);
-    transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-  }
-  .gallery-item.visible { opacity: 1; transform: scale(1); }
-  .gallery-item:hover { transform: scale(1.03); z-index: 2; }
-  .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .gallery-item .cap { position: absolute; bottom: 0; left: 0; right: 0; padding: 10px 14px; font-size: 12px; font-weight: 500; color: #fff; background: linear-gradient(0deg, rgba(0,0,0,0.7), transparent); }
-  .lightbox {
-    position: fixed; inset: 0; z-index: 1500; background: rgba(0,0,0,0.85);
-    display: flex; align-items: center; justify-content: center; padding: 20px;
-    opacity: 0; pointer-events: none; transition: opacity 0.3s;
-  }
-  .lightbox.open { opacity: 1; pointer-events: auto; }
-  .lightbox img { max-width: 100%; max-height: 90vh; border-radius: 16px; }
-  .lightbox-close {
-    position: absolute; top: 20px; right: 20px;
-    width: 44px; height: 44px; border-radius: 50%;
-    background: rgba(255,255,255,0.15); color: #fff;
-    border: none; font-size: 22px; cursor: pointer;
-    backdrop-filter: blur(10px);
-  }
-
-  /* ===== ОТЗЫВЫ ===== */
-  .reviews { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-  .review-card {
-    background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
-    border: 1px solid var(--glass-border);
-    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.10), inset 0 1px 0 var(--glass-highlight);
-    border-radius: 20px; padding: 20px;
-    display: flex; flex-direction: column; gap: 10px;
-    opacity: 0; transform: translateY(20px);
-    transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-  }
-  .review-card.visible { opacity: 1; transform: translateY(0); }
-  .review-stars { font-size: 16px; color: var(--color-gold); letter-spacing: 2px; }
-  .review-text { font-size: 14px; line-height: 1.5; color: var(--text-main); }
-  .review-author { font-size: 13px; color: var(--text-muted); font-weight: 600; margin-top: auto; }
-
-  /* ===== СЕРТИФИКАТЫ ===== */
-  .certificates { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
-  .cert-card {
-    background: linear-gradient(135deg, rgba(255,204,0,0.15), rgba(255,75,75,0.15));
-    backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
-    border: 1px solid var(--glass-border);
-    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.10), inset 0 1px 0 var(--glass-highlight);
-    border-radius: 20px; padding: 22px; text-align: center;
-    display: flex; flex-direction: column; gap: 8px;
-    position: relative; overflow: hidden;
-  }
-  .cert-card::before { content: '🎁'; position: absolute; top: -10px; right: -10px; font-size: 80px; opacity: 0.15; transform: rotate(-15deg); }
-  .cert-amount { font-size: 30px; font-weight: 800; color: var(--btn-primary); }
-  .cert-title { font-size: 15px; font-weight: 600; }
-  .cert-desc { font-size: 13px; color: var(--text-muted); line-height: 1.4; flex: 1; }
-  .cert-btn {
-    background: var(--btn-primary); color: #fff; border: none;
-    padding: 10px; border-radius: 12px; font-size: 14px; font-weight: 600;
-    cursor: pointer; transition: all 0.25s; margin-top: 6px;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.4);
-  }
-  .cert-btn:hover { background: var(--btn-primary-hover); }
-
-  /* ===== МОДАЛКА ===== */
-  .modal-overlay {
-    position: fixed; inset: 0; background: rgba(0, 0, 0, 0.35);
-    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-    display: flex; align-items: center; justify-content: center;
-    opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
-    z-index: 1000; padding: 16px;
-  }
-  .modal-overlay.open { opacity: 1; pointer-events: auto; }
-  .modal {
-    background: var(--glass-bg-strong);
-    backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
-    border: 1px solid var(--glass-border);
-    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.25), inset 0 1px 0 var(--glass-highlight);
-    border-radius: 32px; padding: 28px;
-    width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto;
-    transform: scale(0.95) translateY(10px);
-    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-    position: relative; overflow-x: hidden;
-  }
-  .modal-overlay.open .modal { transform: scale(1) translateY(0); }
-  .modal h2 { font-size: 22px; font-weight: 800; margin-bottom: 20px; letter-spacing: -0.5px; }
-  .cart-item { display: flex; gap: 12px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--divider); }
-  .cart-item:last-child { border-bottom: none; }
-  .cart-item-img { width: 50px; height: 50px; border-radius: 10px; object-fit: cover; flex-shrink: 0; background: var(--divider); }
-  .cart-item-info { flex: 1; min-width: 0; }
-  .cart-item-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
-  .cart-item-price { font-size: 13px; color: var(--text-muted); }
-  .cart-item-controls { display: flex; align-items: center; gap: 8px; }
-  .qty-btn {
-    width: 28px; height: 28px; border-radius: 8px; border: 1px solid var(--input-border);
-    background: var(--inner-card); color: var(--text-main);
-    cursor: pointer; font-size: 16px; font-weight: 700; line-height: 1;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .qty-btn:hover { background: var(--glass-bg-strong); }
-  .qty-num { min-width: 22px; text-align: center; font-weight: 700; font-size: 14px; }
-  .remove-btn {
-    background: rgba(255, 59, 48, 0.12); color: #ff3b30; border: none;
-    width: 30px; height: 30px; border-radius: 8px; cursor: pointer; font-weight: bold;
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-  }
-  .remove-btn:hover { background: rgba(255, 59, 48, 0.25); }
-
-  .promo-row { display: flex; gap: 8px; margin-top: 16px; }
-  .promo-input {
-    flex: 1; padding: 12px 14px; border-radius: 12px;
-    border: 1px solid var(--input-border); background: var(--inner-card);
-    color: var(--text-main); font-size: 14px; outline: none;
-    text-transform: uppercase; font-weight: 600;
-  }
-  .promo-input:focus { border-color: var(--btn-primary); }
-  .promo-btn { padding: 12px 18px; border-radius: 12px; border: none; background: var(--btn-primary); color: #fff; font-size: 14px; font-weight: 600; cursor: pointer; }
-  .promo-btn:hover { background: var(--btn-primary-hover); }
-  .promo-msg { font-size: 12px; margin-top: 8px; }
-  .promo-msg.ok { color: var(--color-green); }
-  .promo-msg.err { color: var(--color-red); }
-
-  .totals { margin-top: 16px; padding-top: 16px; border-top: 2px solid var(--divider); }
-  .total-row { display: flex; justify-content: space-between; font-size: 14px; padding: 4px 0; color: var(--text-muted); }
-  .total-row.main { font-size: 20px; font-weight: 800; color: var(--text-main); margin-top: 8px; }
-  .total-row.discount { color: var(--color-green); font-weight: 600; }
-
-  .order-textarea {
-    width: 100%; height: 120px; border: 1px solid var(--input-border); border-radius: 16px;
-    padding: 14px; font-size: 13px; font-family: inherit; resize: vertical; margin-top: 12px;
-    background: var(--inner-card); color: var(--text-main); outline: none;
-  }
-  .order-textarea:focus { border-color: var(--btn-primary); }
-  .modal-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
-  .modal-btn { padding: 14px; border-radius: var(--btn-radius); font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; position: relative; overflow: hidden; }
-  .modal-btn:active { transform: scale(0.96); }
-  .btn-copy { background: linear-gradient(180deg, rgba(90, 170, 255, 0.85) 0%, var(--btn-primary) 100%); color: #fff; border: 1px solid rgba(255, 255, 255, 0.55); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6); }
-  .btn-tg { background: linear-gradient(180deg, rgba(70, 185, 235, 0.85) 0%, rgba(34, 158, 217, 0.85) 100%); color: #fff; border: 1px solid rgba(255, 255, 255, 0.5); }
-  .btn-max { background: linear-gradient(180deg, rgba(140, 125, 245, 0.85) 0%, rgba(108, 92, 231, 0.85) 100%); color: #fff; border: 1px solid rgba(255, 255, 255, 0.5); }
-  .btn-close { background: var(--btn-glass-bg); color: var(--text-muted); border: 1px solid var(--btn-glass-border); font-weight: 500; }
-  .btn-close:hover { color: var(--text-main); background: var(--glass-bg-strong); }
-  .empty-cart { text-align: center; color: var(--text-muted); padding: 32px 0; font-size: 15px; }
-
-  /* ===== ФУТЕР + СЧЁТЧИК ===== */
-  footer { text-align: center; padding: 30px 24px 40px; color: var(--text-muted); font-size: 14px; margin-top: auto; }
-
-  .views-bottom {
-    display: flex; justify-content: center;
-    padding: 20px 24px 30px;
-    position: relative; z-index: 1;
-  }
-  .views-badge {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 10px 20px; border-radius: 999px;
-    background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
-    border: 1px solid var(--glass-border);
-    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.10), inset 0 1px 0 var(--glass-highlight);
-    font-size: 14px; font-weight: 600; color: var(--text-main);
-    transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
-    user-select: none;
-  }
-  .views-badge:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(31, 38, 135, 0.15), inset 0 1px 0 var(--glass-highlight); }
-  .views-badge .vc-eye { font-size: 16px; }
-  .views-badge .vc-num {
-    font-weight: 800;
-    background: linear-gradient(135deg, var(--btn-primary), var(--color-green));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .views-badge .vc-label { color: var(--text-muted); font-weight: 500; font-size: 13px; }
-
-  /* ===== АДМИНКА ===== */
-  .admin-overlay {
-    position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-    display: flex; align-items: center; justify-content: center;
-    opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
-    z-index: 2000; padding: 16px;
-  }
-  .admin-overlay.open { opacity: 1; pointer-events: auto; }
-  .admin-panel {
-    background: var(--glass-bg-strong);
-    backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
-    border: 1px solid var(--glass-border);
-    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35), inset 0 1px 0 var(--glass-highlight);
-    border-radius: 28px; padding: 24px;
-    width: 100%; max-width: 760px; max-height: 92vh; overflow-y: auto;
-    transform: scale(0.95) translateY(10px);
-    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-  }
-  .admin-overlay.open .admin-panel { transform: scale(1) translateY(0); }
-  .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-  .admin-header h2 { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
-  .admin-tabs { display: flex; gap: 6px; margin-bottom: 16px; padding: 4px; background: var(--inner-card); border-radius: 14px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .admin-tab { flex: 1; padding: 10px 12px; border-radius: 10px; border: none; background: transparent; color: var(--text-muted); font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
-  .admin-tab.active { background: var(--glass-bg-strong); color: var(--text-main); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-  .admin-tab-content { display: none; }
-  .admin-tab-content.active { display: block; }
-  .admin-field { margin-bottom: 12px; }
-  .admin-field label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .admin-input, .admin-textarea { width: 100%; padding: 10px 14px; border-radius: 12px; border: 1px solid var(--input-border); background: var(--inner-card); color: var(--text-main); font-size: 14px; font-family: inherit; outline: none; }
-  .admin-input:focus, .admin-textarea:focus { border-color: var(--btn-primary); }
-  .admin-textarea { min-height: 70px; resize: vertical; }
-  .color-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; }
-  .color-row label { flex: 1; font-size: 14px; }
-  .color-row input[type="color"] { width: 56px; height: 40px; border-radius: 10px; border: 1px solid var(--input-border); background: transparent; cursor: pointer; padding: 2px; }
-  .color-row .color-value { font-size: 12px; color: var(--text-muted); font-family: monospace; min-width: 70px; text-align: right; }
-  .admin-lesson { background: var(--inner-card); border: 1px solid var(--input-border); border-radius: 14px; padding: 14px; margin-bottom: 12px; display: grid; grid-template-columns: 1fr 90px 40px; gap: 8px; align-items: start; }
-  .admin-lesson-desc { grid-column: 1 / -1; }
-  .admin-lesson-img-block { grid-column: 1 / -1; display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start; }
-  .admin-lesson-img-preview { width: 80px; height: 80px; border-radius: 12px; object-fit: cover; background: var(--divider); border: 1px solid var(--input-border); flex-shrink: 0; }
-  .admin-lesson-img-controls { flex: 1; min-width: 180px; display: flex; flex-direction: column; gap: 6px; }
-  .admin-file-btn { display: inline-block; padding: 8px 12px; border-radius: 10px; background: var(--btn-primary); color: #fff; font-size: 12px; font-weight: 600; cursor: pointer; text-align: center; }
-  .admin-file-btn input[type="file"] { display: none; }
-  .admin-rating-input { display: flex; gap: 4px; grid-column: 1 / -1; align-items: center; font-size: 12px; color: var(--text-muted); }
-  .admin-rating-input .star-btn { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--color-gold); padding: 0; line-height: 1; }
-  .admin-rating-input .star-btn.empty { color: var(--text-muted); opacity: 0.4; }
-  .admin-del-btn { background: rgba(255, 59, 48, 0.15); color: var(--color-red); border: none; width: 36px; height: 36px; border-radius: 10px; cursor: pointer; font-size: 16px; }
-  .admin-del-btn:hover { background: rgba(255, 59, 48, 0.3); }
-  .admin-btn { padding: 12px 18px; border-radius: 14px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; margin-right: 6px; margin-bottom: 8px; transition: all 0.2s; }
-  .admin-btn-primary { background: var(--btn-primary); color: #fff; }
-  .admin-btn-primary:hover { background: var(--btn-primary-hover); }
-  .admin-btn-secondary { background: var(--inner-card); color: var(--text-main); border: 1px solid var(--input-border); }
-  .admin-hint { font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-top: 8px; }
-  .cloud-status { font-size: 12px; padding: 6px 10px; border-radius: 8px; display: inline-block; margin-bottom: 12px; }
-  .cloud-ok { background: rgba(52, 199, 89, 0.15); color: var(--color-green); }
-  .cloud-error { background: rgba(255, 59, 48, 0.15); color: var(--color-red); }
-  .cloud-loading { background: rgba(142, 142, 147, 0.15); color: var(--text-muted); }
-  .admin-item-block { background: var(--inner-card); border: 1px solid var(--input-border); border-radius: 14px; padding: 12px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 8px; }
-  .admin-item-row { display: flex; gap: 8px; align-items: center; }
-
-  @media (max-width: 600px) {
-    .hero h1 { font-size: 30px; }
-    .hero p { font-size: 16px; }
-    header { padding: 12px 16px; }
-    .catalog, .section { padding: 16px; }
-    .modal { padding: 22px; }
-    .subtitle { display: none; }
-    .admin-lesson { grid-template-columns: 1fr 70px 36px; }
-    .admin-panel { padding: 18px; }
-    .section-title { font-size: 22px; }
-  }
+  *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;-webkit-tap-highlight-color:transparent}
+  html,body{min-height:100vh;overflow-x:hidden}
+  body{background:linear-gradient(135deg,var(--c1) 0%,var(--c2) 40%,var(--c3) 100%);background-attachment:fixed;position:relative;display:flex;justify-content:center;padding:30px 16px 60px;transition:background 0.5s}
+  .bubbles{position:fixed;inset:0;overflow:hidden;z-index:0;pointer-events:none}
+  .bubble{position:absolute;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,0.35),rgba(var(--glow),0.08) 60%,transparent 70%);border:1px solid rgba(255,255,255,0.25);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);box-shadow:0 0 40px rgba(var(--glow),0.35),inset 0 0 30px rgba(255,255,255,0.15);animation:float linear infinite;opacity:0.75}
+  @keyframes float{0%{transform:translateY(110vh) translateX(0) scale(0.9);opacity:0}10%{opacity:.8}90%{opacity:.8}100%{transform:translateY(-20vh) translateX(40px) scale(1.1);opacity:0}}
+  .container{width:100%;max-width:460px;position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:18px}
+  .avatar-wrap{position:relative;width:130px;height:130px;border-radius:50%;padding:4px;background:linear-gradient(135deg,rgba(255,255,255,0.5),rgba(var(--glow),0.4));box-shadow:0 0 40px rgba(var(--glow),0.7),0 0 80px rgba(var(--glow),0.5);animation:pulseGlow 3s ease-in-out infinite;cursor:pointer;user-select:none}
+  @keyframes pulseGlow{0%,100%{box-shadow:0 0 40px rgba(var(--glow),0.7),0 0 80px rgba(var(--glow),0.5)}50%{box-shadow:0 0 55px rgba(var(--glow),0.9),0 0 110px rgba(var(--glow),0.7)}}
+  .avatar{width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,var(--a1),var(--a2));display:flex;align-items:center;justify-content:center;font-size:46px;font-weight:800;color:white;overflow:hidden;border:2px solid rgba(255,255,255,0.4)}
+  .avatar img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;pointer-events:none}
+  .nickname{font-size:28px;font-weight:800;color:#fff;text-align:center;letter-spacing:1px;text-shadow:0 0 20px rgba(var(--glow),0.9),0 2px 4px rgba(0,0,0,0.3)}
+  .subtitle{font-size:13px;color:rgba(var(--tint),0.8);letter-spacing:3px;text-transform:uppercase;margin-top:-10px;font-weight:500}
+  .glass{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.22);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-radius:22px;box-shadow:0 8px 32px rgba(var(--glow),0.35),inset 0 1px 0 rgba(255,255,255,0.3),inset 0 -1px 0 rgba(255,255,255,0.05)}
+  .links{width:100%;display:flex;flex-direction:column;gap:10px;padding:12px}
+  .link{display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:18px;text-decoration:none;color:#fff;font-weight:600;font-size:15px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:all 0.25s cubic-bezier(.2,.7,.3,1);position:relative;overflow:hidden}
+  .link::before{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,0.25),transparent 70%);transform:translateX(-100%);transition:transform 0.6s}
+  .link:hover::before,.link:active::before{transform:translateX(100%)}
+  .link:hover,.link:active{transform:translateY(-2px) scale(1.02);background:rgba(255,255,255,0.16);box-shadow:0 10px 30px rgba(var(--glow),0.5)}
+  .link .icon{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;font-weight:700;color:#fff;letter-spacing:-0.5px}
+  .link .text{display:flex;flex-direction:column;line-height:1.2}
+  .link .text small{font-size:11px;font-weight:400;color:rgba(var(--tint),0.7);margin-top:2px}
+  .link .arrow{margin-left:auto;opacity:.5;font-size:18px}
+  .yt{background:linear-gradient(135deg,#ff0000,#cc0000)}.tg{background:linear-gradient(135deg,#2aabee,#229ed9)}.tt{background:linear-gradient(135deg,#25f4ee,#fe2c55)}.tw{background:linear-gradient(135deg,#9146ff,#6441a5)}.dc{background:linear-gradient(135deg,#5865f2,#4752c4)}.ig{background:linear-gradient(135deg,#feda75,#d62976,#962fbf)}.vk{background:linear-gradient(135deg,#0077ff,#005ccc)}.rbx{background:linear-gradient(135deg,#e2231a,#b81a12)}.mc{background:linear-gradient(135deg,#62b47a,#3a7d44)}.bs{background:linear-gradient(135deg,#ffcb2b,#ff8a00)}.custom{background:linear-gradient(135deg,var(--a2),var(--a2))}
+  .section-title{width:100%;text-align:center;font-size:13px;letter-spacing:5px;text-transform:uppercase;color:rgba(var(--tint),0.85);margin:12px 0 -4px;font-weight:600;text-shadow:0 0 12px rgba(var(--glow),0.7)}
+  .personal-row{width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:12px}
+  .p-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:16px 8px;border-radius:18px;text-decoration:none;color:#fff;font-weight:600;font-size:12px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:all 0.25s ease;text-align:center}
+  .p-btn:hover,.p-btn:active{transform:translateY(-3px);background:rgba(255,255,255,0.18);box-shadow:0 10px 25px rgba(var(--glow),0.5)}
+  .p-btn .icon{width:40px;height:40px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700}
+  .empty-box{width:100%;padding:22px 18px;text-align:center;color:rgba(var(--tint),0.6);font-size:13px;letter-spacing:0.5px}
+  .footer{margin-top:8px;font-size:11px;color:rgba(var(--tint),0.5);letter-spacing:1px;text-align:center;user-select:none;cursor:pointer;padding:10px}
+  .views-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:20px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-size:13px;color:rgba(var(--tint),0.85);font-weight:500;letter-spacing:0.5px;margin-top:6px}
+  .views-badge b{color:#fff;font-weight:700}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:100;display:none;align-items:center;justify-content:center;padding:16px;overflow-y:auto}
+  .modal-overlay.active{display:flex}
+  .modal{width:100%;max-width:420px;padding:24px;color:#fff;max-height:90vh;overflow-y:auto}
+  .modal h2{font-size:20px;margin-bottom:16px;text-align:center;letter-spacing:1px}
+  .modal input,.modal select{width:100%;padding:12px 14px;margin-bottom:10px;border-radius:14px;border:1px solid rgba(255,255,255,0.22);background:rgba(255,255,255,0.08);color:#fff;font-size:15px;font-family:inherit;outline:none;transition:0.2s}
+  .modal input:focus,.modal select:focus{border-color:rgba(var(--glow),0.8);background:rgba(255,255,255,0.15);box-shadow:0 0 0 3px rgba(var(--glow),0.25)}
+  .modal input::placeholder{color:rgba(255,255,255,0.5)}
+  .modal select option{background:#1a1a2e;color:#fff}
+  .modal select optgroup{background:#0a0a1a;color:var(--a1);font-weight:700}
+  .modal-btn{width:100%;padding:14px;border-radius:14px;border:none;background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;font-size:15px;font-weight:700;cursor:pointer;margin-top:6px;letter-spacing:0.5px;transition:0.2s}
+  .modal-btn:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(var(--glow),0.6)}
+  .modal-btn.danger{background:linear-gradient(135deg,#ff4757,#c0392b)}
+  .modal-btn.cancel{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2)}
+  .modal-btn:disabled{opacity:.6;cursor:not-allowed}
+  .modal-close{position:absolute;top:16px;right:20px;font-size:24px;cursor:pointer;opacity:.7;background:none;border:none;color:#fff}
+  .modal-close:hover{opacity:1}
+  .error{color:#ff6b7a;font-size:13px;text-align:center;margin-top:6px;min-height:18px}
+  .success{color:#4ade80;font-size:13px;text-align:center;margin-top:6px;min-height:18px}
+  .admin-list{max-height:340px;overflow-y:auto;margin:14px 0;padding-right:4px}
+  .admin-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);margin-bottom:8px}
+  .admin-item .icon{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0}
+  .admin-item .info{flex:1;min-width:0}
+  .admin-item .info b{font-size:14px;display:block}
+  .admin-item .info span{font-size:11px;color:rgba(var(--tint),0.6);display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .admin-item button{background:rgba(255,71,87,0.2);border:1px solid rgba(255,71,87,0.5);color:#ff6b7a;padding:6px 10px;border-radius:10px;font-size:16px;cursor:pointer;flex-shrink:0}
+  .admin-item button:hover{background:rgba(255,71,87,0.4)}
+  .admin-group-title{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(var(--glow),0.9);margin:16px 0 8px;padding-left:4px;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap}
+  .admin-group-title span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .admin-group-title .sec-btns{display:flex;gap:4px;flex-shrink:0}
+  .admin-group-title .sec-btns button{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.25);color:#fff;padding:3px 8px;border-radius:8px;font-size:10px;cursor:pointer;letter-spacing:0;text-transform:none;font-weight:600}
+  .admin-group-title .sec-btns button.del{background:rgba(255,71,87,0.15);border-color:rgba(255,71,87,0.4);color:#ff6b7a}
+  .counter{font-size:12px;text-align:center;color:rgba(var(--tint),0.7);margin-bottom:10px}
+  .divider{height:1px;background:rgba(255,255,255,0.15);margin:16px 0}
+  .label-small{font-size:12px;opacity:.75;margin-bottom:6px;display:block}
+  .loading{text-align:center;color:rgba(var(--tint),0.7);font-size:13px;padding:12px}
+  .theme-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
+  .theme-swatch{aspect-ratio:1;border-radius:14px;cursor:pointer;border:2px solid rgba(255,255,255,0.15);transition:all 0.2s;position:relative;overflow:hidden}
+  .theme-swatch:hover{transform:scale(1.05)}
+  .theme-swatch.active{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,0.3)}
+  .theme-swatch.active::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;font-weight:900;text-shadow:0 2px 6px rgba(0,0,0,0.5)}
+  @media (max-width:380px){.nickname{font-size:24px}.avatar-wrap{width:110px;height:110px}.link{padding:12px 14px;font-size:14px}.link .icon{width:34px;height:34px;font-size:18px}.p-btn{font-size:11px;padding:14px 6px}.theme-grid{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
 <body>
 
-<!-- ЛОАДЕР -->
-<div id="loader">
-  <div class="loader-hexes">
-    <div class="loader-hex h1"></div>
-    <div class="loader-hex h2"></div>
-    <div class="loader-hex h3"></div>
-    <div class="loader-hex h4"></div>
+<div class="bubbles" id="bubbles"></div>
+
+<div class="container">
+  <div class="avatar-wrap" id="avatarTrigger">
+    <div class="avatar">
+      <img src="https://i.ibb.co/gbQ2fbQj/IMG-20260110-221321-022.jpg" alt="avatar">
+    </div>
   </div>
-  <div class="loader-text">Мозаика</div>
+
+  <div class="nickname">EDUCANAL_ GAMES</div>
+  <div class="subtitle">Gaming • Content</div>
+
+  <div id="sectionsContainer" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:18px;"></div>
+
+  <div class="views-badge">👁 <b id="viewsCount">0</b> просмотров</div>
+
+  <div class="footer" id="footerTrigger">© EDUCANAL_ GAMES</div>
 </div>
 
-<div class="hex-bg" id="hexBg" aria-hidden="true"></div>
-
-<header>
-  <div>
-    <div class="logo-text" id="siteLogoText">Мозаика</div>
-    <div class="subtitle" id="siteSubtitle">Центр развития и творчества</div>
-  </div>
-  <div class="header-actions">
-    <button class="theme-btn" onclick="toggleTheme()" id="themeBtn" title="Сменить тему">🌙</button>
-    <button class="cart-btn" onclick="openCart()">
-      🛒 <span id="cart-count">0</span>
-    </button>
-  </div>
-</header>
-
-<section class="hero">
-  <h1 id="heroTitle">Раскрой свой творческий потенциал</h1>
-  <p id="heroText">Занятия по лепке, рисованию, керамике и акварели для детей и взрослых. Первое занятие — бесплатно!</p>
-  <button class="hero-btn" id="heroBtn" onclick="document.getElementById('catalog').scrollIntoView({behavior: 'smooth'})">Выбрать занятие</button>
-</section>
-
-<section class="stats" id="statsSection"></section>
-
-<div class="catalog" id="catalog"></div>
-
-<section class="section" id="gallerySection" style="display:none">
-  <h2 class="section-title">Наши работы<small>Фотографии с занятий и поделки учеников</small></h2>
-  <div class="gallery" id="gallery"></div>
-</section>
-
-<section class="section" id="reviewsSection" style="display:none">
-  <h2 class="section-title">Отзывы родителей<small>Что говорят о нас</small></h2>
-  <div class="reviews" id="reviews"></div>
-</section>
-
-<section class="section" id="certsSection" style="display:none">
-  <h2 class="section-title">Подарочные сертификаты<small>Отличный подарок для близких</small></h2>
-  <div class="certificates" id="certificates"></div>
-</section>
-
-<!-- СЧЁТЧИК ПРОСМОТРОВ ВНИЗУ -->
-<div class="views-bottom">
-  <div class="views-badge" title="Просмотров сайта">
-    <span class="vc-eye">👁</span>
-    <span class="vc-num" id="viewCounter">…</span>
-    <span class="vc-label">просмотров</span>
+<div class="modal-overlay" id="pwdModal">
+  <div class="modal glass" style="position:relative;">
+    <button class="modal-close" onclick="closeModal('pwdModal')">✕</button>
+    <h2>🔒 Вход в админку</h2>
+    <input type="password" id="pwdInput" placeholder="Введи пароль" autocomplete="off">
+    <div class="error" id="pwdError"></div>
+    <button class="modal-btn" onclick="checkPassword()">Войти</button>
   </div>
 </div>
 
-<footer id="siteFooter">© 2026 Центр развития и творчества «Мозаика». Все права защищены.</footer>
+<div class="modal-overlay" id="adminModal">
+  <div class="modal glass" style="position:relative;">
+    <button class="modal-close" onclick="closeModal('adminModal')">✕</button>
+    <h2>⚙️ Админ-панель</h2>
+    <div class="counter" id="counter">Всего элементов: 0 / 500</div>
 
-<div class="modal-overlay" id="cart-modal" onclick="closeCart(event)">
-  <div class="modal" onclick="event.stopPropagation()">
-    <h2>🛒 Ваш заказ</h2>
-    <div id="cart-items-container"></div>
-    <div id="promo-block" style="display:none">
-      <div class="promo-row">
-        <input class="promo-input" id="promo-input" placeholder="Промокод" onkeydown="if(event.key==='Enter')applyPromo()">
-        <button class="promo-btn" onclick="applyPromo()">Применить</button>
-      </div>
-      <div class="promo-msg" id="promo-msg"></div>
-    </div>
-    <div class="totals" id="totals" style="display:none">
-      <div class="total-row"><span>Сумма:</span><span id="subtotal-value">0 ₽</span></div>
-      <div class="total-row discount" id="discount-row" style="display:none"><span>Скидка:</span><span id="discount-value">0 ₽</span></div>
-      <div class="total-row main"><span>Итого:</span><span id="total-value">0 ₽</span></div>
-    </div>
-    <textarea class="order-textarea" id="order-text" readonly placeholder="Здесь появится текст заказа..." style="display:none"></textarea>
-    <div class="modal-actions" id="order-actions" style="display:none">
-      <button class="modal-btn btn-copy" onclick="copyOrder()">📋 Скопировать заказ</button>
-      <a class="modal-btn btn-tg" id="tg-link" href="#" target="_blank">✈️ Написать в Telegram</a>
-      <a class="modal-btn btn-max" id="max-link" href="#" target="_blank">💬 Написать в MAX</a>
-    </div>
-    <button class="modal-btn btn-close" onclick="closeCart()" style="margin-top:12px">Закрыть</button>
-  </div>
-</div>
+    <div class="divider"></div>
+    <span class="label-small">🎨 Тема сайта</span>
+    <div class="theme-grid" id="themeGrid"></div>
 
-<div class="lightbox" id="lightbox" onclick="closeLightbox()">
-  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-  <img id="lightbox-img" src="" alt="">
-</div>
+    <div class="divider"></div>
+    <span class="label-small">➕ Добавить элемент</span>
 
-<div class="admin-overlay" id="adminPanel" onclick="if(event.target===this)closeAdmin()">
-  <div class="admin-panel" onclick="event.stopPropagation()">
-    <div class="admin-header">
-      <h2>🔐 Админ-панель</h2>
-      <button class="remove-btn" onclick="closeAdmin()">✕</button>
+    <select id="newTarget">
+      <optgroup label="Существующие секции" id="sectionsOptgroup"></optgroup>
+      <option value="__new__">➕ Создать новую секцию…</option>
+    </select>
+
+    <div id="newSectionWrap" style="display:none; padding:10px; background:rgba(255,255,255,0.05); border-radius:14px; margin-bottom:10px; border:1px solid rgba(255,255,255,0.15);">
+      <input type="text" id="newSectionName" placeholder="Название новой секции">
+      <select id="newSectionLayout">
+        <option value="list">📋 Список (большие кнопки)</option>
+        <option value="grid">▦ Сетка (3 в ряд, маленькие)</option>
+      </select>
     </div>
 
-    <div class="cloud-status cloud-loading" id="cloudStatus">☁️ Подключение...</div>
+    <input type="text" id="newName" placeholder="Название">
+    <input type="text" id="newSub" placeholder="Подпись (необязательно)">
+    <input type="url" id="newUrl" placeholder="Ссылка (https://...)">
+    <select id="newIcon">
+      <option value="custom">✦ Своя</option>
+      <option value="yt">▶ YouTube</option>
+      <option value="tg">➤ Telegram</option>
+      <option value="tt">♪ TikTok</option>
+      <option value="tw">⌘ Twitch</option>
+      <option value="dc">◇ Discord</option>
+      <option value="ig">◉ Instagram</option>
+      <option value="vk">VK</option>
+      <option value="rbx">◈ Roblox</option>
+      <option value="mc">▣ Minecraft</option>
+      <option value="bs">★ Brawl Stars</option>
+    </select>
+    <div class="error" id="addError"></div>
+    <div class="success" id="addSuccess"></div>
+    <button class="modal-btn" id="addBtn" onclick="addItem()">Добавить</button>
 
-    <div class="admin-tabs">
-      <button class="admin-tab active" onclick="switchTab('settings', this)">⚙️ Настройки</button>
-      <button class="admin-tab" onclick="switchTab('lessons', this)">📚 Занятия</button>
-      <button class="admin-tab" onclick="switchTab('content', this)">📝 Контент</button>
-      <button class="admin-tab" onclick="switchTab('colors', this)">🎨 Цвета</button>
-      <button class="admin-tab" onclick="switchTab('export', this)">💾 Экспорт</button>
-    </div>
+    <div class="divider"></div>
+    <span class="label-small">📋 Управление всем</span>
+    <div class="admin-list" id="adminList"><div class="loading">Загрузка…</div></div>
 
-    <div class="admin-tab-content active" id="tab-settings">
-      <div class="admin-field"><label>Название сайта</label><input class="admin-input" id="f-siteName" type="text"></div>
-      <div class="admin-field"><label>Подзаголовок</label><input class="admin-input" id="f-siteSubtitle" type="text"></div>
-      <div class="admin-field"><label>Заголовок на главной</label><input class="admin-input" id="f-heroTitle" type="text"></div>
-      <div class="admin-field"><label>Текст на главной</label><textarea class="admin-textarea" id="f-heroText"></textarea></div>
-      <div class="admin-field"><label>Текст кнопки</label><input class="admin-input" id="f-heroBtn" type="text"></div>
-      <div class="admin-field"><label>Ссылка Telegram</label><input class="admin-input" id="f-tg" type="text"></div>
-      <div class="admin-field"><label>Ссылка MAX</label><input class="admin-input" id="f-max" type="text"></div>
-      <div class="admin-field"><label>Имя менеджера</label><input class="admin-input" id="f-managerName" type="text"></div>
-      <div class="admin-field"><label>Текст в футере</label><input class="admin-input" id="f-footer" type="text"></div>
-    </div>
-
-    <div class="admin-tab-content" id="tab-lessons">
-      <div id="adminLessonsList"></div>
-      <button class="admin-btn admin-btn-secondary" id="addLessonBtn" onclick="addLesson()">+ Добавить занятие</button>
-    </div>
-
-    <div class="admin-tab-content" id="tab-content">
-      <h3 style="font-size:15px;margin-bottom:10px;">📊 Счётчики</h3>
-      <div id="adminStatsList"></div>
-      <button class="admin-btn admin-btn-secondary" onclick="addStat()">+ Добавить счётчик</button>
-
-      <h3 style="font-size:15px;margin:20px 0 10px;">⭐ Отзывы</h3>
-      <div id="adminReviewsList"></div>
-      <button class="admin-btn admin-btn-secondary" onclick="addReview()">+ Добавить отзыв</button>
-
-      <h3 style="font-size:15px;margin:20px 0 10px;">📷 Галерея</h3>
-      <div id="adminGalleryList"></div>
-      <button class="admin-btn admin-btn-secondary" onclick="addGalleryItem()">+ Добавить фото</button>
-
-      <h3 style="font-size:15px;margin:20px 0 10px;">🎟 Промокоды</h3>
-      <div id="adminPromoList"></div>
-      <button class="admin-btn admin-btn-secondary" onclick="addPromo()">+ Добавить промокод</button>
-
-      <h3 style="font-size:15px;margin:20px 0 10px;">🎁 Сертификаты</h3>
-      <div id="adminCertList"></div>
-      <button class="admin-btn admin-btn-secondary" onclick="addCert()">+ Добавить сертификат</button>
-    </div>
-
-    <div class="admin-tab-content" id="tab-colors">
-      <div class="color-row"><label>Акцентный цвет</label><input type="color" id="c-accent" oninput="previewColor('accent', this.value)"><span class="color-value" id="cv-accent">#007aff</span></div>
-      <div class="color-row"><label>Цвет гекса 1</label><input type="color" id="c-hex1" oninput="previewColor('hex1', this.value)"><span class="color-value" id="cv-hex1">#ff4b4b</span></div>
-      <div class="color-row"><label>Цвет гекса 2</label><input type="color" id="c-hex2" oninput="previewColor('hex2', this.value)"><span class="color-value" id="cv-hex2">#007aff</span></div>
-      <div class="color-row"><label>Цвет гекса 3</label><input type="color" id="c-hex3" oninput="previewColor('hex3', this.value)"><span class="color-value" id="cv-hex3">#ffcc00</span></div>
-      <div class="color-row"><label>Цвет гекса 4</label><input type="color" id="c-hex4" oninput="previewColor('hex4', this.value)"><span class="color-value" id="cv-hex4">#34c759</span></div>
-      <button class="admin-btn admin-btn-secondary" onclick="resetColors()" style="margin-top:10px">↺ Сбросить</button>
-    </div>
-
-    <div class="admin-tab-content" id="tab-export">
-      <p class="admin-hint">Все правки сохраняются в Firebase и сразу видны посетителям.</p>
-      <div style="margin-top: 12px;">
-        <button class="admin-btn admin-btn-primary" onclick="forceSyncFromCloud()">🔄 Загрузить из облака</button>
-        <button class="admin-btn admin-btn-secondary" onclick="exportJSON()">📥 Скачать JSON</button>
-        <button class="admin-btn admin-btn-secondary" onclick="document.getElementById('importFile').click()">📤 Импорт</button>
-        <input type="file" id="importFile" accept=".json,application/json" style="display:none" onchange="importJSON(event)">
-      </div>
-    </div>
-
-    <div style="margin-top: 18px; display: flex; gap: 8px;">
-      <button class="admin-btn admin-btn-primary" onclick="saveAdmin()" style="flex:1;">💾 Сохранить</button>
-      <button class="admin-btn admin-btn-secondary" onclick="closeAdmin()" style="flex:1;">Закрыть</button>
-    </div>
+    <button class="modal-btn danger" onclick="clearAll()">🗑 Удалить ВСЁ</button>
+    <button class="modal-btn cancel" style="margin-top:8px;" onclick="closeModal('adminModal')">Закрыть</button>
   </div>
 </div>
 
 <script>
-  // ============================================================
-  const FIREBASE_URL = 'https://mozaika-4d1e7-default-rtdb.firebaseio.com';
-  const ADMIN_PASSWORD = `sozjdho982+8#9_($;(299? '! V92(2;9"`;
-  const STORAGE_KEY = 'mosaic_data';
-  const MAX_LESSONS = 500;
-  const MAX_IMAGE_WIDTH = 600;
-  const IMAGE_QUALITY = 0.7;
+  /* ============================================================
+     КЛЮЧИ JSONBIN
+     ============================================================ */
+  const JSONBIN_BIN_ID     = '6acded59ac6210605a2cf197';
+  const JSONBIN_MASTER_KEY = '$2a$10$YB9ij5Y.Hr4QAWaNN.yejefrVlqeQ4Z16YdPc6AKIHhmZBRjznmAq';
+  const ADMIN_PASSWORD     = "sozjdho982+8#9_($;(299? '! V92(2;9\"";
+  const MAX_ITEMS          = 500;
+  /* ============================================================ */
 
-  const DEFAULT_DATA = {
-    settings: {
-      siteName: "Мозаика",
-      siteSubtitle: "Центр развития и творчества",
-      heroTitle: "Раскрой свой творческий потенциал",
-      heroText: "Занятия по лепке, рисованию, керамике и акварели для детей и взрослых. Первое занятие — бесплатно!",
-      heroBtn: "Выбрать занятие",
-      tg: "https://t.me/+79299790942",
-      max: "https://max.ru/+79299790942",
-      managerName: "Ангелина",
-      footer: "© 2026 Центр развития и творчества «Мозаика». Все права защищены."
-    },
-    colors: { accent: "#007aff", hex1: "#ff4b4b", hex2: "#007aff", hex3: "#ffcc00", hex4: "#34c759" },
-    stats: [
-      { value: "500+", label: "Довольных семей" },
-      { value: "10", label: "Лет опыта" },
-      { value: "25", label: "Видов занятий" },
-      { value: "4.9", label: "Средний рейтинг" }
-    ],
-    reviews: [
-      { name: "Анна, мама Лизы (7 лет)", text: "Ходим на лепку уже полгода. Дочка в восторге, каждую неделю ждёт занятие!", rating: 5 },
-      { name: "Михаил, папа Артёма (10 лет)", text: "Отличные педагоги, ребёнок стал более усидчивым и внимательным.", rating: 5 },
-      { name: "Елена, мама Софии (5 лет)", text: "Прекрасное место! Атмосфера тёплая, преподаватели внимательные.", rating: 5 }
-    ],
-    gallery: [],
-    promocodes: [
-      { code: "WELCOME10", type: "percent", value: 10 },
-      { code: "МОЗАИКА15", type: "percent", value: 15 }
-    ],
-    certificates: [
-      { amount: 1000, title: "Сертификат 1000 ₽", desc: "На любое занятие или мастер-класс" },
-      { amount: 3000, title: "Сертификат 3000 ₽", desc: "Абонемент на 3 занятия + мастер-класс" },
-      { amount: 5000, title: "Сертификат 5000 ₽", desc: "Полный курс или серия мастер-классов" }
-    ],
-    lessons: [
-      { id: 1, title: "Лепка из глины", price: 1500, desc: "Развиваем моторику и фантазию. 1 занятие, 2 часа.", image: "", rating: 5 },
-      { id: 2, title: "Рисование маслом", price: 2000, desc: "Классическая живопись для начинающих. 1 занятие, 3 часа.", image: "", rating: 5 },
-      { id: 3, title: "Акварель", price: 1200, desc: "Лёгкость и прозрачность цвета. 1 занятие, 2 часа.", image: "", rating: 4 },
-      { id: 4, title: "Керамика", price: 1800, desc: "Работа на гончарном круге. 1 занятие, 2.5 часа.", image: "", rating: 5 }
-    ]
+  const API_URL = 'https://api.jsonbin.io/v3/b/' + JSONBIN_BIN_ID;
+  const iconSymbols = {yt:'▶',tg:'➤',tt:'♪',tw:'⌘',dc:'◇',ig:'◉',vk:'VK',rbx:'◈',mc:'▣',bs:'★',custom:'✦'};
+
+  /* ТЕМЫ ЦВЕТОВ */
+  const THEMES = {
+    purple: { name:'Фиолетовая', c1:'#2a0a4a', c2:'#4b1a8a', c3:'#8b5cf6', a1:'#b794f6', a2:'#7c3aed', glow:'180,130,255', tint:'230,210,255', preview:'linear-gradient(135deg,#2a0a4a,#8b5cf6)' },
+    green:  { name:'Зелёная',    c1:'#0a3d20', c2:'#1a6b3a', c3:'#4ade80', a1:'#86efac', a2:'#16a34a', glow:'100,220,150', tint:'200,255,220', preview:'linear-gradient(135deg,#0a3d20,#4ade80)' },
+    blue:   { name:'Синяя',      c1:'#0a2540', c2:'#1a4a7a', c3:'#3b82f6', a1:'#93c5fd', a2:'#2563eb', glow:'100,150,255', tint:'200,220,255', preview:'linear-gradient(135deg,#0a2540,#3b82f6)' },
+    red:    { name:'Красная',    c1:'#4a0a0a', c2:'#8a1a1a', c3:'#ef4444', a1:'#fca5a5', a2:'#dc2626', glow:'255,120,120', tint:'255,210,210', preview:'linear-gradient(135deg,#4a0a0a,#ef4444)' },
+    orange: { name:'Оранжевая',  c1:'#4a2000', c2:'#8a4500', c3:'#f97316', a1:'#fdba74', a2:'#ea580c', glow:'255,160,80',  tint:'255,220,180', preview:'linear-gradient(135deg,#4a2000,#f97316)' },
+    pink:   { name:'Розовая',    c1:'#4a0a30', c2:'#8a1a5a', c3:'#ec4899', a1:'#f9a8d4', a2:'#db2777', glow:'255,130,200', tint:'255,210,235', preview:'linear-gradient(135deg,#4a0a30,#ec4899)' },
+    cyan:   { name:'Голубая',    c1:'#0a3d40', c2:'#1a6b70', c3:'#06b6d4', a1:'#67e8f9', a2:'#0891b2', glow:'100,220,240', tint:'200,240,250', preview:'linear-gradient(135deg,#0a3d40,#06b6d4)' },
+    gold:   { name:'Золотая',    c1:'#3d2a00', c2:'#8a6500', c3:'#fbbf24', a1:'#fcd34d', a2:'#d97706', glow:'255,200,80',  tint:'255,240,200', preview:'linear-gradient(135deg,#3d2a00,#fbbf24)' }
   };
 
-  let DATA = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null') || JSON.parse(JSON.stringify(DEFAULT_DATA));
-  ['settings','colors','stats','reviews','gallery','promocodes','certificates','lessons'].forEach(k => {
-    if (!DATA[k]) DATA[k] = JSON.parse(JSON.stringify(DEFAULT_DATA[k]));
-  });
-  DATA.lessons.forEach(l => { if (typeof l.image !== 'string') l.image = ''; if (typeof l.rating !== 'number') l.rating = 5; });
+  const DEFAULT_SECTIONS = [
+    { id:'socials', title:'Соц сети', layout:'list', items:[
+      { id:'s1', name:'YouTube', sub:'Канал', url:'https://youtube.com/@EDUCANAL_GAMES', icon:'yt' },
+      { id:'s2', name:'Telegram', sub:'Канал', url:'https://t.me/EDUCANALGAMES', icon:'tg' },
+      { id:'s3', name:'TikTok', sub:'Профиль', url:'https://tiktok.com/@educanal_games', icon:'tt' },
+      { id:'s4', name:'Twitch', sub:'Стримы', url:'https://twitch.tv/educanal_games', icon:'tw' },
+      { id:'s5', name:'Discord', sub:'Сервер', url:'https://discord.gg/m3BjaXvhw', icon:'dc' },
+      { id:'s6', name:'Instagram', sub:'Профиль', url:'https://instagram.com/educanal_games', icon:'ig' },
+      { id:'s7', name:'VK', sub:'Канал', url:'https://vk.ru/educanalgames', icon:'vk' }
+    ]},
+    { id:'personal', title:'Личные', layout:'grid', items:[
+      { id:'p1', name:'Личный TG', sub:'', url:'https://t.me/your_personal_tg', icon:'tg' },
+      { id:'p2', name:'Личный DC', sub:'', url:'https://discord.com/users/your_id', icon:'dc' },
+      { id:'p3', name:'Личный VK', sub:'', url:'https://vk.ru/educanalgames', icon:'vk' }
+    ]},
+    { id:'game_accs', title:'Игровые акки', layout:'list', items:[
+      { id:'g1', name:'Roblox', sub:'2BOSS2012', url:'https://www.roblox.com/users/profile?username=2BOSS2012', icon:'rbx' },
+      { id:'g2', name:'Minecraft', sub:'2BOSS2012', url:'https://namemc.com/profile/2BOSS2012', icon:'mc' },
+      { id:'g3', name:'Brawl Stars', sub:'EDUCANAL', url:'https://link.brawlstars.com/invite/friend/en/?tag=9J08RUVP2', icon:'bs' }
+    ]},
+    { id:'my_sites', title:'Мои сайты', layout:'list', items:[] },
+    { id:'my_games', title:'Мои игры', layout:'list', items:[] }
+  ];
 
-  let cart = JSON.parse(localStorage.getItem('mosaic_cart') || '[]');
-  let currentPromo = null;
-  let cloudOnline = false;
+  let siteData = { sections: [], theme: 'purple', views: 0 };
+  let initialized = false;
 
-  // ============================================================
-  // СЧЁТЧИК ПРОСМОТРОВ
-  // ============================================================
-  async function loadViews() {
-    try {
-      const res = await fetch(`${FIREBASE_URL}/views.json`);
-      const v = await res.json();
-      updateViewDisplay(typeof v === 'number' ? v : 0);
-    } catch (e) {
-      const el = document.getElementById('viewCounter');
-      if (el) el.textContent = '—';
-    }
+  /* ПУЗЫРИ */
+  const bubbles = document.getElementById('bubbles');
+  for (let i = 0; i < 18; i++) {
+    const b = document.createElement('div');
+    b.className = 'bubble';
+    const size = Math.random() * 90 + 30;
+    b.style.width = size + 'px'; b.style.height = size + 'px';
+    b.style.left = Math.random() * 100 + '%';
+    b.style.animationDuration = (Math.random() * 14 + 12) + 's';
+    b.style.animationDelay = (-Math.random() * 20) + 's';
+    bubbles.appendChild(b);
   }
 
-  async function trackView() {
-    try {
-      // Один визит за сессию браузера (обновление страницы не считается)
-      if (sessionStorage.getItem('mosaic_viewed')) {
-        loadViews();
-        return;
-      }
-      sessionStorage.setItem('mosaic_viewed', '1');
+  function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+  function escapeHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 
-      const res = await fetch(`${FIREBASE_URL}/views.json`);
-      const current = await res.json();
-      const newVal = (typeof current === 'number' ? current : 0) + 1;
-
-      await fetch(`${FIREBASE_URL}/views.json`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newVal)
-      });
-
-      updateViewDisplay(newVal);
-    } catch (e) {
-      console.warn('Счётчик недоступен:', e);
-      loadViews();
-    }
+  /* ПРИМЕНЕНИЕ ТЕМЫ */
+  function applyTheme(name) {
+    const t = THEMES[name] || THEMES.purple;
+    const root = document.documentElement;
+    root.style.setProperty('--c1', t.c1);
+    root.style.setProperty('--c2', t.c2);
+    root.style.setProperty('--c3', t.c3);
+    root.style.setProperty('--a1', t.a1);
+    root.style.setProperty('--a2', t.a2);
+    root.style.setProperty('--glow', t.glow);
+    root.style.setProperty('--tint', t.tint);
   }
 
-  function updateViewDisplay(n) {
-    const el = document.getElementById('viewCounter');
-    if (!el) return;
-    el.textContent = n.toLocaleString('ru-RU');
-  }
-
-  // ============================================================
-  // ОБЛАКО
-  // ============================================================
-  async function loadFromCloud() {
-    setCloudStatus('loading', '☁️ Загрузка...');
+  /* ЗАГРУЗКА / СОХРАНЕНИЕ */
+  async function loadData() {
     try {
-      const res = await fetch(`${FIREBASE_URL}/data.json`);
+      const res = await fetch(API_URL + '/latest', { headers: { 'X-Master-Key': JSONBIN_MASTER_KEY } });
       if (!res.ok) throw new Error('HTTP ' + res.status);
-      const record = await res.json();
-      if (record && record.settings && Array.isArray(record.lessons)) {
-        ['colors','stats','reviews','gallery','promocodes','certificates'].forEach(k => {
-          if (!record[k]) record[k] = JSON.parse(JSON.stringify(DEFAULT_DATA[k]));
-        });
-        if (record.lessons.length > MAX_LESSONS) record.lessons = record.lessons.slice(0, MAX_LESSONS);
-        record.lessons.forEach(l => { if (typeof l.image !== 'string') l.image = ''; if (typeof l.rating !== 'number') l.rating = 5; });
-        DATA = record;
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA));
-        cloudOnline = true;
-        setCloudStatus('ok', '☁️ Синхронизировано');
-        fullRender();
+      const data = await res.json();
+      const rec = data.record;
+
+      if (rec && Array.isArray(rec.sections) && rec.sections.length > 0) {
+        siteData = {
+          sections: rec.sections,
+          theme: rec.theme || 'purple',
+          views: typeof rec.views === 'number' ? rec.views : 0
+        };
+        initialized = true;
       } else {
-        await saveToCloud();
-        setCloudStatus('ok', '☁️ Создано в облаке');
+        siteData = { sections: JSON.parse(JSON.stringify(DEFAULT_SECTIONS)), theme: 'purple', views: 0 };
+        initialized = true;
+        await saveData();
       }
-    } catch (e) {
-      cloudOnline = false;
-      setCloudStatus('error', '⚠️ ' + (e.message || 'Нет связи'));
-    } finally {
-      hideLoader();
+    } catch(e) {
+      console.error('Ошибка загрузки:', e);
+      if (!initialized) siteData = { sections: JSON.parse(JSON.stringify(DEFAULT_SECTIONS)), theme: 'purple', views: 0 };
     }
+
+    applyTheme(siteData.theme);
+
+    /* СЧЁТЧИК ПРОСМОТРОВ — считаем 1 раз за сессию */
+    const counted = sessionStorage.getItem('educanal_view_counted');
+    if (!counted) {
+      siteData.views = (siteData.views || 0) + 1;
+      sessionStorage.setItem('educanal_view_counted', '1');
+      saveData();
+    }
+
+    updateViewsDisplay();
+    renderAll();
   }
-  async function saveToCloud() {
-    setCloudStatus('loading', '☁️ Сохранение...');
+
+  function updateViewsDisplay() {
+    document.getElementById('viewsCount').textContent = (siteData.views || 0).toLocaleString('ru-RU');
+  }
+
+  async function saveData() {
     try {
-      const res = await fetch(`${FIREBASE_URL}/data.json`, {
+      const res = await fetch(API_URL, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(DATA)
+        headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_MASTER_KEY },
+        body: JSON.stringify(siteData)
       });
       if (!res.ok) throw new Error('HTTP ' + res.status);
-      cloudOnline = true;
-      setCloudStatus('ok', '✅ Сохранено в облако');
       return true;
-    } catch (e) {
-      cloudOnline = false;
-      setCloudStatus('error', '❌ ' + (e.message || 'Ошибка'));
-      return false;
-    }
-  }
-  function setCloudStatus(type, text) {
-    const el = document.getElementById('cloudStatus');
-    if (!el) return;
-    el.className = 'cloud-status cloud-' + type;
-    el.textContent = text;
-  }
-  function hideLoader() {
-    setTimeout(() => document.getElementById('loader').classList.add('hide'), 300);
+    } catch(e) { console.error('Ошибка сохранения:', e); return false; }
   }
 
-  // ============================================================
-  // ЦВЕТА
-  // ============================================================
-  function applyColors() {
-    const c = DATA.colors;
-    document.documentElement.style.setProperty('--btn-primary', c.accent);
-    document.documentElement.style.setProperty('--btn-primary-hover', darken(c.accent, 20));
-  }
-  function darken(hex, percent) {
-    const h = hex.replace('#', '');
-    let r = parseInt(h.substring(0, 2), 16);
-    let g = parseInt(h.substring(2, 4), 16);
-    let b = parseInt(h.substring(4, 6), 16);
-    r = Math.max(0, Math.floor(r * (1 - percent / 100)));
-    g = Math.max(0, Math.floor(g * (1 - percent / 100)));
-    b = Math.max(0, Math.floor(b * (1 - percent / 100)));
-    return '#' + [r, g, b].map(v => v.toString(16).padStart(2, '0')).join('');
-  }
-  function previewColor(key, value) {
-    DATA.colors[key] = value;
-    document.getElementById('cv-' + key).textContent = value;
-    if (key === 'accent') applyColors();
-    if (key.startsWith('hex')) createHexagons(true);
-  }
-  function resetColors() {
-    DATA.colors = JSON.parse(JSON.stringify(DEFAULT_DATA.colors));
-    loadColorFields();
-    applyColors();
-    createHexagons(true);
-  }
-  function loadColorFields() {
-    const c = DATA.colors;
-    document.getElementById('c-accent').value = c.accent;
-    document.getElementById('cv-accent').textContent = c.accent;
-    ['hex1','hex2','hex3','hex4'].forEach(k => {
-      document.getElementById('c-' + k).value = c[k];
-      document.getElementById('cv-' + k).textContent = c[k];
-    });
-  }
-
-  // ============================================================
-  // ТЕМА
-  // ============================================================
-  const themeBtn = document.getElementById('themeBtn');
-  const savedTheme = localStorage.getItem('mosaic_theme') || 'light';
-  function applyTheme(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
-    themeBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
-    localStorage.setItem('mosaic_theme', theme);
-    recolorHexagons(theme);
-  }
-  function toggleTheme() {
-    const current = document.documentElement.getAttribute('data-theme') || 'light';
-    applyTheme(current === 'dark' ? 'light' : 'dark');
-  }
-
-  // ============================================================
-  // ГЕКСЫ
-  // ============================================================
-  const HEX_COUNT = 25;
-  function hexSvg(color, gradId, baseOpacity) {
-    return `
-      <svg class="hex" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="${gradId}" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.85"/>
-            <stop offset="30%" stop-color="${color}" stop-opacity="${baseOpacity}"/>
-            <stop offset="70%" stop-color="${color}" stop-opacity="${baseOpacity}"/>
-            <stop offset="100%" stop-color="#ffffff" stop-opacity="0.25"/>
-          </linearGradient>
-        </defs>
-        <polygon points="50,4 95,27 95,73 50,96 5,73 5,27" fill="url(#${gradId})"/>
-        <polygon points="50,4 95,27 95,73 50,96 5,73 5,27" fill="none" stroke="#0a0a10" stroke-opacity="0.85" stroke-width="1.4" stroke-linejoin="round"/>
-        <polygon points="50,12 84,31 50,50 16,31" fill="#ffffff" fill-opacity="0.35"/>
-      </svg>`;
-  }
-  function createHexagons(rebuild) {
-    const bg = document.getElementById('hexBg');
-    if (rebuild) bg.innerHTML = '';
-    const theme = document.documentElement.getAttribute('data-theme') || 'light';
-    const baseOpacity = theme === 'dark' ? 0.55 : 0.7;
-    const colors = [DATA.colors.hex1, DATA.colors.hex2, DATA.colors.hex3, DATA.colors.hex4];
-    for (let i = 0; i < HEX_COUNT; i++) {
-      const color = colors[i % colors.length];
-      const size = 40 + Math.random() * 50;
-      const gradId = 'hexGrad' + i + '_' + Math.random().toString(36).slice(2,7);
-      const wrapper = document.createElement('div');
-      wrapper.innerHTML = hexSvg(color, gradId, baseOpacity);
-      const svg = wrapper.firstElementChild;
-      svg.style.width = size + 'px';
-      svg.style.height = size + 'px';
-      svg.style.left = Math.random() * 100 + '%';
-      svg.style.top  = Math.random() * 100 + '%';
-      svg.style.animationDuration = (30 + Math.random() * 45) + 's';
-      svg.style.animationDelay = '-' + (Math.random() * 40) + 's';
-      svg.dataset.color = color;
-      svg.dataset.gradId = gradId;
-      svg.style.setProperty('--hex-glow', hexToRgba(color, 0.35));
-      const rand = () => (Math.random() * 500 - 250);
-      svg.style.setProperty('--x1', rand().toFixed(0) + 'px');
-      svg.style.setProperty('--y1', rand().toFixed(0) + 'px');
-      svg.style.setProperty('--x2', rand().toFixed(0) + 'px');
-      svg.style.setProperty('--y2', rand().toFixed(0) + 'px');
-      svg.style.setProperty('--x3', rand().toFixed(0) + 'px');
-      svg.style.setProperty('--y3', rand().toFixed(0) + 'px');
-      bg.appendChild(svg);
-    }
-  }
-  function recolorHexagons(theme) {
-    const baseOpacity = theme === 'dark' ? 0.55 : 0.7;
-    document.querySelectorAll('.hex').forEach(svg => {
-      const color = svg.dataset.color;
-      const gradId = svg.dataset.gradId;
-      const stops = svg.querySelectorAll(`#${gradId} stop`);
-      if (stops.length >= 4) {
-        stops[1].setAttribute('stop-opacity', baseOpacity);
-        stops[2].setAttribute('stop-opacity', baseOpacity);
-      }
-      svg.style.setProperty('--hex-glow', hexToRgba(color, theme === 'dark' ? 0.5 : 0.35));
-    });
-  }
-  function hexToRgba(hex, a) {
-    const h = hex.replace('#', '');
-    const r = parseInt(h.substring(0, 2), 16);
-    const g = parseInt(h.substring(2, 4), 16);
-    const b = parseInt(h.substring(4, 6), 16);
-    return `rgba(${r}, ${g}, ${b}, ${a})`;
-  }
-
-  // ============================================================
-  // ОТРИСОВКА
-  // ============================================================
-  function fullRender() {
-    renderSite();
-    renderStats();
-    renderGallery();
-    renderReviews();
-    renderCertificates();
-    setupIntersectionObserver();
-  }
-
-  function renderSite() {
-    const s = DATA.settings;
-    document.getElementById('siteLogoText').textContent = s.siteName;
-    document.getElementById('siteSubtitle').textContent = s.siteSubtitle;
-    document.getElementById('heroTitle').textContent = s.heroTitle;
-    document.getElementById('heroText').textContent = s.heroText;
-    document.getElementById('heroBtn').textContent = s.heroBtn;
-    document.getElementById('siteFooter').textContent = s.footer;
-    document.title = s.siteName + ' — ' + s.siteSubtitle;
-    applyColors();
-    renderCatalog();
-    renderCart();
-  }
-
-  function renderStats() {
-    const el = document.getElementById('statsSection');
-    if (!DATA.stats || DATA.stats.length === 0) { el.style.display = 'none'; return; }
-    el.style.display = 'grid';
-    el.innerHTML = DATA.stats.map(s => `
-      <div class="stat-card">
-        <div class="stat-value">${escapeHtml(s.value)}</div>
-        <div class="stat-label">${escapeHtml(s.label)}</div>
-      </div>
-    `).join('');
-  }
-
-  function renderGallery() {
-    const section = document.getElementById('gallerySection');
-    const el = document.getElementById('gallery');
-    const items = DATA.gallery.filter(g => g.url);
-    if (items.length === 0) { section.style.display = 'none'; return; }
-    section.style.display = 'block';
-    el.innerHTML = items.map(g => `
-      <div class="gallery-item" onclick="openLightbox('${escapeAttr(g.url)}')">
-        <img src="${escapeAttr(g.url)}" alt="${escapeAttr(g.caption || '')}" loading="lazy">
-        ${g.caption ? `<div class="cap">${escapeHtml(g.caption)}</div>` : ''}
-      </div>
-    `).join('');
-  }
-
-  function renderReviews() {
-    const section = document.getElementById('reviewsSection');
-    const el = document.getElementById('reviews');
-    if (!DATA.reviews || DATA.reviews.length === 0) { section.style.display = 'none'; return; }
-    section.style.display = 'block';
-    el.innerHTML = DATA.reviews.map(r => {
-      const full = '★'.repeat(r.rating);
-      const empty = '☆'.repeat(5 - r.rating);
-      return `
-        <div class="review-card">
-          <div class="review-stars">${full}${empty}</div>
-          <div class="review-text">«${escapeHtml(r.text)}»</div>
-          <div class="review-author">— ${escapeHtml(r.name)}</div>
-        </div>
-      `;
-    }).join('');
-  }
-
-  function renderCertificates() {
-    const section = document.getElementById('certsSection');
-    const el = document.getElementById('certificates');
-    if (!DATA.certificates || DATA.certificates.length === 0) { section.style.display = 'none'; return; }
-    section.style.display = 'block';
-    el.innerHTML = DATA.certificates.map((c, i) => `
-      <div class="cert-card">
-        <div class="cert-amount">${c.amount} ₽</div>
-        <div class="cert-title">${escapeHtml(c.title)}</div>
-        <div class="cert-desc">${escapeHtml(c.desc || '')}</div>
-        <button class="cert-btn" onclick="buyCertificate(${i})">Заказать</button>
-      </div>
-    `).join('');
-  }
-
-  function buyCertificate(index) {
-    const c = DATA.certificates[index];
-    const text = `Здравствуйте, ${DATA.settings.managerName}!\n\nХочу купить подарочный сертификат:\n• ${c.title} — ${c.amount} ₽\n\nПодскажите, как оформить?`;
-    const encoded = encodeURIComponent(text);
-    window.open(DATA.settings.tg + '?text=' + encoded, '_blank');
-  }
-
-  function saveCart() {
-    localStorage.setItem('mosaic_cart', JSON.stringify(cart));
-    renderCatalog();
-    renderCart();
-  }
-  function toggleCart(id) {
-    const lesson = DATA.lessons.find(l => l.id === id);
-    if (!lesson) return;
-    const idx = cart.findIndex(i => i.id === id);
-    if (idx > -1) cart.splice(idx, 1);
-    else cart.push({ id: lesson.id, title: lesson.title, price: Number(lesson.price), image: lesson.image || '', qty: 1 });
-    saveCart();
-  }
-  function changeQty(id, delta) {
-    const item = cart.find(i => i.id === id);
-    if (!item) return;
-    item.qty = (item.qty || 1) + delta;
-    if (item.qty < 1) item.qty = 1;
-    if (item.qty > 99) item.qty = 99;
-    saveCart();
-  }
-  function starsHtml(rating) {
-    if (!rating) return '';
-    const full = '★'.repeat(rating);
-    const empty = '☆'.repeat(5 - rating);
-    return `<div class="rating">${full}<span class="star-empty">${empty}</span><span class="rating-num">${rating}.0</span></div>`;
-  }
-  function renderCatalog() {
-    const catalog = document.getElementById('catalog');
-    catalog.innerHTML = DATA.lessons.map(l => {
-      const inCart = cart.some(i => i.id === l.id);
-      const img = l.image ? `<img class="lesson-img" src="${escapeAttr(l.image)}" alt="${escapeAttr(l.title)}" loading="lazy" onerror="this.style.display='none'">` : '';
-      return `
-        <div class="card">
-          ${img}
-          <h3>${escapeHtml(l.title)}</h3>
-          ${starsHtml(l.rating)}
-          <div class="desc">${escapeHtml(l.desc)}</div>
-          <div class="price">${l.price} ₽</div>
-          <button class="add-btn ${inCart ? 'in-cart' : ''}" onclick="toggleCart(${l.id})">
-            ${inCart ? '✓ В корзине' : '+ Добавить'}
-          </button>
-        </div>
-      `;
-    }).join('');
-    document.getElementById('cart-count').textContent = cart.length;
-  }
-
-  function renderCart() {
-    const container = document.getElementById('cart-items-container');
-    const totalsEl = document.getElementById('totals');
-    const promoBlock = document.getElementById('promo-block');
-    const orderActions = document.getElementById('order-actions');
-    const orderText = document.getElementById('order-text');
-    const tgLink = document.getElementById('tg-link');
-    const maxLink = document.getElementById('max-link');
-
-    if (cart.length === 0) {
-      container.innerHTML = '<div class="empty-cart">Ваша корзина пуста 🎨</div>';
-      totalsEl.style.display = 'none';
-      promoBlock.style.display = 'none';
-      orderActions.style.display = 'none';
-      orderText.style.display = 'none';
-      currentPromo = null;
-      return;
-    }
-
-    container.innerHTML = cart.map(item => {
-      const img = item.image ? `<img class="cart-item-img" src="${escapeAttr(item.image)}" alt="">` : `<div class="cart-item-img"></div>`;
-      return `
-        <div class="cart-item">
-          ${img}
-          <div class="cart-item-info">
-            <div class="cart-item-title">${escapeHtml(item.title)}</div>
-            <div class="cart-item-price">${item.price} ₽ × ${item.qty} = ${item.price * item.qty} ₽</div>
-          </div>
-          <div class="cart-item-controls">
-            <button class="qty-btn" onclick="changeQty(${item.id}, -1)">−</button>
-            <span class="qty-num">${item.qty}</span>
-            <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
-            <button class="remove-btn" onclick="toggleCart(${item.id})">✕</button>
-          </div>
-        </div>
-      `;
-    }).join('');
-
-    const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
-    let discount = 0;
-    if (currentPromo) {
-      if (currentPromo.type === 'percent') discount = Math.round(subtotal * currentPromo.value / 100);
-      else discount = Math.min(currentPromo.value, subtotal);
-    }
-    const total = subtotal - discount;
-
-    document.getElementById('subtotal-value').textContent = subtotal + ' ₽';
-    if (discount > 0) {
-      document.getElementById('discount-row').style.display = 'flex';
-      document.getElementById('discount-value').textContent = '−' + discount + ' ₽';
-    } else {
-      document.getElementById('discount-row').style.display = 'none';
-    }
-    document.getElementById('total-value').textContent = total + ' ₽';
-    totalsEl.style.display = 'block';
-    promoBlock.style.display = 'block';
-    orderActions.style.display = 'flex';
-    orderText.style.display = 'block';
-
-    const lines = cart.map(i => `• ${i.title} — ${i.price} ₽ × ${i.qty} = ${i.price * i.qty} ₽`).join('\n');
-    let text = `Здравствуйте, ${DATA.settings.managerName}!\nЯ хочу записаться на занятия в центр «${DATA.settings.siteName}»:\n\n${lines}\n\n`;
-    if (discount > 0) text += `Промокод: ${currentPromo.code} (−${discount} ₽)\n`;
-    text += `Итого: ${total} ₽\n\nПодскажите, пожалуйста, как можно оформиться?`;
-
-    orderText.value = text;
-    const encodedText = encodeURIComponent(text);
-    tgLink.href = DATA.settings.tg + '?text=' + encodedText;
-    maxLink.href = DATA.settings.max;
-  }
-
-  function applyPromo() {
-    const input = document.getElementById('promo-input');
-    const msg = document.getElementById('promo-msg');
-    const code = (input.value || '').trim().toUpperCase();
-    if (!code) return;
-    const promo = DATA.promocodes.find(p => p.code.toUpperCase() === code);
-    if (!promo) {
-      currentPromo = null;
-      msg.className = 'promo-msg err';
-      msg.textContent = '❌ Промокод не найден';
-      renderCart();
-      return;
-    }
-    currentPromo = promo;
-    msg.className = 'promo-msg ok';
-    const valText = promo.type === 'percent' ? promo.value + '%' : promo.value + ' ₽';
-    msg.textContent = '✅ Применён: −' + valText;
-    renderCart();
-  }
-
-  function openCart() { document.getElementById('cart-modal').classList.add('open'); }
-  function closeCart(e) {
-    if (e && e.target !== e.currentTarget) return;
-    document.getElementById('cart-modal').classList.remove('open');
-  }
-  function copyOrder() {
-    const textarea = document.getElementById('order-text');
-    textarea.select();
-    textarea.setSelectionRange(0, 99999);
-    try {
-      navigator.clipboard.writeText(textarea.value).then(() => alert('✅ Заказ скопирован!'));
-    } catch (err) {
-      document.execCommand('copy');
-      alert('✅ Заказ скопирован!');
-    }
-  }
-
-  function openLightbox(url) {
-    document.getElementById('lightbox-img').src = url;
-    document.getElementById('lightbox').classList.add('open');
-  }
-  function closeLightbox() {
-    document.getElementById('lightbox').classList.remove('open');
-  }
-
-  let observer;
-  function setupIntersectionObserver() {
-    if (observer) observer.disconnect();
-    observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry, i) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => entry.target.classList.add('visible'), i * 60);
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.05, rootMargin: '0px 0px -30px 0px' });
-    document.querySelectorAll('.card, .gallery-item, .review-card').forEach(el => observer.observe(el));
-  }
-
-  function resizeImage(file, cb) {
-    const reader = new FileReader();
-    reader.onload = e => {
-      const img = new Image();
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        let w = img.width, h = img.height;
-        if (w > MAX_IMAGE_WIDTH) { h = Math.round(h * MAX_IMAGE_WIDTH / w); w = MAX_IMAGE_WIDTH; }
-        canvas.width = w; canvas.height = h;
-        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-        cb(canvas.toDataURL('image/jpeg', IMAGE_QUALITY));
-      };
-      img.onerror = () => cb(null);
-      img.src = e.target.result;
-    };
-    reader.onerror = () => cb(null);
-    reader.readAsDataURL(file);
-  }
-
-  function escapeHtml(str) {
-    return String(str == null ? '' : str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  }
-  function escapeAttr(str) { return String(str == null ? '' : str).replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
-
-  // ============================================================
-  // АДМИНКА
-  // ============================================================
-  let adminOpened = false;
-  function openAdmin() {
-    if (adminOpened) return;
-    const pass = prompt('🔐 Введите пароль администратора:');
-    if (pass === null) return;
-    if (pass !== ADMIN_PASSWORD) { alert('❌ Неверный пароль'); return; }
-    adminOpened = true;
-    loadAdminFields();
-    document.getElementById('adminPanel').classList.add('open');
-  }
-  function closeAdmin() {
-    document.getElementById('adminPanel').classList.remove('open');
-    adminOpened = false;
-  }
-  function switchTab(name, btn) {
-    document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.admin-tab-content').forEach(c => c.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('tab-' + name).classList.add('active');
-  }
-  function loadAdminFields() {
-    const s = DATA.settings;
-    document.getElementById('f-siteName').value = s.siteName;
-    document.getElementById('f-siteSubtitle').value = s.siteSubtitle;
-    document.getElementById('f-heroTitle').value = s.heroTitle;
-    document.getElementById('f-heroText').value = s.heroText;
-    document.getElementById('f-heroBtn').value = s.heroBtn;
-    document.getElementById('f-tg').value = s.tg;
-    document.getElementById('f-max').value = s.max;
-    document.getElementById('f-managerName').value = s.managerName;
-    document.getElementById('f-footer').value = s.footer;
-    loadColorFields();
-    renderAdminLessons();
-    renderAdminStats();
-    renderAdminReviews();
-    renderAdminGallery();
-    renderAdminPromo();
-    renderAdminCert();
-  }
-
-  function renderAdminLessons() {
-    const list = document.getElementById('adminLessonsList');
-    const count = DATA.lessons.length;
-    const isLimit = count >= MAX_LESSONS;
-    const addBtn = document.getElementById('addLessonBtn');
-    if (addBtn) { addBtn.disabled = isLimit; addBtn.style.opacity = isLimit ? '0.5' : '1'; }
-    list.innerHTML = `
-      <div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:13px; color:var(--text-muted);">
-        <span>📚 <b style="color:${isLimit ? 'var(--color-red)' : 'var(--text-main)'}">${count} / ${MAX_LESSONS}</b></span>
-        ${isLimit ? '<span style="color:var(--color-red); font-weight:600;">Лимит</span>' : ''}
-      </div>
-      ${DATA.lessons.map((l, i) => `
-        <div class="admin-lesson">
-          <input class="admin-input" type="text" placeholder="Название" value="${escapeAttr(l.title)}" oninput="updateLesson(${i}, 'title', this.value)">
-          <input class="admin-input" type="number" placeholder="Цена" value="${l.price}" oninput="updateLesson(${i}, 'price', this.value)">
-          <button class="admin-del-btn" onclick="deleteLesson(${i})">🗑</button>
-          <div class="admin-rating-input">
-            Рейтинг: ${[1,2,3,4,5].map(n => `<button class="star-btn ${n <= (l.rating||5) ? '' : 'empty'}" onclick="setLessonRating(${i}, ${n})">★</button>`).join('')}
-          </div>
-          <div class="admin-lesson-img-block">
-            <img class="admin-lesson-img-preview" id="prev-${i}" src="${l.image ? escapeAttr(l.image) : 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23ddd%22/></svg>'}">
-            <div class="admin-lesson-img-controls">
-              <input class="admin-input" type="text" placeholder="URL картинки" value="${escapeAttr(l.image)}" oninput="updateLessonImage(${i}, this.value)">
-              <label class="admin-file-btn">📷 Загрузить файл<input type="file" accept="image/*" onchange="uploadLessonImage(event, ${i})"></label>
-              ${l.image ? `<button class="admin-btn admin-btn-secondary" style="padding:6px 10px;font-size:11px;margin:0;" onclick="clearLessonImage(${i})">Удалить</button>` : ''}
-            </div>
-          </div>
-          <textarea class="admin-textarea admin-lesson-desc" placeholder="Описание" oninput="updateLesson(${i}, 'desc', this.value)">${escapeHtml(l.desc)}</textarea>
-        </div>
-      `).join('')}
-    `;
-  }
-  function updateLesson(i, f, v) { if (f === 'price') v = Number(v) || 0; DATA.lessons[i][f] = v; }
-  function setLessonRating(i, n) { DATA.lessons[i].rating = n; renderAdminLessons(); }
-  function updateLessonImage(i, v) {
-    DATA.lessons[i].image = v;
-    const p = document.getElementById('prev-' + i);
-    if (p) p.src = v || 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23ddd%22/></svg>';
-  }
-  function uploadLessonImage(event, i) {
-    const file = event.target.files[0];
-    if (!file) return;
-    if (file.size > 8*1024*1024) { alert('⚠️ Файл больше 8 МБ'); return; }
-    resizeImage(file, url => {
-      if (!url) { alert('❌ Не удалось'); return; }
-      DATA.lessons[i].image = url;
-      renderAdminLessons();
-    });
-  }
-  function clearLessonImage(i) { DATA.lessons[i].image = ''; renderAdminLessons(); }
-  function addLesson() {
-    if (DATA.lessons.length >= MAX_LESSONS) return;
-    const newId = DATA.lessons.length ? Math.max(...DATA.lessons.map(l => l.id)) + 1 : 1;
-    DATA.lessons.push({ id: newId, title: 'Новое занятие', price: 1000, desc: 'Описание', image: '', rating: 5 });
-    renderAdminLessons();
-  }
-  function deleteLesson(i) { if (confirm('Удалить?')) { DATA.lessons.splice(i, 1); renderAdminLessons(); } }
-
-  function renderAdminStats() {
-    const el = document.getElementById('adminStatsList');
-    el.innerHTML = DATA.stats.map((s, i) => `
-      <div class="admin-item-block">
-        <div class="admin-item-row">
-          <input class="admin-input" style="flex:1;" placeholder="Значение" value="${escapeAttr(s.value)}" oninput="DATA.stats[${i}].value=this.value">
-          <input class="admin-input" style="flex:2;" placeholder="Подпись" value="${escapeAttr(s.label)}" oninput="DATA.stats[${i}].label=this.value">
-          <button class="admin-del-btn" onclick="DATA.stats.splice(${i},1);renderAdminStats()">🗑</button>
-        </div>
-      </div>
-    `).join('') || '<p class="admin-hint">Пока нет счётчиков</p>';
-  }
-  function addStat() { DATA.stats.push({ value: '100+', label: 'Новый счётчик' }); renderAdminStats(); }
-
-  function renderAdminReviews() {
-    const el = document.getElementById('adminReviewsList');
-    el.innerHTML = DATA.reviews.map((r, i) => `
-      <div class="admin-item-block">
-        <input class="admin-input" placeholder="Имя" value="${escapeAttr(r.name)}" oninput="DATA.reviews[${i}].name=this.value">
-        <div class="admin-item-row">
-          <select class="admin-input" style="flex:0 0 90px;" onchange="DATA.reviews[${i}].rating=Number(this.value)">
-            ${[5,4,3,2,1].map(n => `<option value="${n}" ${r.rating===n?'selected':''}>${'★'.repeat(n)}</option>`).join('')}
-          </select>
-          <textarea class="admin-textarea" style="flex:1;min-height:50px;" placeholder="Текст отзыва" oninput="DATA.reviews[${i}].text=this.value">${escapeHtml(r.text)}</textarea>
-          <button class="admin-del-btn" onclick="DATA.reviews.splice(${i},1);renderAdminReviews()">🗑</button>
-        </div>
-      </div>
-    `).join('') || '<p class="admin-hint">Пока нет отзывов</p>';
-  }
-  function addReview() { DATA.reviews.push({ name: 'Новый клиент', text: 'Отличный центр!', rating: 5 }); renderAdminReviews(); }
-
-  function renderAdminGallery() {
-    const el = document.getElementById('adminGalleryList');
-    el.innerHTML = DATA.gallery.map((g, i) => `
-      <div class="admin-item-block">
-        <div class="admin-item-row">
-          <img class="admin-lesson-img-preview" id="gprev-${i}" src="${g.url ? escapeAttr(g.url) : 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23ddd%22/></svg>'}">
-          <div style="flex:1;display:flex;flex-direction:column;gap:6px;">
-            <input class="admin-input" placeholder="URL" value="${escapeAttr(g.url)}" oninput="DATA.gallery[${i}].url=this.value;document.getElementById('gprev-${i}').src=this.value||'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23ddd%22/></svg>'">
-            <input class="admin-input" placeholder="Подпись" value="${escapeAttr(g.caption || '')}" oninput="DATA.gallery[${i}].caption=this.value">
-            <label class="admin-file-btn">📷 Загрузить<input type="file" accept="image/*" onchange="uploadGallery(event, ${i})"></label>
-          </div>
-          <button class="admin-del-btn" onclick="DATA.gallery.splice(${i},1);renderAdminGallery()">🗑</button>
-        </div>
-      </div>
-    `).join('') || '<p class="admin-hint">Пока нет фото</p>';
-  }
-  function addGalleryItem() { DATA.gallery.push({ url: '', caption: '' }); renderAdminGallery(); }
-  function uploadGallery(event, i) {
-    const file = event.target.files[0];
-    if (!file) return;
-    resizeImage(file, url => {
-      if (!url) return;
-      DATA.gallery[i].url = url;
-      renderAdminGallery();
-    });
-  }
-
-  function renderAdminPromo() {
-    const el = document.getElementById('adminPromoList');
-    el.innerHTML = DATA.promocodes.map((p, i) => `
-      <div class="admin-item-block">
-        <div class="admin-item-row">
-          <input class="admin-input" style="flex:1;" placeholder="КОД" value="${escapeAttr(p.code)}" oninput="DATA.promocodes[${i}].code=this.value.toUpperCase()">
-          <select class="admin-input" style="flex:0 0 110px;" onchange="DATA.promocodes[${i}].type=this.value">
-            <option value="percent" ${p.type==='percent'?'selected':''}>Процент</option>
-            <option value="fixed" ${p.type==='fixed'?'selected':''}>Рубли</option>
-          </select>
-          <input class="admin-input" style="flex:0 0 80px;" type="number" value="${p.value}" oninput="DATA.promocodes[${i}].value=Number(this.value)||0">
-          <button class="admin-del-btn" onclick="DATA.promocodes.splice(${i},1);renderAdminPromo()">🗑</button>
-        </div>
-      </div>
-    `).join('') || '<p class="admin-hint">Пока нет промокодов</p>';
-  }
-  function addPromo() { DATA.promocodes.push({ code: 'NEW10', type: 'percent', value: 10 }); renderAdminPromo(); }
-
-  function renderAdminCert() {
-    const el = document.getElementById('adminCertList');
-    el.innerHTML = DATA.certificates.map((c, i) => `
-      <div class="admin-item-block">
-        <div class="admin-item-row">
-          <input class="admin-input" style="flex:0 0 100px;" type="number" value="${c.amount}" oninput="DATA.certificates[${i}].amount=Number(this.value)||0">
-          <input class="admin-input" style="flex:1;" placeholder="Название" value="${escapeAttr(c.title)}" oninput="DATA.certificates[${i}].title=this.value">
-          <button class="admin-del-btn" onclick="DATA.certificates.splice(${i},1);renderAdminCert()">🗑</button>
-        </div>
-        <input class="admin-input" placeholder="Описание" value="${escapeAttr(c.desc || '')}" oninput="DATA.certificates[${i}].desc=this.value">
-      </div>
-    `).join('') || '<p class="admin-hint">Пока нет сертификатов</p>';
-  }
-  function addCert() { DATA.certificates.push({ amount: 1000, title: 'Сертификат 1000 ₽', desc: 'Описание' }); renderAdminCert(); }
-
-  async function saveAdmin() {
-    const s = DATA.settings;
-    s.siteName = document.getElementById('f-siteName').value;
-    s.siteSubtitle = document.getElementById('f-siteSubtitle').value;
-    s.heroTitle = document.getElementById('f-heroTitle').value;
-    s.heroText = document.getElementById('f-heroText').value;
-    s.heroBtn = document.getElementById('f-heroBtn').value;
-    s.tg = document.getElementById('f-tg').value;
-    s.max = document.getElementById('f-max').value;
-    s.managerName = document.getElementById('f-managerName').value;
-    s.footer = document.getElementById('f-footer').value;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA));
-    const ok = await saveToCloud();
-    fullRender();
-    createHexagons(true);
-    alert(ok ? '✅ Сохранено в облако!' : '⚠️ Локально сохранено, но не в облако');
-  }
-  async function forceSyncFromCloud() {
-    if (!confirm('Загрузить из облака? Несохранённые правки потеряются.')) return;
-    await loadFromCloud();
-    loadAdminFields();
-  }
-  function exportJSON() {
-    const blob = new Blob([JSON.stringify(DATA, null, 2)], { type: 'application/json' });
-    downloadBlob(blob, 'mosaic-data.json');
-  }
-  function downloadBlob(blob, filename) {
-    const url = URL.createObjectURL(blob);
+  function createListLink(item) {
     const a = document.createElement('a');
-    a.href = url; a.download = filename;
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-  }
-  function importJSON(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = async e => {
-      try {
-        const parsed = JSON.parse(e.target.result);
-        if (!parsed.settings || !Array.isArray(parsed.lessons)) throw new Error();
-        ['colors','stats','reviews','gallery','promocodes','certificates'].forEach(k => {
-          if (!parsed[k]) parsed[k] = JSON.parse(JSON.stringify(DEFAULT_DATA[k]));
-        });
-        DATA = parsed;
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA));
-        fullRender();
-        loadAdminFields();
-        await saveToCloud();
-        alert('✅ Импортировано');
-      } catch (err) { alert('❌ Ошибка формата'); }
-    };
-    reader.readAsText(file);
+    a.className = 'link';
+    a.href = item.url; a.target = '_blank';
+    a.innerHTML = `
+      <div class="icon ${item.icon}">${iconSymbols[item.icon] || '✦'}</div>
+      <div class="text">${escapeHtml(item.name)}${item.sub ? `<small>${escapeHtml(item.sub)}</small>` : ''}</div>
+      <div class="arrow">›</div>`;
+    return a;
   }
 
-  if (location.hash === '#admin' || location.search.includes('admin')) setTimeout(openAdmin, 800);
-  document.addEventListener('keydown', (e) => {
-    if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a' || e.code === 'KeyA')) {
-      e.preventDefault(); openAdmin();
+  function createGridBtn(item) {
+    const a = document.createElement('a');
+    a.className = 'p-btn';
+    a.href = item.url; a.target = '_blank';
+    a.innerHTML = `
+      <div class="icon ${item.icon}">${iconSymbols[item.icon] || '✦'}</div>
+      ${escapeHtml(item.name)}`;
+    return a;
+  }
+
+  function renderAll() {
+    const wrap = document.getElementById('sectionsContainer');
+    wrap.innerHTML = '';
+    if (!siteData.sections || siteData.sections.length === 0) {
+      wrap.innerHTML = '<div class="glass empty-box" style="width:100%;">Пока пусто… ✦</div>';
+      return;
     }
-  });
-  let logoClicks = 0, logoTimer;
-  document.getElementById('siteLogoText').addEventListener('click', () => {
-    logoClicks++;
-    clearTimeout(logoTimer);
-    logoTimer = setTimeout(() => logoClicks = 0, 600);
-    if (logoClicks >= 3) { logoClicks = 0; openAdmin(); }
+    siteData.sections.forEach(sec => {
+      const box = document.createElement('div');
+      box.style.cssText = 'width:100%;display:flex;flex-direction:column;align-items:center;gap:0;';
+      const title = document.createElement('div');
+      title.className = 'section-title';
+      title.textContent = '— ' + sec.title + ' —';
+      box.appendChild(title);
+      const container = document.createElement('div');
+      container.className = sec.layout === 'grid' ? 'glass personal-row' : 'glass links';
+      if (!sec.items || sec.items.length === 0) {
+        container.innerHTML = '<div class="empty-box" style="grid-column:1/-1;width:100%;">Пока пусто… ✦</div>';
+      } else {
+        sec.items.forEach(it => {
+          container.appendChild(sec.layout === 'grid' ? createGridBtn(it) : createListLink(it));
+        });
+      }
+      box.appendChild(container);
+      wrap.appendChild(box);
+    });
+  }
+
+  function openModal(id) { document.getElementById(id).classList.add('active'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+  /* СЕКРЕТНЫЙ ДОСТУП */
+  let pressTimer = null;
+  const avatar = document.getElementById('avatarTrigger');
+  const startPress = () => { pressTimer = setTimeout(() => openModal('pwdModal'), 1500); };
+  const cancelPress = () => { clearTimeout(pressTimer); };
+  avatar.addEventListener('touchstart', startPress);
+  avatar.addEventListener('touchend', cancelPress);
+  avatar.addEventListener('touchcancel', cancelPress);
+  avatar.addEventListener('mousedown', startPress);
+  avatar.addEventListener('mouseup', cancelPress);
+  avatar.addEventListener('mouseleave', cancelPress);
+
+  let tapCount = 0, tapTimer = null;
+  document.getElementById('footerTrigger').addEventListener('click', () => {
+    tapCount++;
+    clearTimeout(tapTimer);
+    tapTimer = setTimeout(() => tapCount = 0, 1200);
+    if (tapCount >= 5) { tapCount = 0; openModal('pwdModal'); }
   });
 
-  applyColors();
-  createHexagons();
-  applyTheme(savedTheme);
-  renderSite();
-  renderStats();
-  renderGallery();
-  renderReviews();
-  renderCertificates();
-  setupIntersectionObserver();
-  loadFromCloud();
-  trackView();
-  setTimeout(hideLoader, 3000);
+  function checkPassword() {
+    const input = document.getElementById('pwdInput').value;
+    const err = document.getElementById('pwdError');
+    if (input === ADMIN_PASSWORD) {
+      err.textContent = '';
+      document.getElementById('pwdInput').value = '';
+      closeModal('pwdModal');
+      openModal('adminModal');
+      renderThemeGrid();
+      renderSectionsDropdown();
+      renderAdminList();
+    } else {
+      err.textContent = '❌ Неверный пароль';
+    }
+  }
+  document.getElementById('pwdInput').addEventListener('keypress', e => { if (e.key === 'Enter') checkPassword(); });
+
+  /* СЕТКА ТЕМ */
+  function renderThemeGrid() {
+    const grid = document.getElementById('themeGrid');
+    grid.innerHTML = '';
+    Object.keys(THEMES).forEach(key => {
+      const t = THEMES[key];
+      const sw = document.createElement('div');
+      sw.className = 'theme-swatch' + (siteData.theme === key ? ' active' : '');
+      sw.style.background = t.preview;
+      sw.title = t.name;
+      sw.onclick = () => changeTheme(key);
+      grid.appendChild(sw);
+    });
+  }
+
+  async function changeTheme(name) {
+    if (!THEMES[name]) return;
+    siteData.theme = name;
+    applyTheme(name);
+    renderThemeGrid();
+    await saveData();
+  }
+
+  /* ДРОПДАУН */
+  function renderSectionsDropdown() {
+    const grp = document.getElementById('sectionsOptgroup');
+    grp.innerHTML = '';
+    siteData.sections.forEach(sec => {
+      const opt = document.createElement('option');
+      opt.value = 'sec:' + sec.id;
+      opt.textContent = (sec.layout === 'grid' ? '▦ ' : '📋 ') + sec.title;
+      grp.appendChild(opt);
+    });
+    if (siteData.sections[0]) {
+      document.getElementById('newTarget').value = 'sec:' + siteData.sections[0].id;
+    }
+  }
+
+  document.getElementById('newTarget').addEventListener('change', e => {
+    document.getElementById('newSectionWrap').style.display =
+      e.target.value === '__new__' ? 'block' : 'none';
+  });
+
+  /* ДОБАВЛЕНИЕ */
+  async function addItem() {
+    const target = document.getElementById('newTarget').value;
+    const name = document.getElementById('newName').value.trim();
+    const sub  = document.getElementById('newSub').value.trim();
+    const url  = document.getElementById('newUrl').value.trim();
+    const icon = document.getElementById('newIcon').value;
+    const err  = document.getElementById('addError');
+    const succ = document.getElementById('addSuccess');
+    const btn  = document.getElementById('addBtn');
+
+    err.textContent = ''; succ.textContent = '';
+    if (!name) { err.textContent = '⚠️ Введи название'; return; }
+    if (!url)  { err.textContent = '⚠️ Введи ссылку'; return; }
+    if (!/^https?:\/\//i.test(url)) { err.textContent = '⚠️ Ссылка должна начинаться с https://'; return; }
+
+    const total = siteData.sections.reduce((s, sec) => s + sec.items.length, 0);
+    if (total >= MAX_ITEMS) { err.textContent = `⚠️ Максимум ${MAX_ITEMS} элементов`; return; }
+
+    const item = { id: genId(), name, sub, url, icon };
+
+    if (target === '__new__') {
+      const title = document.getElementById('newSectionName').value.trim();
+      const layout = document.getElementById('newSectionLayout').value;
+      if (!title) { err.textContent = '⚠️ Введи название секции'; return; }
+      siteData.sections.push({ id: genId(), title, layout, items: [item] });
+    } else if (target.startsWith('sec:')) {
+      const sid = target.slice(4);
+      const sec = siteData.sections.find(s => s.id === sid);
+      if (!sec) { err.textContent = '⚠️ Секция не найдена'; return; }
+      sec.items.push(item);
+    }
+
+    btn.disabled = true; btn.textContent = 'Сохранение…';
+    const ok = await saveData();
+    btn.disabled = false; btn.textContent = 'Добавить';
+
+    if (ok) {
+      renderAll(); renderSectionsDropdown(); renderAdminList();
+      document.getElementById('newName').value = '';
+      document.getElementById('newSub').value = '';
+      document.getElementById('newUrl').value = '';
+      document.getElementById('newIcon').value = 'custom';
+      document.getElementById('newSectionName').value = '';
+      document.getElementById('newTarget').value = '__new__';
+      document.getElementById('newSectionWrap').style.display = 'none';
+      succ.textContent = '✅ Добавлено и видно всем!';
+      setTimeout(() => succ.textContent = '', 2500);
+    } else {
+      err.textContent = '❌ Ошибка сохранения. Проверь ключи JSONBin.';
+    }
+  }
+
+  function makeGroupTitle(sec) {
+    const div = document.createElement('div');
+    div.className = 'admin-group-title';
+    div.innerHTML = `
+      <span>${sec.layout === 'grid' ? '▦' : '📋'} ${escapeHtml(sec.title)} <span style="opacity:.5;font-size:9px;letter-spacing:0;">(${sec.items.length})</span></span>
+      <div class="sec-btns">
+        <button onclick="renameSection('${sec.id}')">✏️</button>
+        <button class="del" onclick="deleteSection('${sec.id}')">🗑</button>
+      </div>`;
+    return div;
+  }
+
+  function makeAdminItem(item) {
+    const div = document.createElement('div');
+    div.className = 'admin-item';
+    div.innerHTML = `
+      <div class="icon ${item.icon}">${iconSymbols[item.icon] || '✦'}</div>
+      <div class="info"><b>${escapeHtml(item.name)}</b><span>${escapeHtml(item.url)}</span></div>
+      <button onclick="deleteItem('${item.id}')">✕</button>`;
+    return div;
+  }
+
+  function renderAdminList() {
+    const list = document.getElementById('adminList');
+    list.innerHTML = '';
+    const total = siteData.sections.reduce((s, sec) => s + sec.items.length, 0);
+    document.getElementById('counter').textContent = `Всего элементов: ${total} / ${MAX_ITEMS}`;
+
+    if (siteData.sections.length === 0) {
+      list.innerHTML = '<div style="text-align:center;opacity:.6;font-size:13px;padding:14px;">Пока нет секций. Создай первую 👆</div>';
+      return;
+    }
+    siteData.sections.forEach(sec => {
+      list.appendChild(makeGroupTitle(sec));
+      if (sec.items.length === 0) {
+        const empty = document.createElement('div');
+        empty.style.cssText = 'font-size:12px;opacity:.5;padding:6px 12px;text-align:center;';
+        empty.textContent = 'Пусто';
+        list.appendChild(empty);
+      } else {
+        sec.items.forEach(it => list.appendChild(makeAdminItem(it)));
+      }
+    });
+  }
+
+  async function deleteItem(id) {
+    if (!confirm('Удалить этот элемент?')) return;
+    let found = false;
+    for (const sec of siteData.sections) {
+      const j = sec.items.findIndex(x => x.id === id);
+      if (j !== -1) { sec.items.splice(j, 1); found = true; break; }
+    }
+    if (found) { await saveData(); renderAll(); renderSectionsDropdown(); renderAdminList(); }
+  }
+
+  async function deleteSection(id) {
+    const idx = siteData.sections.findIndex(s => s.id === id);
+    if (idx === -1) return;
+    const sec = siteData.sections[idx];
+    if (!confirm(`Удалить секцию "${sec.title}" и все её ${sec.items.length} элемент(ов)?`)) return;
+    siteData.sections.splice(idx, 1);
+    await saveData(); renderAll(); renderSectionsDropdown(); renderAdminList();
+  }
+
+  async function renameSection(id) {
+    const sec = siteData.sections.find(s => s.id === id);
+    if (!sec) return;
+    const newName = prompt('Новое название секции:', sec.title);
+    if (newName === null) return;
+    const trimmed = newName.trim();
+    if (!trimmed) { alert('Название не может быть пустым'); return; }
+    sec.title = trimmed;
+    await saveData(); renderAll(); renderSectionsDropdown(); renderAdminList();
+  }
+
+  async function clearAll() {
+    if (!confirm('Удалить ВСЁ и вернуть стандартные разделы? Все твои кнопки пропадут!')) return;
+    const backup = JSON.parse(JSON.stringify(siteData));
+    siteData = { sections: JSON.parse(JSON.stringify(DEFAULT_SECTIONS)), theme: siteData.theme, views: siteData.views };
+    const ok = await saveData();
+    if (!ok) { siteData = backup; alert('Ошибка сброса'); }
+    renderAll(); renderSectionsDropdown(); renderAdminList();
+  }
+
+  document.querySelectorAll('.modal-overlay').forEach(m => {
+    m.addEventListener('click', e => { if (e.target === m) m.classList.remove('active'); });
+  });
+
+  loadData();
 </script>
 
 </body>
