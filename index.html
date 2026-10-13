@@ -5,320 +5,73 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>EDUCANAL_ GAMES</title>
 <style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  html, body {
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  body {
-    background: linear-gradient(135deg, #2a0a4a 0%, #4b1a8a 40%, #8b5cf6 100%);
-    background-attachment: fixed;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    padding: 30px 16px 60px;
-  }
-
-  .bubbles {
-    position: fixed;
-    inset: 0;
-    overflow: hidden;
-    z-index: 0;
-    pointer-events: none;
-  }
-
-  .bubble {
-    position: absolute;
-    border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.35), rgba(200,160,255,0.08) 60%, transparent 70%);
-    border: 1px solid rgba(255,255,255,0.25);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    box-shadow: 0 0 40px rgba(180,130,255,0.35), inset 0 0 30px rgba(255,255,255,0.15);
-    animation: float linear infinite;
-    opacity: 0.75;
-  }
-
-  @keyframes float {
-    0%   { transform: translateY(110vh) translateX(0) scale(0.9); opacity: 0; }
-    10%  { opacity: 0.8; }
-    90%  { opacity: 0.8; }
-    100% { transform: translateY(-20vh) translateX(40px) scale(1.1); opacity: 0; }
-  }
-
-  .container {
-    width: 100%;
-    max-width: 460px;
-    position: relative;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 18px;
-  }
-
-  .avatar-wrap {
-    position: relative;
-    width: 130px;
-    height: 130px;
-    border-radius: 50%;
-    padding: 4px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.5), rgba(180,130,255,0.4));
-    box-shadow: 0 0 40px rgba(180,130,255,0.7), 0 0 80px rgba(140,90,255,0.5);
-    animation: pulseGlow 3s ease-in-out infinite;
-  }
-
-  @keyframes pulseGlow {
-    0%, 100% { box-shadow: 0 0 40px rgba(180,130,255,0.7), 0 0 80px rgba(140,90,255,0.5); }
-    50%      { box-shadow: 0 0 55px rgba(200,160,255,0.9), 0 0 110px rgba(160,110,255,0.7); }
-  }
-
-  .avatar {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #b794f6, #7c3aed);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 46px;
-    font-weight: 800;
-    color: white;
-    overflow: hidden;
-    border: 2px solid rgba(255,255,255,0.4);
-  }
-
-  .avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    display: block;
-  }
-
-  .nickname {
-    font-size: 28px;
-    font-weight: 800;
-    color: #fff;
-    text-align: center;
-    letter-spacing: 1px;
-    text-shadow: 0 0 20px rgba(180,130,255,0.9), 0 2px 4px rgba(0,0,0,0.3);
-  }
-
-  .subtitle {
-    font-size: 13px;
-    color: rgba(230,210,255,0.8);
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    margin-top: -10px;
-    font-weight: 500;
-  }
-
-  .glass {
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border-radius: 22px;
-    box-shadow:
-      0 8px 32px rgba(80, 30, 160, 0.35),
-      inset 0 1px 0 rgba(255,255,255,0.3),
-      inset 0 -1px 0 rgba(255,255,255,0.05);
-  }
-
-  .links {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 12px;
-  }
-
-  .link {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 14px 18px;
-    border-radius: 18px;
-    text-decoration: none;
-    color: #fff;
-    font-weight: 600;
-    font-size: 15px;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    transition: all 0.25s cubic-bezier(.2,.7,.3,1);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .link::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.25), transparent 70%);
-    transform: translateX(-100%);
-    transition: transform 0.6s;
-  }
-
-  .link:hover::before, .link:active::before {
-    transform: translateX(100%);
-  }
-
-  .link:hover, .link:active {
-    transform: translateY(-2px) scale(1.02);
-    background: rgba(255, 255, 255, 0.16);
-    box-shadow: 0 10px 30px rgba(160,110,255,0.5);
-  }
-
-  .link .icon {
-    width: 38px;
-    height: 38px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    font-size: 20px;
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: -0.5px;
-  }
-
-  .link .text {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.2;
-  }
-
-  .link .text small {
-    font-size: 11px;
-    font-weight: 400;
-    color: rgba(230,210,255,0.7);
-    margin-top: 2px;
-  }
-
-  .link .arrow {
-    margin-left: auto;
-    opacity: 0.5;
-    font-size: 18px;
-  }
-
-  .yt    { background: linear-gradient(135deg, #ff0000, #cc0000); }
-  .tg    { background: linear-gradient(135deg, #2aabee, #229ed9); }
-  .tt    { background: linear-gradient(135deg, #25f4ee, #fe2c55); }
-  .tw    { background: linear-gradient(135deg, #9146ff, #6441a5); }
-  .dc    { background: linear-gradient(135deg, #5865f2, #4752c4); }
-  .ig    { background: linear-gradient(135deg, #feda75, #d62976, #962fbf); }
-  .vk    { background: linear-gradient(135deg, #0077ff, #005ccc); }
-  .rbx   { background: linear-gradient(135deg, #e2231a, #b81a12); }
-  .mc    { background: linear-gradient(135deg, #62b47a, #3a7d44); }
-  .bs    { background: linear-gradient(135deg, #ffcb2b, #ff8a00); }
-
-  .section-title {
-    width: 100%;
-    text-align: center;
-    font-size: 13px;
-    letter-spacing: 5px;
-    text-transform: uppercase;
-    color: rgba(230,210,255,0.85);
-    margin: 12px 0 -4px;
-    font-weight: 600;
-    text-shadow: 0 0 12px rgba(180,130,255,0.7);
-  }
-
-  .personal-row {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    padding: 12px;
-  }
-
-  .p-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 16px 8px;
-    border-radius: 18px;
-    text-decoration: none;
-    color: #fff;
-    font-weight: 600;
-    font-size: 12px;
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.18);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    transition: all 0.25s ease;
-    text-align: center;
-  }
-
-  .p-btn:hover, .p-btn:active {
-    transform: translateY(-3px);
-    background: rgba(255,255,255,0.18);
-    box-shadow: 0 10px 25px rgba(160,110,255,0.5);
-  }
-
-  .p-btn .icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    font-weight: 700;
-  }
-
-  .empty {
-    width: 100%;
-    padding: 24px 18px;
-    text-align: center;
-    color: rgba(230,210,255,0.75);
-    font-size: 14px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .empty .emoji {
-    font-size: 28px;
-    opacity: 0.85;
-    animation: floatEmoji 3s ease-in-out infinite;
-  }
-
-  @keyframes floatEmoji {
-    0%, 100% { transform: translateY(0); }
-    50%      { transform: translateY(-6px); }
-  }
-
-  .footer {
-    margin-top: 8px;
-    font-size: 11px;
-    color: rgba(230,210,255,0.5);
-    letter-spacing: 1px;
-    text-align: center;
-  }
-
-  @media (max-width: 380px) {
-    .nickname { font-size: 24px; }
-    .avatar-wrap { width: 110px; height: 110px; }
-    .link { padding: 12px 14px; font-size: 14px; }
-    .link .icon { width: 34px; height: 34px; font-size: 18px; }
-    .p-btn { font-size: 11px; padding: 14px 6px; }
-  }
+  *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;-webkit-tap-highlight-color:transparent}
+  html,body{min-height:100vh;overflow-x:hidden}
+  body{background:linear-gradient(135deg,#2a0a4a 0%,#4b1a8a 40%,#8b5cf6 100%);background-attachment:fixed;position:relative;display:flex;justify-content:center;padding:30px 16px 60px}
+  .bubbles{position:fixed;inset:0;overflow:hidden;z-index:0;pointer-events:none}
+  .bubble{position:absolute;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,0.35),rgba(200,160,255,0.08) 60%,transparent 70%);border:1px solid rgba(255,255,255,0.25);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);box-shadow:0 0 40px rgba(180,130,255,0.35),inset 0 0 30px rgba(255,255,255,0.15);animation:float linear infinite;opacity:0.75}
+  @keyframes float{0%{transform:translateY(110vh) translateX(0) scale(0.9);opacity:0}10%{opacity:.8}90%{opacity:.8}100%{transform:translateY(-20vh) translateX(40px) scale(1.1);opacity:0}}
+  .container{width:100%;max-width:460px;position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:18px}
+  .avatar-wrap{position:relative;width:130px;height:130px;border-radius:50%;padding:4px;background:linear-gradient(135deg,rgba(255,255,255,0.5),rgba(180,130,255,0.4));box-shadow:0 0 40px rgba(180,130,255,0.7),0 0 80px rgba(140,90,255,0.5);animation:pulseGlow 3s ease-in-out infinite;cursor:pointer;user-select:none}
+  @keyframes pulseGlow{0%,100%{box-shadow:0 0 40px rgba(180,130,255,0.7),0 0 80px rgba(140,90,255,0.5)}50%{box-shadow:0 0 55px rgba(200,160,255,0.9),0 0 110px rgba(160,110,255,0.7)}}
+  .avatar{width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,#b794f6,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:46px;font-weight:800;color:white;overflow:hidden;border:2px solid rgba(255,255,255,0.4)}
+  .avatar img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;pointer-events:none}
+  .nickname{font-size:28px;font-weight:800;color:#fff;text-align:center;letter-spacing:1px;text-shadow:0 0 20px rgba(180,130,255,0.9),0 2px 4px rgba(0,0,0,0.3)}
+  .subtitle{font-size:13px;color:rgba(230,210,255,0.8);letter-spacing:3px;text-transform:uppercase;margin-top:-10px;font-weight:500}
+  .glass{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.22);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-radius:22px;box-shadow:0 8px 32px rgba(80,30,160,0.35),inset 0 1px 0 rgba(255,255,255,0.3),inset 0 -1px 0 rgba(255,255,255,0.05)}
+  .links{width:100%;display:flex;flex-direction:column;gap:10px;padding:12px}
+  .link{display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:18px;text-decoration:none;color:#fff;font-weight:600;font-size:15px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:all 0.25s cubic-bezier(.2,.7,.3,1);position:relative;overflow:hidden}
+  .link::before{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,0.25),transparent 70%);transform:translateX(-100%);transition:transform 0.6s}
+  .link:hover::before,.link:active::before{transform:translateX(100%)}
+  .link:hover,.link:active{transform:translateY(-2px) scale(1.02);background:rgba(255,255,255,0.16);box-shadow:0 10px 30px rgba(160,110,255,0.5)}
+  .link .icon{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;font-weight:700;color:#fff;letter-spacing:-0.5px}
+  .link .text{display:flex;flex-direction:column;line-height:1.2}
+  .link .text small{font-size:11px;font-weight:400;color:rgba(230,210,255,0.7);margin-top:2px}
+  .link .arrow{margin-left:auto;opacity:.5;font-size:18px}
+  .yt{background:linear-gradient(135deg,#ff0000,#cc0000)}.tg{background:linear-gradient(135deg,#2aabee,#229ed9)}.tt{background:linear-gradient(135deg,#25f4ee,#fe2c55)}.tw{background:linear-gradient(135deg,#9146ff,#6441a5)}.dc{background:linear-gradient(135deg,#5865f2,#4752c4)}.ig{background:linear-gradient(135deg,#feda75,#d62976,#962fbf)}.vk{background:linear-gradient(135deg,#0077ff,#005ccc)}.rbx{background:linear-gradient(135deg,#e2231a,#b81a12)}.mc{background:linear-gradient(135deg,#62b47a,#3a7d44)}.bs{background:linear-gradient(135deg,#ffcb2b,#ff8a00)}.custom{background:linear-gradient(135deg,#8b5cf6,#6d28d9)}
+  .section-title{width:100%;text-align:center;font-size:13px;letter-spacing:5px;text-transform:uppercase;color:rgba(230,210,255,0.85);margin:12px 0 -4px;font-weight:600;text-shadow:0 0 12px rgba(180,130,255,0.7)}
+  .personal-row{width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:12px}
+  .p-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:16px 8px;border-radius:18px;text-decoration:none;color:#fff;font-weight:600;font-size:12px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:all 0.25s ease;text-align:center}
+  .p-btn:hover,.p-btn:active{transform:translateY(-3px);background:rgba(255,255,255,0.18);box-shadow:0 10px 25px rgba(160,110,255,0.5)}
+  .p-btn .icon{width:40px;height:40px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700}
+  .empty-box{width:100%;padding:22px 18px;text-align:center;color:rgba(230,210,255,0.6);font-size:13px;letter-spacing:0.5px}
+  .footer{margin-top:8px;font-size:11px;color:rgba(230,210,255,0.5);letter-spacing:1px;text-align:center;user-select:none;cursor:pointer;padding:10px}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:100;display:none;align-items:center;justify-content:center;padding:16px;overflow-y:auto}
+  .modal-overlay.active{display:flex}
+  .modal{width:100%;max-width:420px;padding:24px;color:#fff;max-height:90vh;overflow-y:auto}
+  .modal h2{font-size:20px;margin-bottom:16px;text-align:center;letter-spacing:1px}
+  .modal input,.modal select{width:100%;padding:12px 14px;margin-bottom:10px;border-radius:14px;border:1px solid rgba(255,255,255,0.22);background:rgba(255,255,255,0.08);color:#fff;font-size:15px;font-family:inherit;outline:none;transition:0.2s}
+  .modal input:focus,.modal select:focus{border-color:rgba(180,130,255,0.8);background:rgba(255,255,255,0.15);box-shadow:0 0 0 3px rgba(180,130,255,0.25)}
+  .modal input::placeholder{color:rgba(255,255,255,0.5)}
+  .modal select option{background:#2a0a4a;color:#fff}
+  .modal select optgroup{background:#1a0533;color:#b794f6;font-weight:700}
+  .modal-btn{width:100%;padding:14px;border-radius:14px;border:none;background:linear-gradient(135deg,#8b5cf6,#6d28d9);color:#fff;font-size:15px;font-weight:700;cursor:pointer;margin-top:6px;letter-spacing:0.5px;transition:0.2s}
+  .modal-btn:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(140,90,255,0.6)}
+  .modal-btn.danger{background:linear-gradient(135deg,#ff4757,#c0392b)}
+  .modal-btn.cancel{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2)}
+  .modal-btn:disabled{opacity:.6;cursor:not-allowed}
+  .modal-close{position:absolute;top:16px;right:20px;font-size:24px;cursor:pointer;opacity:.7;background:none;border:none;color:#fff}
+  .modal-close:hover{opacity:1}
+  .error{color:#ff6b7a;font-size:13px;text-align:center;margin-top:6px;min-height:18px}
+  .success{color:#4ade80;font-size:13px;text-align:center;margin-top:6px;min-height:18px}
+  .admin-list{max-height:400px;overflow-y:auto;margin:14px 0;padding-right:4px}
+  .admin-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);margin-bottom:8px}
+  .admin-item .icon{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0}
+  .admin-item .info{flex:1;min-width:0}
+  .admin-item .info b{font-size:14px;display:block}
+  .admin-item .info span{font-size:11px;color:rgba(230,210,255,0.6);display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .admin-item button{background:rgba(255,71,87,0.2);border:1px solid rgba(255,71,87,0.5);color:#ff6b7a;padding:6px 10px;border-radius:10px;font-size:16px;cursor:pointer;flex-shrink:0}
+  .admin-item button:hover{background:rgba(255,71,87,0.4)}
+  .admin-group-title{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(180,130,255,0.9);margin:16px 0 8px;padding-left:4px;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap}
+  .admin-group-title span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .admin-group-title .sec-btns{display:flex;gap:4px;flex-shrink:0}
+  .admin-group-title .sec-btns button{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.25);color:#fff;padding:3px 8px;border-radius:8px;font-size:10px;cursor:pointer;letter-spacing:0;text-transform:none;font-weight:600}
+  .admin-group-title .sec-btns button.del{background:rgba(255,71,87,0.15);border-color:rgba(255,71,87,0.4);color:#ff6b7a}
+  .counter{font-size:12px;text-align:center;color:rgba(230,210,255,0.7);margin-bottom:10px}
+  .divider{height:1px;background:rgba(255,255,255,0.15);margin:16px 0}
+  .label-small{font-size:12px;opacity:.75;margin-bottom:6px;display:block}
+  .loading{text-align:center;color:rgba(230,210,255,0.7);font-size:13px;padding:12px}
+  @media (max-width:380px){.nickname{font-size:24px}.avatar-wrap{width:110px;height:110px}.link{padding:12px 14px;font-size:14px}.link .icon{width:34px;height:34px;font-size:18px}.p-btn{font-size:11px;padding:14px 6px}}
 </style>
 </head>
 <body>
@@ -326,124 +79,456 @@
 <div class="bubbles" id="bubbles"></div>
 
 <div class="container">
-
-  <div class="avatar-wrap">
+  <div class="avatar-wrap" id="avatarTrigger">
     <div class="avatar">
-      <img src="https://i.ibb.co/gbQ2fbQj/IMG-20260110-221321-022.jpg" alt="EDUCANAL_ GAMES avatar">
+      <img src="https://i.ibb.co/gbQ2fbQj/IMG-20260110-221321-022.jpg" alt="avatar">
     </div>
   </div>
 
   <div class="nickname">EDUCANAL_ GAMES</div>
   <div class="subtitle">Gaming • Content</div>
 
-  <div class="section-title">— Соц сети —</div>
+  <div id="sectionsContainer" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:18px;"></div>
 
-  <div class="glass links">
-    <a class="link" href="https://youtube.com/@EDUCANAL_GAMES" target="_blank">
-      <div class="icon yt">▶</div>
-      <div class="text">YouTube<small>Канал</small></div>
-      <div class="arrow">›</div>
-    </a>
-    <a class="link" href="https://t.me/EDUCANALGAMES" target="_blank">
-      <div class="icon tg">➤</div>
-      <div class="text">Telegram<small>Канал</small></div>
-      <div class="arrow">›</div>
-    </a>
-    <a class="link" href="https://tiktok.com/@educanal_games" target="_blank">
-      <div class="icon tt">♪</div>
-      <div class="text">TikTok<small>Профиль</small></div>
-      <div class="arrow">›</div>
-    </a>
-    <a class="link" href="https://twitch.tv/educanal_games" target="_blank">
-      <div class="icon tw">⌘</div>
-      <div class="text">Twitch<small>Стримы</small></div>
-      <div class="arrow">›</div>
-    </a>
-    <a class="link" href="https://discord.gg/m3BjaXvhw" target="_blank">
-      <div class="icon dc">◇</div>
-      <div class="text">Discord<small>Сервер / Канал</small></div>
-      <div class="arrow">›</div>
-    </a>
-    <a class="link" href="https://instagram.com/educanal_games" target="_blank">
-      <div class="icon ig">◉</div>
-      <div class="text">Instagram<small>Профиль</small></div>
-      <div class="arrow">›</div>
-    </a>
-    <a class="link" href="https://vk.ru/educanalgames" target="_blank">
-      <div class="icon vk">VK</div>
-      <div class="text">VK<small>Канал</small></div>
-      <div class="arrow">›</div>
-    </a>
+  <div class="footer" id="footerTrigger">© EDUCANAL_ GAMES</div>
+</div>
+
+<div class="modal-overlay" id="pwdModal">
+  <div class="modal glass" style="position:relative;">
+    <button class="modal-close" onclick="closeModal('pwdModal')">✕</button>
+    <h2>🔒 Вход в админку</h2>
+    <input type="password" id="pwdInput" placeholder="Введи пароль" autocomplete="off">
+    <div class="error" id="pwdError"></div>
+    <button class="modal-btn" onclick="checkPassword()">Войти</button>
   </div>
+</div>
 
-  <div class="section-title">— Личные —</div>
+<div class="modal-overlay" id="adminModal">
+  <div class="modal glass" style="position:relative;">
+    <button class="modal-close" onclick="closeModal('adminModal')">✕</button>
+    <h2>⚙️ Админ-панель</h2>
+    <div class="counter" id="counter">Всего элементов: 0 / 500</div>
 
-  <div class="glass personal-row">
-    <a class="p-btn" href="https://t.me/your_personal_tg" target="_blank">
-      <div class="icon tg">➤</div>Личный TG
-    </a>
-    <a class="p-btn" href="https://discord.com/users/your_id" target="_blank">
-      <div class="icon dc">◇</div>Личный Discord
-    </a>
-    <a class="p-btn" href="https://vk.ru/educanalgames" target="_blank">
-      <div class="icon vk">VK</div>Личный VK
-    </a>
+    <div class="divider"></div>
+    <span class="label-small">➕ Добавить элемент</span>
+
+    <select id="newTarget">
+      <optgroup label="Существующие секции" id="sectionsOptgroup"></optgroup>
+      <option value="__new__">➕ Создать новую секцию…</option>
+    </select>
+
+    <div id="newSectionWrap" style="display:none; padding:10px; background:rgba(255,255,255,0.05); border-radius:14px; margin-bottom:10px; border:1px solid rgba(255,255,255,0.15);">
+      <input type="text" id="newSectionName" placeholder="Название новой секции">
+      <select id="newSectionLayout">
+        <option value="list">📋 Список (большие кнопки)</option>
+        <option value="grid">▦ Сетка (3 в ряд, маленькие)</option>
+      </select>
+    </div>
+
+    <input type="text" id="newName" placeholder="Название">
+    <input type="text" id="newSub" placeholder="Подпись (необязательно)">
+    <input type="url" id="newUrl" placeholder="Ссылка (https://...)">
+    <select id="newIcon">
+      <option value="custom">✦ Своя (фиолетовая)</option>
+      <option value="yt">▶ YouTube (красная)</option>
+      <option value="tg">➤ Telegram (голубая)</option>
+      <option value="tt">♪ TikTok (бирюзово-розовая)</option>
+      <option value="tw">⌘ Twitch (фиолетовая)</option>
+      <option value="dc">◇ Discord (синяя)</option>
+      <option value="ig">◉ Instagram (розовая)</option>
+      <option value="vk">VK VK (синяя)</option>
+      <option value="rbx">◈ Roblox (красная)</option>
+      <option value="mc">▣ Minecraft (зелёная)</option>
+      <option value="bs">★ Brawl Stars (жёлтая)</option>
+    </select>
+    <div class="error" id="addError"></div>
+    <div class="success" id="addSuccess"></div>
+    <button class="modal-btn" id="addBtn" onclick="addItem()">Добавить</button>
+
+    <div class="divider"></div>
+    <span class="label-small">📋 Управление всем</span>
+    <div class="admin-list" id="adminList"><div class="loading">Загрузка…</div></div>
+
+    <button class="modal-btn danger" onclick="clearAll()">🗑 Удалить ВСЁ</button>
+    <button class="modal-btn cancel" style="margin-top:8px;" onclick="closeModal('adminModal')">Закрыть</button>
   </div>
-
-  <div class="section-title">— Игровые акки —</div>
-
-  <div class="glass links">
-    <a class="link" href="https://www.roblox.com/users/profile?username=2BOSS2012" target="_blank">
-      <div class="icon rbx">◈</div>
-      <div class="text">Roblox<small>2BOSS2012</small></div>
-      <div class="arrow">›</div>
-    </a>
-    <a class="link" href="https://namemc.com/profile/2BOSS2012" target="_blank">
-      <div class="icon mc">▣</div>
-      <div class="text">Minecraft<small>2BOSS2012</small></div>
-      <div class="arrow">›</div>
-    </a>
-    <a class="link" href="https://link.brawlstars.com/invite/friend/en/?tag=9J08RUVP2" target="_blank">
-      <div class="icon bs">★</div>
-      <div class="text">Brawl Stars<small>EDUCANAL</small></div>
-      <div class="arrow">›</div>
-    </a>
-  </div>
-
-  <div class="section-title">— Мои сайты —</div>
-
-  <div class="glass empty">
-    <div class="emoji">◇</div>
-    <div>Пока сайтов нет…</div>
-    <div style="font-size:11px; opacity:0.6;">Скоро тут появятся мои проекты ✦</div>
-  </div>
-
-  <div class="section-title">— Мои игры —</div>
-
-  <div class="glass empty">
-    <div class="emoji">◈</div>
-    <div>Пока игр нет…</div>
-    <div style="font-size:11px; opacity:0.6;">Скоро тут появятся мои проекты ✦</div>
-  </div>
-
-  <div class="footer">© EDUCANAL_ GAMES</div>
-
 </div>
 
 <script>
+  /* ============================================================
+     КЛЮЧИ JSONBIN
+     ============================================================ */
+  const JSONBIN_BIN_ID     = '6acded59ac6210605a2cf197';
+  const JSONBIN_MASTER_KEY = '$2a$10$YB9ij5Y.Hr4QAWaNN.yejefrVlqeQ4Z16YdPc6AKIHhmZBRjznmAq';
+  const ADMIN_PASSWORD     = "sozjdho982+8#9_($;(299? '! V92(2;9\"";
+  const MAX_ITEMS          = 500;
+  /* ============================================================ */
+
+  const API_URL = 'https://api.jsonbin.io/v3/b/' + JSONBIN_BIN_ID;
+  const iconSymbols = {yt:'▶',tg:'➤',tt:'♪',tw:'⌘',dc:'◇',ig:'◉',vk:'VK',rbx:'◈',mc:'▣',bs:'★',custom:'✦'};
+
+  const DEFAULT_SECTIONS = [
+    {
+      id: 'socials',
+      title: 'Соц сети',
+      layout: 'list',
+      items: [
+        { id: 's1', name: 'YouTube', sub: 'Канал', url: 'https://youtube.com/@EDUCANAL_GAMES', icon: 'yt' },
+        { id: 's2', name: 'Telegram', sub: 'Канал', url: 'https://t.me/EDUCANALGAMES', icon: 'tg' },
+        { id: 's3', name: 'TikTok', sub: 'Профиль', url: 'https://tiktok.com/@educanal_games', icon: 'tt' },
+        { id: 's4', name: 'Twitch', sub: 'Стримы', url: 'https://twitch.tv/educanal_games', icon: 'tw' },
+        { id: 's5', name: 'Discord', sub: 'Сервер', url: 'https://discord.gg/m3BjaXvhw', icon: 'dc' },
+        { id: 's6', name: 'Instagram', sub: 'Профиль', url: 'https://instagram.com/educanal_games', icon: 'ig' },
+        { id: 's7', name: 'VK', sub: 'Канал', url: 'https://vk.ru/educanalgames', icon: 'vk' }
+      ]
+    },
+    {
+      id: 'personal',
+      title: 'Личные',
+      layout: 'grid',
+      items: [
+        { id: 'p1', name: 'Личный TG', sub: '', url: 'https://t.me/your_personal_tg', icon: 'tg' },
+        { id: 'p2', name: 'Личный DC', sub: '', url: 'https://discord.com/users/your_id', icon: 'dc' },
+        { id: 'p3', name: 'Личный VK', sub: '', url: 'https://vk.ru/educanalgames', icon: 'vk' }
+      ]
+    },
+    {
+      id: 'game_accs',
+      title: 'Игровые акки',
+      layout: 'list',
+      items: [
+        { id: 'g1', name: 'Roblox', sub: '2BOSS2012', url: 'https://www.roblox.com/users/profile?username=2BOSS2012', icon: 'rbx' },
+        { id: 'g2', name: 'Minecraft', sub: '2BOSS2012', url: 'https://namemc.com/profile/2BOSS2012', icon: 'mc' },
+        { id: 'g3', name: 'Brawl Stars', sub: 'EDUCANAL', url: 'https://link.brawlstars.com/invite/friend/en/?tag=9J08RUVP2', icon: 'bs' }
+      ]
+    },
+    { id: 'my_sites', title: 'Мои сайты', layout: 'list', items: [] },
+    { id: 'my_games', title: 'Мои игры', layout: 'list', items: [] }
+  ];
+
+  let siteData = { sections: [] };
+  let initialized = false;
+
   const bubbles = document.getElementById('bubbles');
-  const COUNT = 18;
-  for (let i = 0; i < COUNT; i++) {
+  for (let i = 0; i < 18; i++) {
     const b = document.createElement('div');
     b.className = 'bubble';
     const size = Math.random() * 90 + 30;
-    b.style.width = size + 'px';
-    b.style.height = size + 'px';
+    b.style.width = size + 'px'; b.style.height = size + 'px';
     b.style.left = Math.random() * 100 + '%';
     b.style.animationDuration = (Math.random() * 14 + 12) + 's';
     b.style.animationDelay = (-Math.random() * 20) + 's';
     bubbles.appendChild(b);
   }
+
+  function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+  function escapeHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+  async function loadData() {
+    try {
+      const res = await fetch(API_URL + '/latest', { headers: { 'X-Master-Key': JSONBIN_MASTER_KEY } });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      const rec = data.record;
+
+      if (rec && Array.isArray(rec.sections) && rec.sections.length > 0) {
+        siteData = { sections: rec.sections };
+        initialized = true;
+      } else {
+        siteData = { sections: JSON.parse(JSON.stringify(DEFAULT_SECTIONS)) };
+        initialized = true;
+        await saveData();
+      }
+    } catch(e) {
+      console.error('Ошибка загрузки:', e);
+      if (!initialized) siteData = { sections: JSON.parse(JSON.stringify(DEFAULT_SECTIONS)) };
+    }
+    renderAll();
+  }
+
+  async function saveData() {
+    try {
+      const res = await fetch(API_URL, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_MASTER_KEY },
+        body: JSON.stringify(siteData)
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return true;
+    } catch(e) { console.error('Ошибка сохранения:', e); return false; }
+  }
+
+  function createListLink(item) {
+    const a = document.createElement('a');
+    a.className = 'link';
+    a.href = item.url;
+    a.target = '_blank';
+    a.innerHTML = `
+      <div class="icon ${item.icon}">${iconSymbols[item.icon] || '✦'}</div>
+      <div class="text">${escapeHtml(item.name)}${item.sub ? `<small>${escapeHtml(item.sub)}</small>` : ''}</div>
+      <div class="arrow">›</div>`;
+    return a;
+  }
+
+  function createGridBtn(item) {
+    const a = document.createElement('a');
+    a.className = 'p-btn';
+    a.href = item.url;
+    a.target = '_blank';
+    a.innerHTML = `
+      <div class="icon ${item.icon}">${iconSymbols[item.icon] || '✦'}</div>
+      ${escapeHtml(item.name)}`;
+    return a;
+  }
+
+  function renderAll() {
+    const wrap = document.getElementById('sectionsContainer');
+    wrap.innerHTML = '';
+
+    if (!siteData.sections || siteData.sections.length === 0) {
+      wrap.innerHTML = '<div class="glass empty-box" style="width:100%;">Пока пусто… ✦</div>';
+      return;
+    }
+
+    siteData.sections.forEach(sec => {
+      const box = document.createElement('div');
+      box.style.cssText = 'width:100%;display:flex;flex-direction:column;align-items:center;gap:0;';
+
+      const title = document.createElement('div');
+      title.className = 'section-title';
+      title.textContent = '— ' + sec.title + ' —';
+      box.appendChild(title);
+
+      const container = document.createElement('div');
+      container.className = sec.layout === 'grid' ? 'glass personal-row' : 'glass links';
+
+      if (!sec.items || sec.items.length === 0) {
+        container.innerHTML = '<div class="empty-box" style="grid-column:1/-1;width:100%;">Пока пусто… ✦</div>';
+      } else {
+        sec.items.forEach(it => {
+          container.appendChild(sec.layout === 'grid' ? createGridBtn(it) : createListLink(it));
+        });
+      }
+      box.appendChild(container);
+      wrap.appendChild(box);
+    });
+  }
+
+  function openModal(id) { document.getElementById(id).classList.add('active'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+  let pressTimer = null;
+  const avatar = document.getElementById('avatarTrigger');
+  const startPress = () => { pressTimer = setTimeout(() => openModal('pwdModal'), 1500); };
+  const cancelPress = () => { clearTimeout(pressTimer); };
+  avatar.addEventListener('touchstart', startPress);
+  avatar.addEventListener('touchend', cancelPress);
+  avatar.addEventListener('touchcancel', cancelPress);
+  avatar.addEventListener('mousedown', startPress);
+  avatar.addEventListener('mouseup', cancelPress);
+  avatar.addEventListener('mouseleave', cancelPress);
+
+  let tapCount = 0, tapTimer = null;
+  document.getElementById('footerTrigger').addEventListener('click', () => {
+    tapCount++;
+    clearTimeout(tapTimer);
+    tapTimer = setTimeout(() => tapCount = 0, 1200);
+    if (tapCount >= 5) { tapCount = 0; openModal('pwdModal'); }
+  });
+
+  function checkPassword() {
+    const input = document.getElementById('pwdInput').value;
+    const err = document.getElementById('pwdError');
+    if (input === ADMIN_PASSWORD) {
+      err.textContent = '';
+      document.getElementById('pwdInput').value = '';
+      closeModal('pwdModal');
+      openModal('adminModal');
+      renderSectionsDropdown();
+      renderAdminList();
+    } else {
+      err.textContent = '❌ Неверный пароль';
+    }
+  }
+  document.getElementById('pwdInput').addEventListener('keypress', e => { if (e.key === 'Enter') checkPassword(); });
+
+  function renderSectionsDropdown() {
+    const grp = document.getElementById('sectionsOptgroup');
+    grp.innerHTML = '';
+    siteData.sections.forEach(sec => {
+      const opt = document.createElement('option');
+      opt.value = 'sec:' + sec.id;
+      opt.textContent = (sec.layout === 'grid' ? '▦ ' : '📋 ') + sec.title;
+      grp.appendChild(opt);
+    });
+    if (siteData.sections[0]) {
+      document.getElementById('newTarget').value = 'sec:' + siteData.sections[0].id;
+    }
+  }
+
+  document.getElementById('newTarget').addEventListener('change', e => {
+    document.getElementById('newSectionWrap').style.display =
+      e.target.value === '__new__' ? 'block' : 'none';
+  });
+
+  async function addItem() {
+    const target = document.getElementById('newTarget').value;
+    const name = document.getElementById('newName').value.trim();
+    const sub  = document.getElementById('newSub').value.trim();
+    const url  = document.getElementById('newUrl').value.trim();
+    const icon = document.getElementById('newIcon').value;
+    const err  = document.getElementById('addError');
+    const succ = document.getElementById('addSuccess');
+    const btn  = document.getElementById('addBtn');
+
+    err.textContent = ''; succ.textContent = '';
+
+    if (!name) { err.textContent = '⚠️ Введи название'; return; }
+    if (!url)  { err.textContent = '⚠️ Введи ссылку'; return; }
+    if (!/^https?:\/\//i.test(url)) { err.textContent = '⚠️ Ссылка должна начинаться с https://'; return; }
+
+    const total = siteData.sections.reduce((s, sec) => s + sec.items.length, 0);
+    if (total >= MAX_ITEMS) { err.textContent = `⚠️ Максимум ${MAX_ITEMS} элементов`; return; }
+
+    const item = { id: genId(), name, sub, url, icon };
+
+    if (target === '__new__') {
+      const title = document.getElementById('newSectionName').value.trim();
+      const layout = document.getElementById('newSectionLayout').value;
+      if (!title) { err.textContent = '⚠️ Введи название секции'; return; }
+      siteData.sections.push({ id: genId(), title, layout, items: [item] });
+    } else if (target.startsWith('sec:')) {
+      const sid = target.slice(4);
+      const sec = siteData.sections.find(s => s.id === sid);
+      if (!sec) { err.textContent = '⚠️ Секция не найдена'; return; }
+      sec.items.push(item);
+    }
+
+    btn.disabled = true; btn.textContent = 'Сохранение…';
+    const ok = await saveData();
+    btn.disabled = false; btn.textContent = 'Добавить';
+
+    if (ok) {
+      renderAll();
+      renderSectionsDropdown();
+      renderAdminList();
+      document.getElementById('newName').value = '';
+      document.getElementById('newSub').value = '';
+      document.getElementById('newUrl').value = '';
+      document.getElementById('newIcon').value = 'custom';
+      document.getElementById('newSectionName').value = '';
+      document.getElementById('newTarget').value = '__new__';
+      document.getElementById('newSectionWrap').style.display = 'none';
+      succ.textContent = '✅ Добавлено и видно всем!';
+      setTimeout(() => succ.textContent = '', 2500);
+    } else {
+      err.textContent = '❌ Ошибка сохранения. Проверь ключи JSONBin.';
+    }
+  }
+
+  function makeGroupTitle(sec) {
+    const div = document.createElement('div');
+    div.className = 'admin-group-title';
+    div.innerHTML = `
+      <span>${sec.layout === 'grid' ? '▦' : '📋'} ${escapeHtml(sec.title)} <span style="opacity:.5;font-size:9px;letter-spacing:0;">(${sec.items.length})</span></span>
+      <div class="sec-btns">
+        <button onclick="renameSection('${sec.id}')">✏️</button>
+        <button class="del" onclick="deleteSection('${sec.id}')">🗑</button>
+      </div>`;
+    return div;
+  }
+
+  function makeAdminItem(item) {
+    const div = document.createElement('div');
+    div.className = 'admin-item';
+    div.innerHTML = `
+      <div class="icon ${item.icon}">${iconSymbols[item.icon] || '✦'}</div>
+      <div class="info"><b>${escapeHtml(item.name)}</b><span>${escapeHtml(item.url)}</span></div>
+      <button onclick="deleteItem('${item.id}')">✕</button>`;
+    return div;
+  }
+
+  function renderAdminList() {
+    const list = document.getElementById('adminList');
+    list.innerHTML = '';
+    const total = siteData.sections.reduce((s, sec) => s + sec.items.length, 0);
+    document.getElementById('counter').textContent = `Всего элементов: ${total} / ${MAX_ITEMS}`;
+
+    if (siteData.sections.length === 0) {
+      list.innerHTML = '<div style="text-align:center;opacity:.6;font-size:13px;padding:14px;">Пока нет секций. Создай первую 👆</div>';
+      return;
+    }
+
+    siteData.sections.forEach(sec => {
+      list.appendChild(makeGroupTitle(sec));
+      if (sec.items.length === 0) {
+        const empty = document.createElement('div');
+        empty.style.cssText = 'font-size:12px;opacity:.5;padding:6px 12px;text-align:center;';
+        empty.textContent = 'Пусто';
+        list.appendChild(empty);
+      } else {
+        sec.items.forEach(it => list.appendChild(makeAdminItem(it)));
+      }
+    });
+  }
+
+  async function deleteItem(id) {
+    if (!confirm('Удалить этот элемент?')) return;
+    let found = false;
+    for (const sec of siteData.sections) {
+      const j = sec.items.findIndex(x => x.id === id);
+      if (j !== -1) { sec.items.splice(j, 1); found = true; break; }
+    }
+    if (found) {
+      await saveData();
+      renderAll();
+      renderSectionsDropdown();
+      renderAdminList();
+    }
+  }
+
+  async function deleteSection(id) {
+    const idx = siteData.sections.findIndex(s => s.id === id);
+    if (idx === -1) return;
+    const sec = siteData.sections[idx];
+    if (!confirm(`Удалить секцию "${sec.title}" и все её ${sec.items.length} элемент(ов)?`)) return;
+    siteData.sections.splice(idx, 1);
+    await saveData();
+    renderAll();
+    renderSectionsDropdown();
+    renderAdminList();
+  }
+
+  async function renameSection(id) {
+    const sec = siteData.sections.find(s => s.id === id);
+    if (!sec) return;
+    const newName = prompt('Новое название секции:', sec.title);
+    if (newName === null) return;
+    const trimmed = newName.trim();
+    if (!trimmed) { alert('Название не может быть пустым'); return; }
+    sec.title = trimmed;
+    await saveData();
+    renderAll();
+    renderSectionsDropdown();
+    renderAdminList();
+  }
+
+  async function clearAll() {
+    if (!confirm('Удалить ВСЁ и вернуть стандартные разделы? Все твои кнопки пропадут!')) return;
+    const backup = JSON.parse(JSON.stringify(siteData));
+    siteData = { sections: JSON.parse(JSON.stringify(DEFAULT_SECTIONS)) };
+    const ok = await saveData();
+    if (!ok) { siteData = backup; alert('Ошибка сброса'); }
+    renderAll();
+    renderSectionsDropdown();
+    renderAdminList();
+  }
+
+  document.querySelectorAll('.modal-overlay').forEach(m => {
+    m.addEventListener('click', e => { if (e.target === m) m.classList.remove('active'); });
+  });
+
+  loadData();
 </script>
 
 </body>
