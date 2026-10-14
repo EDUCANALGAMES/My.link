@@ -319,7 +319,7 @@
       </div>
       <input type="text" id="newName" placeholder="Название">
       <input type="text" id="newSub" placeholder="Подпись (необязательно)">
-      <input type="url" id="newUrl" placeholder="Ссылка (https://...)">
+      <input type="text" id="newUrl" placeholder="Ссылка (необязательно)">
       <div id="imageFieldWrap" style="display:none"><input type="url" id="newImage" placeholder="URL картинки"></div>
       <div id="iconFieldWrap">
         <span class="label-small">🎨 Иконка</span>
@@ -401,6 +401,11 @@
       <button class="modal-btn" onclick="requestNotifications()">🔔 Включить уведомления</button>
       <p class="success" id="notifStatus"></p>
       <div class="divider"></div>
+      <span class="label-small">🔐 Пароль админки</span>
+      <input type="password" id="inpNewPwd" placeholder="Новый пароль" autocomplete="new-password">
+      <button class="modal-btn" onclick="changePassword()">Сменить пароль</button>
+      <p class="success" id="pwdChangeStatus"></p>
+      <div class="divider"></div>
       <span class="label-small">💾 Резервная копия</span>
       <button class="modal-btn cancel" onclick="exportData()">📤 Скачать JSON</button>
       <button class="modal-btn cancel" style="margin-top:8px" onclick="document.getElementById('importFile').click()">📥 Загрузить JSON</button>
@@ -425,7 +430,7 @@
 
     <input type="text" id="editName" placeholder="Название">
     <input type="text" id="editSub" placeholder="Подпись">
-    <input type="url" id="editUrl" placeholder="Ссылка (https://...)">
+    <input type="text" id="editUrl" placeholder="Ссылка (необязательно)">
 
     <div id="editImageWrap" style="display:none">
       <input type="url" id="editImage" placeholder="URL картинки">
@@ -467,13 +472,15 @@
 <script>
 const JSONBIN_BIN_ID     = '6acded59ac6210605a2cf197';
 const JSONBIN_MASTER_KEY = '$2a$10$YB9ij5Y.Hr4QAWaNN.yejefrVlqeQ4Z16YdPc6AKIHhmZBRjznmAq';
-const ADMIN_PASSWORD     = "sozjdho982+8#9_($;(299? '! V92(2;9\"";
 const MAX_ITEMS = 500;
 const API_URL = 'https://api.jsonbin.io/v3/b/' + JSONBIN_BIN_ID;
 const CACHE_KEY = 'educanal_cache_v1';
 const THEME_KEY = 'educanal_theme';
 const BG_KEY = 'educanal_bg';
 const LAST_SPLASH_KEY = 'educanal_last_splash';
+
+/* ПАРОЛЬ В ХЕШЕ — в открытом виде не виден */
+let ADMIN_PASSWORD_HASH = localStorage.getItem('educanal_admin_hash') || '';
 
 const QUICK_COLORS = [
   '#ef4444','#dc2626','#f97316','#ea580c','#f59e0b',
@@ -580,6 +587,13 @@ const $ = id => document.getElementById(id);
 const genId = () => Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const escapeHtml = s => { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; };
 const today = () => new Date().toISOString().slice(0,10);
+
+/* SHA-256 хеширование */
+async function sha256(str){
+  const buf = new TextEncoder().encode(str);
+  const h = await crypto.subtle.digest('SHA-256', buf);
+  return [...new Uint8Array(h)].map(b => b.toString(16).padStart(2,'0')).join('');
+}
 
 function setSyncStatus(status){
   const d = $('syncDot');
@@ -705,7 +719,6 @@ function migrateRecord(rec){
   if (Array.isArray(rec) && rec.length) return {sections:[{id:'links',title:'Мои кнопки',layout:'list',items:rec}],theme:'purple',views:0};
   return null;
 }
-
 async function loadData(){
   const cached = loadFromCache();
   if (cached && cached.sections){
@@ -874,30 +887,23 @@ function applySettings(){
 function updateViewsDisplay(){
   $('viewsCount').textContent = (siteData.views||0).toLocaleString('ru-RU');
 }
-
-/* ИКОНКИ */
 function getIconHtml(item){
-  // 1. Фото-иконка через iconImage (для любого типа)
   if (item.iconImage){
     const bg = item.iconColor || '';
     return `<div class="icon img"${bg ? ` style="background:${bg}"` : ''}><img src="${escapeHtml(item.iconImage)}" onerror="this.parentElement.innerHTML='🖼️'"></div>`;
   }
-  // 2. Тип "С фото" — большая картинка
   if (item.type === 'image' && item.image){
     const bg = item.iconColor || '';
     return `<div class="icon img"${bg ? ` style="background:${bg}"` : ''}><img src="${escapeHtml(item.image)}" onerror="this.parentElement.innerHTML='🖼️'"></div>`;
   }
-  // 3. Свой эмодзи
   if (item.customIcon){
     const bg = item.iconColor || 'rgba(255,255,255,.1)';
     return `<div class="icon emoji-only" style="background:${bg}">${escapeHtml(item.customIcon)}</div>`;
   }
-  // 4. Файл
   if (item.type === 'file'){
     const bg = item.iconColor || '';
     return `<div class="icon file"${bg ? ` style="background:${bg}"` : ''}>📄</div>`;
   }
-  // 5. Стандартная иконка
   const key = item.icon || 'custom';
   const sym = ICON_SYMBOLS[key] || '✦';
   if (item.iconColor){
@@ -931,25 +937,42 @@ function getIconHtmlSmall(item){
   if (key === 'custom') return `<div class="icon emoji-only" style="background:rgba(255,255,255,.1)">✦</div>`;
   return `<div class="icon ${key}">${sym}</div>`;
 }
-
 function createListLink(item){
   const a = document.createElement('a');
-  a.className='link'; a.href=item.url; a.target='_blank';
-  if (item.type==='file') a.setAttribute('download','');
-  const arrow = item.type==='file' ? '⬇' : '›';
+  a.className='link';
+  if (item.url){
+    a.href = item.url;
+    a.target = '_blank';
+    if (item.type==='file') a.setAttribute('download','');
+  } else {
+    a.href = 'javascript:void(0)';
+    a.style.cursor = 'default';
+  }
+  const arrow = item.url ? (item.type==='file' ? '⬇' : '›') : '•';
   const sub = item.type==='file' && !item.sub ? 'Нажми чтобы скачать' : item.sub;
   a.innerHTML = `${getIconHtml(item)}<div class="text">${escapeHtml(item.name)}${sub?`<small>${escapeHtml(sub)}</small>`:''}</div><div class="arrow">${arrow}</div>`;
   if (item.btnBg) a.style.background = item.btnBg;
-  a.addEventListener('click', () => { playClickSound(); trackClick(item.id); });
+  if (item.url){
+    a.addEventListener('click', () => { playClickSound(); trackClick(item.id); });
+  }
   return a;
 }
 function createGridBtn(item){
   const a = document.createElement('a');
-  a.className='p-btn'; a.href=item.url; a.target='_blank';
-  if (item.type==='file') a.setAttribute('download','');
+  a.className='p-btn';
+  if (item.url){
+    a.href = item.url;
+    a.target = '_blank';
+    if (item.type==='file') a.setAttribute('download','');
+  } else {
+    a.href = 'javascript:void(0)';
+    a.style.cursor = 'default';
+  }
   a.innerHTML = `${getIconHtml(item)}${escapeHtml(item.name)}`;
   if (item.btnBg) a.style.background = item.btnBg;
-  a.addEventListener('click', () => { playClickSound(); trackClick(item.id); });
+  if (item.url){
+    a.addEventListener('click', () => { playClickSound(); trackClick(item.id); });
+  }
   return a;
 }
 function renderAll(){
@@ -976,7 +999,6 @@ function renderAll(){
     wrap.appendChild(box);
   });
 }
-
 function openModal(id){ $(id).classList.add('active'); }
 function closeModal(id){ $(id).classList.remove('active'); }
 
@@ -994,22 +1016,62 @@ $('footerTrigger').addEventListener('click',()=>{
   if (tapCount>=5){ tapCount=0; openModal('pwdModal'); }
 });
 
-function checkPassword(){
-  const v = $('pwdInput').value;
+function openAdmin(){
+  closeModal('pwdModal');
+  openModal('adminModal');
+  renderBgGrid(); renderThemeGrid(); renderSectionsDropdown(); renderAdminList();
+  renderAdminProfile(); renderStats(); updateSwitches();
+  $('effectSelect').value = siteData.settings.effect || 'bubbles';
+  initIconPicker('iconPicker', 'add');
+  initPalettes();
+}
+
+async function checkPassword(){
+  const input = $('pwdInput').value;
+  if (!input) return;
   const err = $('pwdError');
-  if (v === ADMIN_PASSWORD){
-    err.textContent='';
-    $('pwdInput').value='';
-    closeModal('pwdModal');
-    openModal('adminModal');
-    renderBgGrid(); renderThemeGrid(); renderSectionsDropdown(); renderAdminList();
-    renderAdminProfile(); renderStats(); updateSwitches();
-    $('effectSelect').value = siteData.settings.effect || 'bubbles';
-    initIconPicker('iconPicker', 'add');
-    initPalettes();
-  } else err.textContent='❌ Неверный пароль';
+  const hash = await sha256(input);
+
+  if (!ADMIN_PASSWORD_HASH){
+    localStorage.setItem('educanal_admin_hash', hash);
+    ADMIN_PASSWORD_HASH = hash;
+    err.textContent = '';
+    $('pwdInput').value = '';
+    openAdmin();
+    setTimeout(() => {
+      alert('✅ Пароль установлен!\n\nТвой хеш:\n\n' + hash + '\n\nСкопируй его и вставь в код в переменную ADMIN_PASSWORD_HASH, чтобы пароль работал после очистки кеша.');
+    }, 500);
+    return;
+  }
+
+  if (hash === ADMIN_PASSWORD_HASH){
+    err.textContent = '';
+    $('pwdInput').value = '';
+    openAdmin();
+  } else {
+    err.textContent = '❌ Неверный пароль';
+  }
 }
 $('pwdInput').addEventListener('keypress', e => { if (e.key==='Enter') checkPassword(); });
+
+async function changePassword(){
+  const pwd = $('inpNewPwd').value;
+  const status = $('pwdChangeStatus');
+  if (!pwd || pwd.length < 4){
+    status.style.color = '#ff6b7a';
+    status.textContent = '❌ Минимум 4 символа';
+    return;
+  }
+  const hash = await sha256(pwd);
+  localStorage.setItem('educanal_admin_hash', hash);
+  ADMIN_PASSWORD_HASH = hash;
+  $('inpNewPwd').value = '';
+  status.style.color = '#4ade80';
+  status.textContent = '✅ Пароль изменён!';
+  setTimeout(() => {
+    alert('🔑 Твой новый хеш:\n\n' + hash + '\n\n⚠️ Вставь его в код в переменную ADMIN_PASSWORD_HASH, чтобы пароль работал после очистки кеша.');
+  }, 300);
+}
 
 function switchTab(t){
   document.querySelectorAll('.tab').forEach(x => x.classList.toggle('active', x.dataset.tab===t));
@@ -1018,7 +1080,6 @@ function switchTab(t){
   if (t==='stats') renderStats();
   if (t==='profile') renderAdminProfile();
 }
-
 function initPalettes(){
   ['btnPaletteAdd','iconPaletteAdd','btnPaletteEdit','iconPaletteEdit'].forEach(id => {
     const c = $(id); if (!c) return;
@@ -1039,7 +1100,6 @@ function initPalettes(){
     });
   });
 }
-
 function renderBgGrid(){
   const g = $('bgGrid'); g.innerHTML='';
   const currentBg = siteData.settings.bg || 'classic';
@@ -1113,7 +1173,6 @@ async function toggleSwitch(key){
   if (saveTimer){ clearTimeout(saveTimer); saveTimer = null; }
   await doSave();
 }
-
 function initIconPicker(containerId, mode){
   const c = $(containerId); c.innerHTML = '';
   const activeIcon = mode === 'add' ? currentIcon : editIcon;
@@ -1163,7 +1222,7 @@ function selectType(t){
   $('imageFieldWrap').style.display = t==='image' ? 'block' : 'none';
   $('iconFieldWrap').style.display = t==='link' ? 'block' : 'none';
   const u = $('newUrl');
-  u.placeholder = t==='file' ? 'Ссылка на файл (https://...)' : t==='image' ? 'Ссылка при клике' : 'Ссылка (https://...)';
+  u.placeholder = t==='file' ? 'Ссылка на файл (необязательно)' : t==='image' ? 'Ссылка при клике (необязательно)' : 'Ссылка (необязательно)';
 }
 function selectEditType(t){
   editType = t;
@@ -1199,8 +1258,7 @@ function addItem(){
   const err = $('addError'), succ = $('addSuccess');
   err.textContent=''; succ.textContent='';
   if (!name){ err.textContent='⚠️ Введи название'; return; }
-  if (!url){ err.textContent='⚠️ Введи ссылку'; return; }
-  if (!/^https?:\/\//i.test(url)){ err.textContent='⚠️ Ссылка должна начинаться с https://'; return; }
+  if (url && !/^https?:\/\//i.test(url)){ err.textContent='⚠️ Ссылка должна начинаться с https://'; return; }
   if (currentType==='image' && !image){ err.textContent='⚠️ Введи URL картинки'; return; }
   const total = siteData.sections.reduce((s,x)=>s+x.items.length,0);
   if (total >= MAX_ITEMS){ err.textContent=`⚠️ Максимум ${MAX_ITEMS}`; return; }
@@ -1243,9 +1301,10 @@ function makeGroupTitle(sec){
 function makeAdminItem(item){
   const div = document.createElement('div');
   div.className='admin-item';
+  const urlText = item.url ? escapeHtml(item.url) : '<i style="opacity:.5">без ссылки</i>';
   div.innerHTML = `
     ${getIconHtmlSmall(item)}
-    <div class="info"><b>${escapeHtml(item.name)}</b><span>${escapeHtml(item.url)}</span></div>
+    <div class="info"><b>${escapeHtml(item.name)}</b><span>${urlText}</span></div>
     <button class="btn-edit" onclick="editItem('${item.id}')">✏️</button>
     <button class="btn-del" onclick="deleteItem('${item.id}')">✕</button>
   `;
@@ -1319,8 +1378,7 @@ async function saveEdit(){
   const err = $('editError'), succ = $('editSuccess');
   err.textContent=''; succ.textContent='';
   if (!name){ err.textContent='⚠️ Введи название'; return; }
-  if (!url){ err.textContent='⚠️ Введи ссылку'; return; }
-  if (!/^https?:\/\//i.test(url)){ err.textContent='⚠️ Ссылка должна начинаться с https://'; return; }
+  if (url && !/^https?:\/\//i.test(url)){ err.textContent='⚠️ Ссылка должна начинаться с https://'; return; }
   if (editType==='image' && !image){ err.textContent='⚠️ Введи URL картинки'; return; }
   const it = found.item;
   it.type = editType;
