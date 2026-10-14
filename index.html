@@ -47,7 +47,8 @@
   .link::before{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.25),transparent 70%);transform:translateX(-100%);transition:transform .6s}
   .link:hover::before,.link:active::before{transform:translateX(100%)}
   .link:hover,.link:active{transform:translateY(-2px) scale(1.02);background:rgba(255,255,255,.16);box-shadow:0 10px 30px rgba(var(--glow),.5)}
-  .link .icon{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;font-weight:700;color:#fff;overflow:hidden}
+  .link .icon{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;font-weight:700;color:#fff;overflow:hidden;background:linear-gradient(135deg,var(--a2),var(--a2))}
+  .link .icon.emoji-only{background:rgba(255,255,255,.1)!important;font-size:24px}
   .link .icon img{width:100%;height:100%;object-fit:cover;display:block}
   .link .text{display:flex;flex-direction:column;line-height:1.2;flex:1;min-width:0}
   .link .text small{font-size:11px;font-weight:400;color:rgba(var(--tint),.7);margin-top:2px}
@@ -57,7 +58,8 @@
   .personal-row{width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:12px}
   .p-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:16px 8px;border-radius:18px;text-decoration:none;color:var(--text);font-weight:600;font-size:12px;background:var(--glass-btn);border:1px solid var(--glass-border);backdrop-filter:blur(10px);transition:all .25s ease;text-align:center}
   .p-btn:hover,.p-btn:active{transform:translateY(-3px);background:rgba(255,255,255,.18);box-shadow:0 10px 25px rgba(var(--glow),.5)}
-  .p-btn .icon{width:40px;height:40px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;overflow:hidden}
+  .p-btn .icon{width:40px;height:40px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;overflow:hidden;background:linear-gradient(135deg,var(--a2),var(--a2))}
+  .p-btn .icon.emoji-only{background:rgba(255,255,255,.1)!important;font-size:26px}
   .p-btn .icon img{width:100%;height:100%;object-fit:cover;display:block}
   .empty-box{width:100%;padding:22px 18px;text-align:center;color:rgba(var(--tint),.6);font-size:13px}
   .footer{margin-top:8px;font-size:11px;color:rgba(var(--tint),.5);letter-spacing:1px;text-align:center;user-select:none;cursor:pointer;padding:10px}
@@ -120,13 +122,15 @@
   .type-btn.active{background:linear-gradient(135deg,var(--a1),var(--a2));border-color:transparent;color:#fff}
   .type-btn .em{display:block;font-size:18px;margin-bottom:2px}
   .admin-list{max-height:320px;overflow-y:auto;margin:14px 0;padding-right:4px}
-  .admin-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:var(--glass-btn);border:1px solid var(--glass-border);margin-bottom:8px}
-  .admin-item .icon{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0;overflow:hidden}
+  .admin-item{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;background:var(--glass-btn);border:1px solid var(--glass-border);margin-bottom:8px}
+  .admin-item .icon{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0;overflow:hidden;background:linear-gradient(135deg,var(--a2),var(--a2));color:#fff}
+  .admin-item .icon.emoji-only{background:rgba(255,255,255,.1)!important;font-size:22px}
   .admin-item .icon img{width:100%;height:100%;object-fit:cover;display:block}
   .admin-item .info{flex:1;min-width:0}
   .admin-item .info b{font-size:14px;display:block}
   .admin-item .info span{font-size:11px;color:rgba(var(--tint),.6);display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .admin-item button{background:rgba(255,71,87,.2);border:1px solid rgba(255,71,87,.5);color:#ff6b7a;padding:6px 10px;border-radius:10px;font-size:16px;cursor:pointer}
+  .admin-item .btn-edit{background:rgba(139,92,246,.25);border:1px solid rgba(139,92,246,.6);color:#c4b5fd;padding:6px 10px;border-radius:10px;font-size:14px;cursor:pointer}
+  .admin-item .btn-del{background:rgba(255,71,87,.2);border:1px solid rgba(255,71,87,.5);color:#ff6b7a;padding:6px 10px;border-radius:10px;font-size:14px;cursor:pointer}
   .admin-group-title{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(var(--glow),.9);margin:16px 0 8px;padding-left:4px;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap}
   .admin-group-title span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .admin-group-title .sec-btns{display:flex;gap:4px}
@@ -149,7 +153,12 @@
   .sync-dot{position:fixed;top:20px;left:20px;width:8px;height:8px;border-radius:50%;background:#22c55e;z-index:50;transition:.3s}
   .sync-dot.saving{background:#f59e0b;animation:dotBlink 1s infinite}
   .sync-dot.error{background:#ef4444}
-  @media (max-width:380px){.nickname{font-size:24px}.avatar-wrap{width:110px;height:110px}.link{padding:12px 14px;font-size:14px}.link .icon{width:34px;height:34px;font-size:18px}.p-btn{font-size:11px;padding:14px 6px}.theme-grid{grid-template-columns:repeat(4,1fr)}}
+  .icon-picker{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:10px}
+  .icon-opt{aspect-ratio:1;border-radius:10px;background:var(--glass-btn);border:2px solid var(--glass-border);display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;color:var(--text);transition:.15s;overflow:hidden}
+  .icon-opt:hover{transform:scale(1.05)}
+  .icon-opt.active{border-color:#fff;background:rgba(139,92,246,.4)}
+  .icon-opt img{width:100%;height:100%;object-fit:cover;display:block}
+  @media (max-width:380px){.nickname{font-size:24px}.avatar-wrap{width:110px;height:110px}.link{padding:12px 14px;font-size:14px}.link .icon{width:34px;height:34px;font-size:18px}.p-btn{font-size:11px;padding:14px 6px}.theme-grid{grid-template-columns:repeat(4,1fr)}.icon-picker{grid-template-columns:repeat(5,1fr)}}
 </style>
 <script>
 (function(){
@@ -176,7 +185,7 @@
 </div>
 
 <div class="fx-layer" id="fxLayer"></div>
-<div class="sync-dot" id="syncDot" title="Синхронизация"></div>
+<div class="sync-dot" id="syncDot"></div>
 <div class="music-btn" id="musicBtn" style="display:none" onclick="toggleMusic()">🎵</div>
 <audio id="bgMusic" loop></audio>
 
@@ -279,14 +288,8 @@
       <input type="url" id="newUrl" placeholder="Ссылка (https://...)">
       <div id="imageFieldWrap" style="display:none"><input type="url" id="newImage" placeholder="URL картинки"></div>
       <div id="iconFieldWrap">
-        <select id="newIcon">
-          <option value="custom">✦ Своя</option>
-          <option value="yt">▶ YouTube</option><option value="tg">➤ Telegram</option>
-          <option value="tt">♪ TikTok</option><option value="tw">⌘ Twitch</option>
-          <option value="dc">◇ Discord</option><option value="ig">◉ Instagram</option>
-          <option value="vk">VK</option><option value="rbx">◈ Roblox</option>
-          <option value="mc">▣ Minecraft</option><option value="bs">★ Brawl Stars</option>
-        </select>
+        <span class="label-small">🎨 Иконка</span>
+        <div class="icon-picker" id="iconPicker"></div>
       </div>
       <div class="error" id="addError"></div>
       <div class="success" id="addSuccess"></div>
@@ -349,6 +352,41 @@
   </div>
 </div>
 
+<!-- МОДАЛКА РЕДАКТИРОВАНИЯ -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal glass">
+    <button class="modal-close" onclick="closeModal('editModal')">✕</button>
+    <h2>✏️ Редактировать</h2>
+
+    <span class="label-small">➕ Тип</span>
+    <div class="type-row">
+      <div class="type-btn" data-edit-type="link" onclick="selectEditType('link')"><span class="em">📋</span>Обычная</div>
+      <div class="type-btn" data-edit-type="file" onclick="selectEditType('file')"><span class="em">📄</span>Файл</div>
+      <div class="type-btn" data-edit-type="image" onclick="selectEditType('image')"><span class="em">🖼️</span>С фото</div>
+    </div>
+
+    <input type="text" id="editName" placeholder="Название">
+    <input type="text" id="editSub" placeholder="Подпись">
+    <input type="url" id="editUrl" placeholder="Ссылка (https://...)">
+
+    <div id="editImageWrap" style="display:none">
+      <input type="url" id="editImage" placeholder="URL картинки">
+    </div>
+
+    <div id="editIconWrap">
+      <span class="label-small">🎨 Иконка</span>
+      <div class="icon-picker" id="editIconPicker"></div>
+      <input type="text" id="editCustomIcon" placeholder="Или свой символ/эмодзи (напр. 🔥)" maxlength="4">
+    </div>
+
+    <div class="error" id="editError"></div>
+    <div class="success" id="editSuccess"></div>
+    <button class="modal-btn" onclick="saveEdit()">💾 Сохранить изменения</button>
+    <button class="modal-btn danger" style="margin-top:8px" onclick="deleteFromEdit()">🗑 Удалить кнопку</button>
+    <button class="modal-btn cancel" style="margin-top:8px" onclick="closeModal('editModal')">Отмена</button>
+  </div>
+</div>
+
 <script>
 const JSONBIN_BIN_ID     = '6acded59ac6210605a2cf197';
 const JSONBIN_MASTER_KEY = '$2a$10$YB9ij5Y.Hr4QAWaNN.yejefrVlqeQ4Z16YdPc6AKIHhmZBRjznmAq';
@@ -358,7 +396,10 @@ const API_URL = 'https://api.jsonbin.io/v3/b/' + JSONBIN_BIN_ID;
 const CACHE_KEY = 'educanal_cache_v1';
 const THEME_KEY = 'educanal_theme';
 const LAST_SPLASH_KEY = 'educanal_last_splash';
-const iconSymbols = {yt:'▶',tg:'➤',tt:'♪',tw:'⌘',dc:'◇',ig:'◉',vk:'VK',rbx:'◈',mc:'▣',bs:'★',custom:'✦'};
+
+/* Символы иконок */
+const ICON_SYMBOLS = {yt:'▶',tg:'➤',tt:'♪',tw:'⌘',dc:'◇',ig:'◉',vk:'VK',rbx:'◈',mc:'▣',bs:'★'};
+const ICON_LIST = ['custom','yt','tg','tt','tw','dc','ig','vk','rbx','mc','bs'];
 
 const THEMES = {
   purple:{name:'Фиолет',c1:'#2a0a4a',c2:'#4b1a8a',c3:'#8b5cf6',a1:'#b794f6',a2:'#7c3aed',glow:'180,130,255',tint:'230,210,255',preview:'linear-gradient(135deg,#2a0a4a,#8b5cf6)'},
@@ -419,6 +460,12 @@ let siteData = {sections:[],theme:'purple',views:0,
   settings:JSON.parse(JSON.stringify(DEFAULT_SETTINGS)),online:{},lastUpdated:0};
 let initialized = false;
 let currentType = 'link';
+let currentIcon = 'custom';
+let currentCustomIcon = '';
+let editType = 'link';
+let editIcon = 'custom';
+let editCustomIcon = '';
+let editingItemId = null;
 let sessionId = Math.random().toString(36).slice(2,10);
 let saveTimer = null;
 let pendingChanges = false;
@@ -545,22 +592,20 @@ async function loadData(){
       const keepLocalTheme = cached && localTime > serverTime;
 
       siteData.sections = rec.sections;
-      if (!keepLocalTheme) {
-        siteData.theme = rec.theme || 'purple';
-      }
+      if (!keepLocalTheme) siteData.theme = rec.theme || 'purple';
       siteData.views = rec.views || 0;
       siteData.stats = rec.stats || {viewsByDay:{},devices:{mobile:0,desktop:0,tablet:0},clicks:{}};
       siteData.settings = Object.assign({}, DEFAULT_SETTINGS, rec.settings||{});
       siteData.online = rec.online || {};
       siteData.lastUpdated = Math.max(serverTime, localTime);
       initialized = true;
-    } else if (!initialized) {
+    } else if (!initialized){
       siteData.sections = JSON.parse(JSON.stringify(DEFAULT_SECTIONS));
       initialized = true;
     }
     setSyncStatus('ok');
 
-    if (!cached){ showSplash(); }
+    if (!cached) showSplash();
 
     applyTheme(siteData.theme);
     applySettings();
@@ -623,9 +668,7 @@ async function doSave(){
 
 window.addEventListener('beforeunload', () => {
   if (pendingChanges){
-    try {
-      navigator.sendBeacon(API_URL, new Blob([JSON.stringify(siteData)],{type:'application/json'}));
-    } catch(e){}
+    try { navigator.sendBeacon(API_URL, new Blob([JSON.stringify(siteData)],{type:'application/json'})); } catch(e){}
   }
 });
 
@@ -718,18 +761,53 @@ function updateViewsDisplay(){
   $('viewsCount').textContent = (siteData.views||0).toLocaleString('ru-RU');
 }
 
-function makeIconHtml(item){
-  if (item.type === 'file') return `<div class="icon file">📄</div>`;
-  if (item.type === 'image' && item.image) return `<div class="icon img"><img src="${escapeHtml(item.image)}" onerror="this.parentElement.innerHTML='🖼️'"></div>`;
-  return `<div class="icon ${item.icon||'custom'}">${iconSymbols[item.icon]||'✦'}</div>`;
+/* ═════════ ИКОНКИ ═════════ */
+function getIconHtml(item){
+  // Если кастомный символ/эмодзи
+  if (item.customIcon){
+    return `<div class="icon emoji-only">${escapeHtml(item.customIcon)}</div>`;
+  }
+  // Если фото
+  if (item.type === 'image' && item.image){
+    return `<div class="icon img"><img src="${escapeHtml(item.image)}" onerror="this.parentElement.innerHTML='🖼️'"></div>`;
+  }
+  // Файл
+  if (item.type === 'file'){
+    return `<div class="icon file">📄</div>`;
+  }
+  // Стандартные иконки
+  const key = item.icon || 'custom';
+  const sym = ICON_SYMBOLS[key] || '✦';
+  if (key === 'custom'){
+    return `<div class="icon emoji-only">✦</div>`;
+  }
+  return `<div class="icon ${key}">${sym}</div>`;
 }
+
+function getIconHtmlSmall(item){
+  if (item.customIcon){
+    return `<div class="icon emoji-only">${escapeHtml(item.customIcon)}</div>`;
+  }
+  if (item.type === 'image' && item.image){
+    return `<div class="icon img"><img src="${escapeHtml(item.image)}" onerror="this.parentElement.innerHTML='🖼️'"></div>`;
+  }
+  if (item.type === 'file'){
+    return `<div class="icon file">📄</div>`;
+  }
+  const key = item.icon || 'custom';
+  const sym = ICON_SYMBOLS[key] || '✦';
+  if (key === 'custom') return `<div class="icon emoji-only">✦</div>`;
+  return `<div class="icon ${key}">${sym}</div>`;
+}
+
+/* ═════════ РЕНДЕР САЙТА ═════════ */
 function createListLink(item){
   const a = document.createElement('a');
   a.className='link'; a.href=item.url; a.target='_blank';
   if (item.type==='file') a.setAttribute('download','');
   const arrow = item.type==='file' ? '⬇' : '›';
   const sub = item.type==='file' && !item.sub ? 'Нажми чтобы скачать' : item.sub;
-  a.innerHTML = `${makeIconHtml(item)}<div class="text">${escapeHtml(item.name)}${sub?`<small>${escapeHtml(sub)}</small>`:''}</div><div class="arrow">${arrow}</div>`;
+  a.innerHTML = `${getIconHtml(item)}<div class="text">${escapeHtml(item.name)}${sub?`<small>${escapeHtml(sub)}</small>`:''}</div><div class="arrow">${arrow}</div>`;
   a.addEventListener('click', () => { playClickSound(); trackClick(item.id); });
   return a;
 }
@@ -737,7 +815,7 @@ function createGridBtn(item){
   const a = document.createElement('a');
   a.className='p-btn'; a.href=item.url; a.target='_blank';
   if (item.type==='file') a.setAttribute('download','');
-  a.innerHTML = `${makeIconHtml(item)}${escapeHtml(item.name)}`;
+  a.innerHTML = `${getIconHtml(item)}${escapeHtml(item.name)}`;
   a.addEventListener('click', () => { playClickSound(); trackClick(item.id); });
   return a;
 }
@@ -766,6 +844,7 @@ function renderAll(){
   });
 }
 
+/* ═════════ МОДАЛКИ ═════════ */
 function openModal(id){ $(id).classList.add('active'); }
 function closeModal(id){ $(id).classList.remove('active'); }
 
@@ -794,6 +873,7 @@ function checkPassword(){
     renderThemeGrid(); renderSectionsDropdown(); renderAdminList();
     renderAdminProfile(); renderStats(); updateSwitches();
     $('effectSelect').value = siteData.settings.effect || 'bubbles';
+    initIconPicker('iconPicker', 'add');
   } else err.textContent='❌ Неверный пароль';
 }
 $('pwdInput').addEventListener('keypress', e => { if (e.key==='Enter') checkPassword(); });
@@ -862,15 +942,62 @@ async function toggleSwitch(key){
   await doSave();
 }
 
+/* ═════════ ИКОНКИ-ПИКЕР ═════════ */
+function initIconPicker(containerId, mode){
+  const c = $(containerId); c.innerHTML = '';
+  const activeIcon = mode === 'add' ? currentIcon : editIcon;
+  ICON_LIST.forEach(k => {
+    const d = document.createElement('div');
+    d.className = 'icon-opt' + (activeIcon === k ? ' active' : '');
+    const sym = ICON_SYMBOLS[k];
+    d.textContent = sym || '✦';
+    if (k !== 'custom'){
+      d.style.background = getIconBg(k);
+    } else {
+      d.style.background = 'rgba(255,255,255,.1)';
+    }
+    d.onclick = () => {
+      if (mode === 'add'){ currentIcon = k; }
+      else { editIcon = k; }
+      initIconPicker(containerId, mode);
+    };
+    c.appendChild(d);
+  });
+}
+function getIconBg(k){
+  const map = {
+    yt:'linear-gradient(135deg,#ff0000,#cc0000)',
+    tg:'linear-gradient(135deg,#2aabee,#229ed9)',
+    tt:'linear-gradient(135deg,#25f4ee,#fe2c55)',
+    tw:'linear-gradient(135deg,#9146ff,#6441a5)',
+    dc:'linear-gradient(135deg,#5865f2,#4752c4)',
+    ig:'linear-gradient(135deg,#feda75,#d62976,#962fbf)',
+    vk:'linear-gradient(135deg,#0077ff,#005ccc)',
+    rbx:'linear-gradient(135deg,#e2231a,#b81a12)',
+    mc:'linear-gradient(135deg,#62b47a,#3a7d44)',
+    bs:'linear-gradient(135deg,#ffcb2b,#ff8a00)'
+  };
+  return map[k] || 'rgba(255,255,255,.1)';
+}
+
+/* ═════════ ТИП ═════════ */
 function selectType(t){
   currentType = t;
-  document.querySelectorAll('.type-btn').forEach(b => b.classList.toggle('active', b.dataset.type===t));
+  document.querySelectorAll('.type-btn[data-type]').forEach(b => b.classList.toggle('active', b.dataset.type===t));
   $('imageFieldWrap').style.display = t==='image' ? 'block' : 'none';
   $('iconFieldWrap').style.display = t==='link' ? 'block' : 'none';
   const u = $('newUrl');
   u.placeholder = t==='file' ? 'Ссылка на файл (https://...)' : t==='image' ? 'Ссылка при клике' : 'Ссылка (https://...)';
 }
 
+function selectEditType(t){
+  editType = t;
+  document.querySelectorAll('.type-btn[data-edit-type]').forEach(b => b.classList.toggle('active', b.dataset.editType===t));
+  $('editImageWrap').style.display = t==='image' ? 'block' : 'none';
+  $('editIconWrap').style.display = t==='link' ? 'block' : 'none';
+}
+
+/* ═════════ ДРОПДАУН ═════════ */
 function renderSectionsDropdown(){
   const grp = $('sectionsOptgroup'); grp.innerHTML='';
   siteData.sections.forEach(s => {
@@ -885,12 +1012,12 @@ $('newTarget').addEventListener('change', e => {
   $('newSectionWrap').style.display = e.target.value==='__new__' ? 'block' : 'none';
 });
 
+/* ═════════ ДОБАВЛЕНИЕ ═════════ */
 function addItem(){
   const target = $('newTarget').value;
   const name = $('newName').value.trim();
   const sub = $('newSub').value.trim();
   const url = $('newUrl').value.trim();
-  const icon = $('newIcon').value;
   const image = $('newImage').value.trim();
   const err = $('addError'), succ = $('addSuccess');
 
@@ -905,7 +1032,10 @@ function addItem(){
   if (total >= MAX_ITEMS){ err.textContent=`⚠️ Максимум ${MAX_ITEMS}`; return; }
 
   const item = {id:genId(),type:currentType,name,sub,url};
-  if (currentType==='link') item.icon = icon;
+  if (currentType==='link'){
+    item.icon = currentIcon;
+    // если "custom" — берём кастомный символ если введён
+  }
   if (currentType==='image') item.image = image;
 
   if (target==='__new__'){
@@ -924,28 +1054,32 @@ function addItem(){
   renderAll(); renderSectionsDropdown(); renderAdminList(); scheduleSave();
 
   $('newName').value=''; $('newSub').value=''; $('newUrl').value=''; $('newImage').value='';
-  $('newIcon').value='custom'; $('newSectionName').value='';
+  $('newSectionName').value='';
   $('newTarget').value='__new__'; $('newSectionWrap').style.display='none';
   succ.textContent='✅ Добавлено!';
   setTimeout(()=>succ.textContent='',2000);
 }
 
+/* ═════════ УПРАВЛЕНИЕ ═════════ */
 function makeGroupTitle(sec){
   const div = document.createElement('div');
   div.className='admin-group-title';
   div.innerHTML = `<span>${sec.layout==='grid'?'▦':'📋'} ${escapeHtml(sec.title)} <span style="opacity:.5;font-size:9px">(${sec.items.length})</span></span><div class="sec-btns"><button onclick="renameSection('${sec.id}')">✏️</button><button class="del" onclick="deleteSection('${sec.id}')">🗑</button></div>`;
   return div;
 }
+
 function makeAdminItem(item){
   const div = document.createElement('div');
   div.className='admin-item';
-  let ih;
-  if (item.type==='file') ih = `<div class="icon file">📄</div>`;
-  else if (item.type==='image' && item.image) ih = `<div class="icon img"><img src="${escapeHtml(item.image)}" onerror="this.parentElement.innerHTML='🖼️'"></div>`;
-  else ih = `<div class="icon ${item.icon||'custom'}">${iconSymbols[item.icon]||'✦'}</div>`;
-  div.innerHTML = `${ih}<div class="info"><b>${escapeHtml(item.name)}</b><span>${escapeHtml(item.url)}</span></div><button onclick="deleteItem('${item.id}')">✕</button>`;
+  div.innerHTML = `
+    ${getIconHtmlSmall(item)}
+    <div class="info"><b>${escapeHtml(item.name)}</b><span>${escapeHtml(item.url)}</span></div>
+    <button class="btn-edit" onclick="editItem('${item.id}')">✏️</button>
+    <button class="btn-del" onclick="deleteItem('${item.id}')">✕</button>
+  `;
   return div;
 }
+
 function renderAdminList(){
   const list = $('adminList'); list.innerHTML='';
   const total = siteData.sections.reduce((s,x)=>s+x.items.length,0);
@@ -960,6 +1094,117 @@ function renderAdminList(){
     } else sec.items.forEach(it => list.appendChild(makeAdminItem(it)));
   });
 }
+
+/* ═════════ РЕДАКТИРОВАНИЕ ═════════ */
+function findItem(id){
+  for (const sec of siteData.sections){
+    const idx = sec.items.findIndex(x=>x.id===id);
+    if (idx !== -1) return {sec, idx, item: sec.items[idx]};
+  }
+  return null;
+}
+
+function editItem(id){
+  const found = findItem(id);
+  if (!found) return;
+  editingItemId = id;
+  const it = found.item;
+
+  editType = it.type || 'link';
+  editIcon = it.icon || 'custom';
+  editCustomIcon = it.customIcon || '';
+
+  $('editName').value = it.name || '';
+  $('editSub').value = it.sub || '';
+  $('editUrl').value = it.url || '';
+  $('editImage').value = it.image || '';
+  $('editCustomIcon').value = it.customIcon || '';
+  $('editError').textContent = '';
+  $('editSuccess').textContent = '';
+
+  document.querySelectorAll('.type-btn[data-edit-type]').forEach(b => b.classList.toggle('active', b.dataset.editType===editType));
+  $('editImageWrap').style.display = editType==='image' ? 'block' : 'none';
+  $('editIconWrap').style.display = editType==='link' ? 'block' : 'none';
+
+  initIconPicker('editIconPicker', 'edit');
+  closeModal('adminModal');
+  openModal('editModal');
+}
+
+async function saveEdit(){
+  if (!editingItemId) return;
+  const found = findItem(editingItemId);
+  if (!found) return;
+
+  const name = $('editName').value.trim();
+  const sub = $('editSub').value.trim();
+  const url = $('editUrl').value.trim();
+  const image = $('editImage').value.trim();
+  const customIcon = $('editCustomIcon').value.trim();
+  const err = $('editError'), succ = $('editSuccess');
+
+  err.textContent=''; succ.textContent='';
+
+  if (!name){ err.textContent='⚠️ Введи название'; return; }
+  if (!url){ err.textContent='⚠️ Введи ссылку'; return; }
+  if (!/^https?:\/\//i.test(url)){ err.textContent='⚠️ Ссылка должна начинаться с https://'; return; }
+  if (editType==='image' && !image){ err.textContent='⚠️ Введи URL картинки'; return; }
+
+  const it = found.item;
+  it.type = editType;
+  it.name = name;
+  it.sub = sub;
+  it.url = url;
+
+  if (editType === 'link'){
+    it.icon = editIcon;
+    if (customIcon){
+      it.customIcon = customIcon;
+    } else {
+      delete it.customIcon;
+    }
+    delete it.image;
+  } else if (editType === 'image'){
+    it.image = image;
+    delete it.icon;
+    delete it.customIcon;
+  } else if (editType === 'file'){
+    delete it.image;
+    delete it.customIcon;
+  }
+
+  siteData.lastUpdated = Date.now();
+  renderAll(); renderSectionsDropdown(); renderAdminList();
+  saveToCache();
+  pendingChanges = false;
+  if (saveTimer){ clearTimeout(saveTimer); saveTimer = null; }
+  await doSave();
+
+  succ.textContent = '✅ Сохранено!';
+  setTimeout(() => {
+    closeModal('editModal');
+    openModal('adminModal');
+  }, 800);
+}
+
+async function deleteFromEdit(){
+  if (!editingItemId) return;
+  if (!confirm('Удалить эту кнопку?')) return;
+  const found = findItem(editingItemId);
+  if (found){
+    found.sec.items.splice(found.idx, 1);
+  }
+  siteData.lastUpdated = Date.now();
+  renderAll(); renderSectionsDropdown(); renderAdminList();
+  saveToCache();
+  pendingChanges = false;
+  if (saveTimer){ clearTimeout(saveTimer); saveTimer = null; }
+  await doSave();
+  closeModal('editModal');
+  openModal('adminModal');
+}
+
+/* ═════════ ОСТАЛЬНОЕ ═════════ */
 function deleteItem(id){
   if (!confirm('Удалить?')) return;
   for (const sec of siteData.sections){
@@ -1003,9 +1248,9 @@ function renderAdminProfile(){
   $('inpSubtitle').value = s.subtitle || '';
   $('inpAvatar').value = s.avatar || '';
   $('schedList').innerHTML = (s.schedule||[]).map((x,i)=>`
-    <div class="admin-item"><div class="info"><b>${escapeHtml(x.day)}</b><span>${escapeHtml(x.time||'')} • ${escapeHtml(x.game||'')}</span></div><button onclick="delSchedule(${i})">✕</button></div>`).join('') || '<div style="text-align:center;opacity:.6;font-size:12px;padding:8px">Пусто</div>';
+    <div class="admin-item"><div class="info"><b>${escapeHtml(x.day)}</b><span>${escapeHtml(x.time||'')} • ${escapeHtml(x.game||'')}</span></div><button class="btn-del" onclick="delSchedule(${i})">✕</button></div>`).join('') || '<div style="text-align:center;opacity:.6;font-size:12px;padding:8px">Пусто</div>';
   $('achListAdmin').innerHTML = (s.achievements||[]).map((x,i)=>`
-    <div class="admin-item"><div class="icon custom" style="font-size:20px">${escapeHtml(x.emoji||'🏆')}</div><div class="info"><b>${escapeHtml(x.name)}</b></div><button onclick="delAch(${i})">✕</button></div>`).join('') || '<div style="text-align:center;opacity:.6;font-size:12px;padding:8px">Пусто</div>';
+    <div class="admin-item"><div class="icon emoji-only" style="font-size:20px">${escapeHtml(x.emoji||'🏆')}</div><div class="info"><b>${escapeHtml(x.name)}</b></div><button class="btn-del" onclick="delAch(${i})">✕</button></div>`).join('') || '<div style="text-align:center;opacity:.6;font-size:12px;padding:8px">Пусто</div>';
 }
 function saveAbout(){ siteData.settings.about = $('inpAbout').value; siteData.lastUpdated=Date.now(); applySettings(); scheduleSave(); alert('✅'); }
 function saveMusic(){ siteData.settings.musicUrl = $('inpMusic').value.trim(); siteData.lastUpdated=Date.now(); applySettings(); scheduleSave(); alert('✅'); }
