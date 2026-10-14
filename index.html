@@ -151,7 +151,6 @@
   .sync-dot.error{background:#ef4444}
   @media (max-width:380px){.nickname{font-size:24px}.avatar-wrap{width:110px;height:110px}.link{padding:12px 14px;font-size:14px}.link .icon{width:34px;height:34px;font-size:18px}.p-btn{font-size:11px;padding:14px 6px}.theme-grid{grid-template-columns:repeat(4,1fr)}}
 </style>
-<!-- МГНОВЕННАЯ ТЕМА ИЗ КЭША -->
 <script>
 (function(){
   try{
@@ -219,7 +218,7 @@
   <div class="modal glass">
     <button class="modal-close" onclick="closeModal('pwdModal')">✕</button>
     <h2>🔒 Вход в админку</h2>
-    <input type="password" id="pwdInput" placeholder="Введи пароль" autocomplete="off">
+    <input type="password" id="pwdInput" name="np-pwd-nofill" placeholder="Введи пароль" autocomplete="new-password" autocorrect="off" spellcheck="false">
     <div class="error" id="pwdError"></div>
     <button class="modal-btn" onclick="checkPassword()">Войти</button>
   </div>
@@ -417,7 +416,7 @@ const DEFAULT_SETTINGS = {
 
 let siteData = {sections:[],theme:'purple',views:0,
   stats:{viewsByDay:{},devices:{mobile:0,desktop:0,tablet:0},clicks:{}},
-  settings:JSON.parse(JSON.stringify(DEFAULT_SETTINGS)),online:{}};
+  settings:JSON.parse(JSON.stringify(DEFAULT_SETTINGS)),online:{},lastUpdated:0};
 let initialized = false;
 let currentType = 'link';
 let sessionId = Math.random().toString(36).slice(2,10);
@@ -430,7 +429,6 @@ const genId = () => Date.now().toString(36)+Math.random().toString(36).slice(2,7
 const escapeHtml = s => { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; };
 const today = () => new Date().toISOString().slice(0,10);
 
-/* ═════════ СИНХРОНИЗАЦИЯ (индикатор) ═════════ */
 function setSyncStatus(status){
   const d = $('syncDot');
   d.classList.remove('saving','error');
@@ -438,10 +436,9 @@ function setSyncStatus(status){
   else if (status==='error') d.classList.add('error');
 }
 
-/* ═════════ SPLASH ═════════ */
 function shouldShowSplash(){
   const last = parseInt(localStorage.getItem(LAST_SPLASH_KEY)||'0');
-  return Date.now() - last > 30*60*1000; /* раз в 30 мин */
+  return Date.now() - last > 30*60*1000;
 }
 function showSplash(){
   if (!shouldShowSplash() || !siteData.settings.showSplash){ $('splash').classList.add('hide'); return; }
@@ -449,7 +446,6 @@ function showSplash(){
   setTimeout(()=>$('splash').classList.add('hide'), 2000);
 }
 
-/* ═════════ ТЕМА ═════════ */
 function applyTheme(name){
   const t = THEMES[name] || THEMES.purple;
   const r = document.documentElement.style;
@@ -460,7 +456,6 @@ function applyTheme(name){
   try { localStorage.setItem(THEME_KEY, JSON.stringify(t)); } catch(e){}
 }
 
-/* ═════════ ЭФФЕКТЫ ═════════ */
 function renderEffect(type){
   const layer = $('fxLayer'); layer.innerHTML = '';
   if (!type || type==='none') return;
@@ -506,7 +501,6 @@ function renderEffect(type){
   }
 }
 
-/* ═════════ КЭШ ═════════ */
 function saveToCache(){
   try { localStorage.setItem(CACHE_KEY, JSON.stringify(siteData)); } catch(e){}
 }
@@ -514,29 +508,19 @@ function loadFromCache(){
   try { const raw = localStorage.getItem(CACHE_KEY); return raw ? JSON.parse(raw) : null; } catch(e){ return null; }
 }
 
-/* ═════════ МИГРАЦИЯ СТАРЫХ ДАННЫХ ═════════ */
 function migrateRecord(rec){
   if (!rec) return null;
-  /* Новый формат */
   if (Array.isArray(rec.sections)) return rec;
-  /* Старый формат: links/sites/games */
   const sections = [];
   if (Array.isArray(rec.links) && rec.links.length) sections.push({id:'links',title:'Мои кнопки',layout:'list',items:rec.links});
   if (Array.isArray(rec.sites) && rec.sites.length) sections.push({id:'sites',title:'Мои сайты',layout:'list',items:rec.sites});
   if (Array.isArray(rec.games) && rec.games.length) sections.push({id:'games',title:'Мои игры',layout:'list',items:rec.games});
-  if (sections.length){
-    return {sections,theme:'purple',views:rec.views||0};
-  }
-  /* Самый старый формат: массив links */
-  if (Array.isArray(rec) && rec.length){
-    return {sections:[{id:'links',title:'Мои кнопки',layout:'list',items:rec}],theme:'purple',views:0};
-  }
+  if (sections.length) return {sections,theme:'purple',views:rec.views||0};
+  if (Array.isArray(rec) && rec.length) return {sections:[{id:'links',title:'Мои кнопки',layout:'list',items:rec}],theme:'purple',views:0};
   return null;
 }
 
-/* ═════════ ЗАГРУЗКА ═════════ */
 async function loadData(){
-  /* 1. МГНОВЕННО из кэша */
   const cached = loadFromCache();
   if (cached && cached.sections){
     siteData = cached;
@@ -545,11 +529,9 @@ async function loadData(){
     applySettings();
     updateViewsDisplay();
     renderAll();
-    updateBadges();
     initialized = true;
     showSplash();
   }
-  /* 2. Фоновая загрузка с сервера */
   try {
     setSyncStatus('saving');
     const res = await fetch(API_URL+'/latest',{headers:{'X-Master-Key':JSONBIN_MASTER_KEY}});
@@ -558,13 +540,19 @@ async function loadData(){
     let rec = migrateRecord(data.record);
 
     if (rec && Array.isArray(rec.sections)){
-      const oldViews = siteData.views||0;
+      const serverTime = rec.lastUpdated || 0;
+      const localTime = siteData.lastUpdated || 0;
+      const keepLocalTheme = cached && localTime > serverTime;
+
       siteData.sections = rec.sections;
-      siteData.theme = rec.theme || 'purple';
+      if (!keepLocalTheme) {
+        siteData.theme = rec.theme || 'purple';
+      }
       siteData.views = rec.views || 0;
       siteData.stats = rec.stats || {viewsByDay:{},devices:{mobile:0,desktop:0,tablet:0},clicks:{}};
       siteData.settings = Object.assign({}, DEFAULT_SETTINGS, rec.settings||{});
       siteData.online = rec.online || {};
+      siteData.lastUpdated = Math.max(serverTime, localTime);
       initialized = true;
     } else if (!initialized) {
       siteData.sections = JSON.parse(JSON.stringify(DEFAULT_SECTIONS));
@@ -578,9 +566,7 @@ async function loadData(){
     applySettings();
     updateViewsDisplay();
     renderAll();
-    updateBadges();
 
-    /* Трек просмотра */
     const counted = sessionStorage.getItem('educanal_counted');
     if (!counted){
       siteData.views = (siteData.views||0)+1;
@@ -603,7 +589,6 @@ async function loadData(){
   }
 }
 
-/* ═════════ СОХРАНЕНИЕ (debounced) ═════════ */
 function scheduleSave(){
   pendingChanges = true;
   saveToCache();
@@ -617,7 +602,6 @@ function scheduleSave(){
 }
 
 async function doSave(){
-  if (isSyncing) { scheduleSave(); return; }
   isSyncing = true;
   setSyncStatus('saving');
   try {
@@ -627,15 +611,16 @@ async function doSave(){
       body:JSON.stringify(siteData)
     });
     setSyncStatus(res.ok ? 'ok' : 'error');
+    return res.ok;
   } catch(e){
     console.error('Сохранение:',e);
     setSyncStatus('error');
+    return false;
+  } finally {
+    isSyncing = false;
   }
-  isSyncing = false;
-  if (pendingChanges) scheduleSave();
 }
 
-/* Сохранить при закрытии */
 window.addEventListener('beforeunload', () => {
   if (pendingChanges){
     try {
@@ -644,7 +629,6 @@ window.addEventListener('beforeunload', () => {
   }
 });
 
-/* ═════════ СТАТИСТИКА ═════════ */
 function trackView(){
   const d = today();
   if (!siteData.stats.viewsByDay) siteData.stats.viewsByDay = {};
@@ -680,7 +664,6 @@ function trackClick(itemId){
   scheduleSave();
 }
 
-/* ═════════ ЗВУК ═════════ */
 function playClickSound(){
   if (!siteData.settings.sound) return;
   try {
@@ -694,7 +677,6 @@ function playClickSound(){
   } catch(e){}
 }
 
-/* ═════════ ПРИМЕНЕНИЕ НАСТРОЕК ═════════ */
 function applySettings(){
   const s = siteData.settings;
   renderEffect(s.effect);
@@ -735,9 +717,7 @@ function applySettings(){
 function updateViewsDisplay(){
   $('viewsCount').textContent = (siteData.views||0).toLocaleString('ru-RU');
 }
-function updateBadges(){}
 
-/* ═════════ РЕНДЕР ═════════ */
 function makeIconHtml(item){
   if (item.type === 'file') return `<div class="icon file">📄</div>`;
   if (item.type === 'image' && item.image) return `<div class="icon img"><img src="${escapeHtml(item.image)}" onerror="this.parentElement.innerHTML='🖼️'"></div>`;
@@ -786,7 +766,6 @@ function renderAll(){
   });
 }
 
-/* ═════════ МОДАЛКИ ═════════ */
 function openModal(id){ $(id).classList.add('active'); }
 function closeModal(id){ $(id).classList.remove('active'); }
 
@@ -819,7 +798,6 @@ function checkPassword(){
 }
 $('pwdInput').addEventListener('keypress', e => { if (e.key==='Enter') checkPassword(); });
 
-/* ═════════ ТАБЫ ═════════ */
 function switchTab(t){
   document.querySelectorAll('.tab').forEach(x => x.classList.toggle('active', x.dataset.tab===t));
   document.querySelectorAll('.tab-pane').forEach(x => x.classList.remove('active'));
@@ -828,7 +806,6 @@ function switchTab(t){
   if (t==='profile') renderAdminProfile();
 }
 
-/* ═════════ ТЕМЫ ═════════ */
 function renderThemeGrid(){
   const g = $('themeGrid'); g.innerHTML='';
   Object.keys(THEMES).forEach(k => {
@@ -843,21 +820,29 @@ function renderThemeGrid(){
     g.appendChild(wrap);
   });
 }
-function changeTheme(k){
+
+async function changeTheme(k){
+  if (!THEMES[k]) return;
   siteData.theme = k;
+  siteData.lastUpdated = Date.now();
   applyTheme(k);
   renderThemeGrid();
-  scheduleSave();
+  saveToCache();
+  pendingChanges = false;
+  if (saveTimer){ clearTimeout(saveTimer); saveTimer = null; }
+  await doSave();
 }
 
-/* ═════════ ЭФФЕКТЫ ═════════ */
-function changeEffect(v){
+async function changeEffect(v){
   siteData.settings.effect = v;
+  siteData.lastUpdated = Date.now();
   renderEffect(v);
-  scheduleSave();
+  saveToCache();
+  pendingChanges = false;
+  if (saveTimer){ clearTimeout(saveTimer); saveTimer = null; }
+  await doSave();
 }
 
-/* ═════════ СВИТЧИ ═════════ */
 function updateSwitches(){
   const s = siteData.settings;
   $('swLight').classList.toggle('on', !!s.lightMode);
@@ -865,12 +850,18 @@ function updateSwitches(){
   $('swSound').classList.toggle('on', !!s.sound);
   $('swSplash').classList.toggle('on', !!s.showSplash);
 }
-function toggleSwitch(key){
+
+async function toggleSwitch(key){
   siteData.settings[key] = !siteData.settings[key];
-  updateSwitches(); applySettings(); scheduleSave();
+  siteData.lastUpdated = Date.now();
+  updateSwitches();
+  applySettings();
+  saveToCache();
+  pendingChanges = false;
+  if (saveTimer){ clearTimeout(saveTimer); saveTimer = null; }
+  await doSave();
 }
 
-/* ═════════ ТИП ═════════ */
 function selectType(t){
   currentType = t;
   document.querySelectorAll('.type-btn').forEach(b => b.classList.toggle('active', b.dataset.type===t));
@@ -880,7 +871,6 @@ function selectType(t){
   u.placeholder = t==='file' ? 'Ссылка на файл (https://...)' : t==='image' ? 'Ссылка при клике' : 'Ссылка (https://...)';
 }
 
-/* ═════════ ДРОПДАУН ═════════ */
 function renderSectionsDropdown(){
   const grp = $('sectionsOptgroup'); grp.innerHTML='';
   siteData.sections.forEach(s => {
@@ -895,7 +885,6 @@ $('newTarget').addEventListener('change', e => {
   $('newSectionWrap').style.display = e.target.value==='__new__' ? 'block' : 'none';
 });
 
-/* ═════════ ДОБАВЛЕНИЕ ═════════ */
 function addItem(){
   const target = $('newTarget').value;
   const name = $('newName').value.trim();
@@ -903,7 +892,8 @@ function addItem(){
   const url = $('newUrl').value.trim();
   const icon = $('newIcon').value;
   const image = $('newImage').value.trim();
-  const err = $('addError'), succ = $('addSuccess'), btn = $('addBtn');
+  const err = $('addError'), succ = $('addSuccess');
+
   err.textContent=''; succ.textContent='';
 
   if (!name){ err.textContent='⚠️ Введи название'; return; }
@@ -930,6 +920,7 @@ function addItem(){
     sec.items.push(item);
   }
 
+  siteData.lastUpdated = Date.now();
   renderAll(); renderSectionsDropdown(); renderAdminList(); scheduleSave();
 
   $('newName').value=''; $('newSub').value=''; $('newUrl').value=''; $('newImage').value='';
@@ -939,7 +930,6 @@ function addItem(){
   setTimeout(()=>succ.textContent='',2000);
 }
 
-/* ═════════ УПРАВЛЕНИЕ ═════════ */
 function makeGroupTitle(sec){
   const div = document.createElement('div');
   div.className='admin-group-title';
@@ -976,6 +966,7 @@ function deleteItem(id){
     const j = sec.items.findIndex(x=>x.id===id);
     if (j!==-1){ sec.items.splice(j,1); break; }
   }
+  siteData.lastUpdated = Date.now();
   renderAll(); renderSectionsDropdown(); renderAdminList(); scheduleSave();
 }
 function deleteSection(id){
@@ -983,6 +974,7 @@ function deleteSection(id){
   if (i===-1) return;
   if (!confirm(`Удалить секцию "${siteData.sections[i].title}"?`)) return;
   siteData.sections.splice(i,1);
+  siteData.lastUpdated = Date.now();
   renderAll(); renderSectionsDropdown(); renderAdminList(); scheduleSave();
 }
 function renameSection(id){
@@ -992,15 +984,16 @@ function renameSection(id){
   if (n===null) return;
   const t = n.trim(); if (!t) return;
   s.title = t;
+  siteData.lastUpdated = Date.now();
   renderAll(); renderSectionsDropdown(); renderAdminList(); scheduleSave();
 }
 function clearAll(){
   if (!confirm('Удалить ВСЁ и вернуть стандарт?')) return;
   siteData.sections = JSON.parse(JSON.stringify(DEFAULT_SECTIONS));
+  siteData.lastUpdated = Date.now();
   renderAll(); renderSectionsDropdown(); renderAdminList(); scheduleSave();
 }
 
-/* ═════════ ПРОФИЛЬ ═════════ */
 function renderAdminProfile(){
   const s = siteData.settings;
   $('inpAbout').value = s.about || '';
@@ -1014,13 +1007,14 @@ function renderAdminProfile(){
   $('achListAdmin').innerHTML = (s.achievements||[]).map((x,i)=>`
     <div class="admin-item"><div class="icon custom" style="font-size:20px">${escapeHtml(x.emoji||'🏆')}</div><div class="info"><b>${escapeHtml(x.name)}</b></div><button onclick="delAch(${i})">✕</button></div>`).join('') || '<div style="text-align:center;opacity:.6;font-size:12px;padding:8px">Пусто</div>';
 }
-function saveAbout(){ siteData.settings.about = $('inpAbout').value; applySettings(); scheduleSave(); alert('✅'); }
-function saveMusic(){ siteData.settings.musicUrl = $('inpMusic').value.trim(); applySettings(); scheduleSave(); alert('✅'); }
-function saveDonate(){ siteData.settings.donateUrl = $('inpDonate').value.trim(); applySettings(); scheduleSave(); alert('✅'); }
+function saveAbout(){ siteData.settings.about = $('inpAbout').value; siteData.lastUpdated=Date.now(); applySettings(); scheduleSave(); alert('✅'); }
+function saveMusic(){ siteData.settings.musicUrl = $('inpMusic').value.trim(); siteData.lastUpdated=Date.now(); applySettings(); scheduleSave(); alert('✅'); }
+function saveDonate(){ siteData.settings.donateUrl = $('inpDonate').value.trim(); siteData.lastUpdated=Date.now(); applySettings(); scheduleSave(); alert('✅'); }
 function saveProfile(){
   siteData.settings.nickname = $('inpNick').value.trim() || 'EDUCANAL_ GAMES';
   siteData.settings.subtitle = $('inpSubtitle').value.trim();
   siteData.settings.avatar = $('inpAvatar').value.trim();
+  siteData.lastUpdated=Date.now();
   applySettings(); scheduleSave(); alert('✅');
 }
 function addSchedule(){
@@ -1030,22 +1024,23 @@ function addSchedule(){
   if (!day){ alert('Введи день'); return; }
   if (!siteData.settings.schedule) siteData.settings.schedule=[];
   siteData.settings.schedule.push({day,time,game});
+  siteData.lastUpdated=Date.now();
   renderAdminProfile(); applySettings(); scheduleSave();
   $('schedDay').value=''; $('schedTime').value=''; $('schedGame').value='';
 }
-function delSchedule(i){ siteData.settings.schedule.splice(i,1); renderAdminProfile(); applySettings(); scheduleSave(); }
+function delSchedule(i){ siteData.settings.schedule.splice(i,1); siteData.lastUpdated=Date.now(); renderAdminProfile(); applySettings(); scheduleSave(); }
 function addAch(){
   const emoji = $('achEmoji').value.trim() || '🏆';
   const name = $('achName').value.trim();
   if (!name){ alert('Введи название'); return; }
   if (!siteData.settings.achievements) siteData.settings.achievements=[];
   siteData.settings.achievements.push({emoji,name,date:today()});
+  siteData.lastUpdated=Date.now();
   renderAdminProfile(); applySettings(); scheduleSave();
   $('achEmoji').value=''; $('achName').value='';
 }
-function delAch(i){ siteData.settings.achievements.splice(i,1); renderAdminProfile(); applySettings(); scheduleSave(); }
+function delAch(i){ siteData.settings.achievements.splice(i,1); siteData.lastUpdated=Date.now(); renderAdminProfile(); applySettings(); scheduleSave(); }
 
-/* ═════════ СТАТИСТИКА ═════════ */
 function renderStats(){
   $('statViews').textContent = (siteData.views||0).toLocaleString('ru-RU');
   const days=[]; for (let i=6;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i); days.push(d.toISOString().slice(0,10)); }
@@ -1076,10 +1071,10 @@ function resetStats(){
   if (!confirm('Сбросить статистику?')) return;
   siteData.views = 0;
   siteData.stats = {viewsByDay:{},devices:{mobile:0,desktop:0,tablet:0},clicks:{}};
+  siteData.lastUpdated=Date.now();
   renderStats(); updateViewsDisplay(); scheduleSave();
 }
 
-/* ═════════ УВЕДОМЛЕНИЯ ═════════ */
 async function requestNotifications(){
   if (!('Notification' in window)){ $('notifStatus').textContent = '❌ Не поддерживается'; return; }
   const perm = await Notification.requestPermission();
@@ -1089,7 +1084,6 @@ async function requestNotifications(){
   } else $('notifStatus').textContent = '❌ Отклонено';
 }
 
-/* ═════════ ЭКСПОРТ/ИМПОРТ ═════════ */
 function exportData(){
   const blob = new Blob([JSON.stringify(siteData,null,2)],{type:'application/json'});
   const a = document.createElement('a');
@@ -1106,6 +1100,7 @@ function importData(e){
       if (!d.sections) throw new Error('Неверный формат');
       siteData = d;
       siteData.settings = Object.assign({}, DEFAULT_SETTINGS, siteData.settings||{});
+      siteData.lastUpdated = Date.now();
       applyTheme(siteData.theme||'purple');
       applySettings(); renderAll(); updateViewsDisplay();
       renderThemeGrid(); renderSectionsDropdown(); renderAdminList();
@@ -1116,7 +1111,6 @@ function importData(e){
   r.readAsText(f);
 }
 
-/* ═════════ МУЗЫКА ═════════ */
 let musicPlaying = false;
 function toggleMusic(){
   const a = $('bgMusic');
@@ -1124,12 +1118,10 @@ function toggleMusic(){
   else { a.play().catch(()=>{}); musicPlaying=true; $('musicBtn').classList.add('playing'); }
 }
 
-/* ═════════ ЗАКРЫТИЕ ПО ФОНУ ═════════ */
 document.querySelectorAll('.modal-overlay').forEach(m => {
   m.addEventListener('click', e => { if (e.target===m) m.classList.remove('active'); });
 });
 
-/* ═════════ СТАРТ ═════════ */
 loadData();
 </script>
 
