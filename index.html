@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>EDUCANAL_ GAMES</title>
 <style>
-  :root{--c1:#2a0a4a;--c2:#4b1a8a;--c3:#8b5cf6;--a1:#b794f6;--a2:#7c3aed;--glow:180,130,255;--tint:230,210,255;--text:#fff;--glass:rgba(255,255,255,0.12);--glass-border:rgba(255,255,255,0.22);--glass-btn:rgba(255,255,255,0.08);--bg-overlay:none}
+  :root{--c1:#2a0a4a;--c2:#4b1a8a;--c3:#8b5cf6;--a1:#b794f6;--a2:#7c3aed;--glow:180,130,255;--tint:230,210,255;--text:#fff;--glass:rgba(255,255,255,0.12);--glass-border:rgba(255,255,255,0.22);--glass-btn:rgba(255,255,255,0.08)}
   body.light{--text:#1a1a2e;--glass:rgba(255,255,255,0.55);--glass-border:rgba(0,0,0,0.12);--glass-btn:rgba(255,255,255,0.5)}
   *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;-webkit-tap-highlight-color:transparent}
   html,body{min-height:100vh;overflow-x:hidden}
@@ -51,7 +51,7 @@
   .link:hover::before,.link:active::before{transform:translateX(100%)}
   .link:hover,.link:active{transform:translateY(-2px) scale(1.02);box-shadow:0 10px 30px rgba(var(--glow),.5)}
   .link .icon{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;font-weight:700;color:#fff;overflow:hidden;background:linear-gradient(135deg,var(--a2),var(--a2))}
-  .link .icon.emoji-only{background:rgba(255,255,255,.1)!important;font-size:24px}
+  .link .icon.emoji-only{font-size:24px}
   .link .icon img{width:100%;height:100%;object-fit:cover;display:block}
   .link .text{display:flex;flex-direction:column;line-height:1.2;flex:1;min-width:0}
   .link .text small{font-size:11px;font-weight:400;color:rgba(var(--tint),.7);margin-top:2px}
@@ -64,7 +64,7 @@
   .p-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:16px 8px;border-radius:18px;text-decoration:none;color:var(--text);font-weight:600;font-size:12px;background:var(--glass-btn);border:1px solid var(--glass-border);backdrop-filter:blur(10px);transition:all .25s ease;text-align:center}
   .p-btn:hover,.p-btn:active{transform:translateY(-3px);box-shadow:0 10px 25px rgba(var(--glow),.5)}
   .p-btn .icon{width:40px;height:40px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;overflow:hidden;background:linear-gradient(135deg,var(--a2),var(--a2))}
-  .p-btn .icon.emoji-only{background:rgba(255,255,255,.1)!important;font-size:26px}
+  .p-btn .icon.emoji-only{font-size:26px}
   .p-btn .icon img{width:100%;height:100%;object-fit:cover;display:block}
   .empty-box{width:100%;padding:22px 18px;text-align:center;color:rgba(var(--tint),.6);font-size:13px}
   body.light .empty-box{color:#6a6a8a}
@@ -79,7 +79,6 @@
   .sched-row{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-radius:12px;background:var(--glass-btn);border:1px solid var(--glass-border);margin-bottom:8px;font-size:13px}
   .sched-row .day{font-weight:700;color:var(--text);min-width:80px}
   .sched-row .game{flex:1;color:rgba(var(--tint),.85);font-size:12px;text-align:center}
-  body.light .sched-row .game{color:#5a5a7a}
   .sched-row .time{font-weight:700;color:var(--a1);font-size:13px}
   .ach-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:12px}
   .ach-item{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 10px;border-radius:16px;background:var(--glass-btn);border:1px solid var(--glass-border);text-align:center}
@@ -132,8 +131,8 @@
   .type-btn .em{display:block;font-size:18px;margin-bottom:2px}
   .admin-list{max-height:320px;overflow-y:auto;margin:14px 0;padding-right:4px}
   .admin-item{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;background:var(--glass-btn);border:1px solid var(--glass-border);margin-bottom:8px}
-  .admin-item .icon{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0;overflow:hidden;color:#fff}
-  .admin-item .icon.emoji-only{background:rgba(255,255,255,.1)!important;font-size:22px}
+  .admin-item .icon{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0;overflow:hidden;color:#fff;background:linear-gradient(135deg,var(--a2),var(--a2))}
+  .admin-item .icon.emoji-only{font-size:22px}
   .admin-item .icon img{width:100%;height:100%;object-fit:cover;display:block}
   .admin-item .info{flex:1;min-width:0}
   .admin-item .info b{font-size:14px;display:block}
@@ -173,14 +172,22 @@
   .bg-opt.active{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.3)}
   .bg-opt.active::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:900;text-shadow:0 2px 8px rgba(0,0,0,.7)}
   .bg-name{font-size:9px;text-align:center;color:rgba(var(--tint),.7);margin-top:-4px;margin-bottom:6px}
-  .color-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+
+  /* ═══ ЦВЕТА ═══ */
+  .color-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}
   .color-field{background:var(--glass-btn);border:1px solid var(--glass-border);border-radius:12px;padding:8px 10px;display:flex;align-items:center;gap:8px}
   .color-field label{font-size:11px;opacity:.8;flex:1}
   .color-field input[type=color]{width:36px;height:36px;border:none;border-radius:10px;cursor:pointer;background:transparent;padding:0;margin:0}
   .color-field input[type=color]::-webkit-color-swatch-wrapper{padding:0}
   .color-field input[type=color]::-webkit-color-swatch{border:none;border-radius:8px}
   .color-field .clear-btn{background:rgba(255,255,255,.1);border:none;color:var(--text);font-size:11px;padding:4px 8px;border-radius:8px;cursor:pointer}
-  @media (max-width:380px){.nickname{font-size:24px}.avatar-wrap{width:110px;height:110px}.link{padding:12px 14px;font-size:14px}.link .icon{width:34px;height:34px;font-size:18px}.p-btn{font-size:11px;padding:14px 6px}.theme-grid{grid-template-columns:repeat(4,1fr)}.icon-picker{grid-template-columns:repeat(5,1fr)}.bg-grid{grid-template-columns:repeat(2,1fr)}}
+  .color-palette{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin-bottom:12px;padding:6px;background:rgba(0,0,0,.15);border-radius:12px}
+  body.light .color-palette{background:rgba(255,255,255,.3)}
+  .color-swatch{aspect-ratio:1;border-radius:6px;cursor:pointer;border:2px solid transparent;transition:.15s}
+  .color-swatch:hover{transform:scale(1.15);border-color:rgba(255,255,255,.6)}
+  .color-swatch.active{border-color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.3)}
+  .palette-title{font-size:10px;opacity:.6;margin-bottom:4px;letter-spacing:1px}
+  @media (max-width:380px){.nickname{font-size:24px}.avatar-wrap{width:110px;height:110px}.link{padding:12px 14px;font-size:14px}.link .icon{width:34px;height:34px;font-size:18px}.p-btn{font-size:11px;padding:14px 6px}.theme-grid{grid-template-columns:repeat(4,1fr)}.icon-picker{grid-template-columns:repeat(5,1fr)}.bg-grid{grid-template-columns:repeat(2,1fr)}.color-palette{grid-template-columns:repeat(8,1fr)}}
 </style>
 <script>
 (function(){
@@ -194,46 +201,8 @@
       r.setProperty('--glow',x.glow); r.setProperty('--tint',x.tint);
       if(x.light) document.addEventListener('DOMContentLoaded',()=>document.body.classList.add('light'));
     }
-    const bg = localStorage.getItem('educanal_bg');
-    if (bg && bg !== 'classic'){
-      document.addEventListener('DOMContentLoaded',()=>{
-        const b = document.getElementById('bgLayer');
-        if (b) applyBgToLayer(b, bg);
-      });
-    }
   }catch(e){}
 })();
-function applyBgToLayer(el, id){
-  const BGS = {
-    stars:{bg:'radial-gradient(2px 2px at 20px 30px,#fff,transparent),radial-gradient(2px 2px at 60px 70px,#fff,transparent),radial-gradient(1px 1px at 130px 80px,#fff,transparent),radial-gradient(1px 1px at 90px 20px,#fff,transparent),radial-gradient(2px 2px at 250px 50px,#fff,transparent),#0a0a1f',size:'300px 200px',color:'#0a0a1f'},
-    sunset:{bg:'linear-gradient(180deg,#ff6b6b 0%,#feca57 50%,#ff9ff3 100%)',color:'#ff6b6b'},
-    ocean:{bg:'linear-gradient(180deg,#0a2540 0%,#1a4a7a 40%,#0ea5e9 100%)',color:'#0a2540'},
-    aurora:{bg:'linear-gradient(135deg,#0a3d20 0%,#1a6b3a 25%,#0ea5e9 50%,#8b5cf6 75%,#ec4899 100%)',color:'#1a6b3a'},
-    fire:{bg:'linear-gradient(180deg,#3d0808 0%,#7a1a08 40%,#f59e0b 80%,#fbbf24 100%)',color:'#3d0808'},
-    cyber:{bg:'linear-gradient(135deg,#1a0033 0%,#4a0080 30%,#ec4899 70%,#22d3ee 100%)',color:'#1a0033'},
-    forest:{bg:'linear-gradient(180deg,#0a1f0a 0%,#1a3d1a 50%,#2a5a2a 100%)',color:'#0a1f0a'},
-    royal:{bg:'linear-gradient(135deg,#1a0a4a 0%,#4a1a8a 40%,#d4af37 100%)',color:'#1a0a4a'},
-    graphite:{bg:'linear-gradient(180deg,#0a0a0f 0%,#1a1a2e 60%,#2a2a3e 100%)',color:'#0a0a0f'},
-    clean:{bg:'linear-gradient(135deg,#f0f2f8 0%,#e0e5f0 50%,#c8d0e0 100%)',color:'#e0e5f0',light:true},
-    rose:{bg:'linear-gradient(135deg,#ffe4e6 0%,#fda4af 50%,#f43f5e 100%)',color:'#fda4af',light:true},
-    mint:{bg:'linear-gradient(135deg,#e0f7f4 0%,#a7f3d0 50%,#34d399 100%)',color:'#a7f3d0',light:true},
-    lavender:{bg:'linear-gradient(135deg,#e9d5ff 0%,#c4b5fd 50%,#a855f7 100%)',color:'#c4b5fd',light:true},
-    mesh:{bg:'radial-gradient(circle at 20% 30%,#8b5cf6 0%,transparent 40%),radial-gradient(circle at 80% 70%,#ec4899 0%,transparent 40%),radial-gradient(circle at 50% 50%,#06b6d4 0%,transparent 50%),linear-gradient(135deg,#1a0a4a,#0a2540)',color:'#1a0a4a'}
-  };
-  const b = BGS[id];
-  if (!b) return;
-  el.style.background = b.bg;
-  if (b.size) el.style.backgroundSize = b.size;
-  if (id === 'classic'){
-    el.style.background = '';
-  } else {
-    document.body.style.background = b.bg;
-    if (b.size) document.body.style.backgroundSize = b.size;
-    document.body.style.backgroundAttachment = 'fixed';
-    if (b.light) document.body.classList.add('light');
-    else document.body.classList.remove('light');
-  }
-}
 </script>
 </head>
 <body>
@@ -310,11 +279,9 @@ function applyBgToLayer(el, id){
     <div class="tab-pane active" id="pane-look">
       <span class="label-small">🖼️ Фон сайта</span>
       <div class="bg-grid" id="bgGrid"></div>
-
       <div class="divider"></div>
       <span class="label-small">🎨 Цветовая тема</span>
       <div class="theme-grid" id="themeGrid"></div>
-
       <div class="divider"></div>
       <span class="label-small">✨ Фоновый эффект</span>
       <select id="effectSelect" onchange="changeEffect(this.value)">
@@ -326,7 +293,6 @@ function applyBgToLayer(el, id){
         <option value="particles">✨ Частицы</option>
         <option value="matrix">💚 Матрица</option>
       </select>
-
       <div class="divider"></div>
       <div class="switch-row"><span>🌙 Светлая тема</span><div class="switch" id="swLight" onclick="toggleSwitch('lightMode')"></div></div>
       <div class="switch-row"><span>🔴 Режим LIVE</span><div class="switch" id="swLive" onclick="toggleSwitch('live')"></div></div>
@@ -363,19 +329,23 @@ function applyBgToLayer(el, id){
         <input type="text" id="newCustomIcon" placeholder="Или свой эмодзи (🔥 ⚡ 🎮)" maxlength="4">
       </div>
 
-      <span class="label-small">🎨 Цвета кнопки (необязательно)</span>
-      <div class="color-row">
-        <div class="color-field">
-          <label>Фон</label>
-          <input type="color" id="newBtnColor" value="#7c3aed">
-          <button class="clear-btn" onclick="clearColor('newBtnColor')">✕</button>
-        </div>
-        <div class="color-field">
-          <label>Иконка</label>
-          <input type="color" id="newIconColor" value="#7c3aed">
-          <button class="clear-btn" onclick="clearColor('newIconColor')">✕</button>
-        </div>
+      <span class="label-small">🎨 Цвет фона кнопки</span>
+      <div class="color-field">
+        <label>Фон кнопки</label>
+        <input type="color" id="newBtnColor" value="#7c3aed">
+        <button class="clear-btn" onclick="clearColor('newBtnColor')">✕</button>
       </div>
+      <div class="palette-title">Быстрые цвета:</div>
+      <div class="color-palette" id="btnPaletteAdd"></div>
+
+      <span class="label-small">🎨 Цвет иконки/эмодзи</span>
+      <div class="color-field">
+        <label>Фон иконки</label>
+        <input type="color" id="newIconColor" value="#7c3aed">
+        <button class="clear-btn" onclick="clearColor('newIconColor')">✕</button>
+      </div>
+      <div class="palette-title">Быстрые цвета:</div>
+      <div class="color-palette" id="iconPaletteAdd"></div>
 
       <div class="error" id="addError"></div>
       <div class="success" id="addSuccess"></div>
@@ -468,19 +438,23 @@ function applyBgToLayer(el, id){
       <input type="text" id="editCustomIcon" placeholder="Свой эмодзи (🔥 ⚡ 🎮)" maxlength="4">
     </div>
 
-    <span class="label-small">🎨 Цвета кнопки</span>
-    <div class="color-row">
-      <div class="color-field">
-        <label>Фон</label>
-        <input type="color" id="editBtnColor" value="#7c3aed">
-        <button class="clear-btn" onclick="clearColor('editBtnColor')">✕</button>
-      </div>
-      <div class="color-field">
-        <label>Иконка</label>
-        <input type="color" id="editIconColor" value="#7c3aed">
-        <button class="clear-btn" onclick="clearColor('editIconColor')">✕</button>
-      </div>
+    <span class="label-small">🎨 Цвет фона кнопки</span>
+    <div class="color-field">
+      <label>Фон кнопки</label>
+      <input type="color" id="editBtnColor" value="#7c3aed">
+      <button class="clear-btn" onclick="clearColor('editBtnColor')">✕</button>
     </div>
+    <div class="palette-title">Быстрые цвета:</div>
+    <div class="color-palette" id="btnPaletteEdit"></div>
+
+    <span class="label-small">🎨 Цвет иконки/эмодзи</span>
+    <div class="color-field">
+      <label>Фон иконки</label>
+      <input type="color" id="editIconColor" value="#7c3aed">
+      <button class="clear-btn" onclick="clearColor('editIconColor')">✕</button>
+    </div>
+    <div class="palette-title">Быстрые цвета:</div>
+    <div class="color-palette" id="iconPaletteEdit"></div>
 
     <div class="error" id="editError"></div>
     <div class="success" id="editSuccess"></div>
@@ -500,6 +474,16 @@ const CACHE_KEY = 'educanal_cache_v1';
 const THEME_KEY = 'educanal_theme';
 const BG_KEY = 'educanal_bg';
 const LAST_SPLASH_KEY = 'educanal_last_splash';
+
+/* 30 быстрых цветов */
+const QUICK_COLORS = [
+  '#ef4444','#dc2626','#f97316','#ea580c','#f59e0b',
+  '#fbbf24','#eab308','#84cc16','#22c55e','#10b981',
+  '#14b8a6','#06b6d4','#0ea5e9','#3b82f6','#2563eb',
+  '#6366f1','#8b5cf6','#a855f7','#d946ef','#ec4899',
+  '#f43f5e','#64748b','#475569','#1e293b','#111827',
+  '#7c3aed','#db2777','#059669','#0891b2','#d97706'
+];
 
 const ICON_SYMBOLS = {yt:'▶',tg:'➤',tt:'♪',tw:'⌘',dc:'◇',ig:'◉',vk:'VK',rbx:'◈',mc:'▣',bs:'★'};
 const ICON_LIST = ['custom','yt','tg','tt','tw','dc','ig','vk','rbx','mc','bs'];
@@ -581,12 +565,10 @@ let siteData = {sections:[],theme:'purple',views:0,
 let initialized = false;
 let currentType = 'link';
 let currentIcon = 'custom';
-let currentCustomIcon = '';
 let currentBtnColor = '';
 let currentIconColor = '';
 let editType = 'link';
 let editIcon = 'custom';
-let editCustomIcon = '';
 let editBtnColor = '';
 let editIconColor = '';
 let editingItemId = null;
@@ -756,9 +738,7 @@ async function loadData(){
       const keepLocalTheme = cached && localTime > serverTime;
 
       siteData.sections = rec.sections;
-      if (!keepLocalTheme){
-        siteData.theme = rec.theme || 'purple';
-      }
+      if (!keepLocalTheme) siteData.theme = rec.theme || 'purple';
       siteData.views = rec.views || 0;
       siteData.stats = rec.stats || {viewsByDay:{},devices:{mobile:0,desktop:0,tablet:0},clicks:{}};
       siteData.settings = Object.assign({}, DEFAULT_SETTINGS, rec.settings||{});
@@ -914,37 +894,54 @@ function updateViewsDisplay(){
   $('viewsCount').textContent = (siteData.views||0).toLocaleString('ru-RU');
 }
 
-/* Иконка */
+/* ═══════ ИКОНКИ — теперь цвет ВСЕГДА применяется ═══════ */
 function getIconHtml(item){
-  // Кастомный эмодзи/символ — приоритет
+  // Кастомный эмодзи
   if (item.customIcon){
-    return `<div class="icon emoji-only"${item.iconColor ? ` style="background:${item.iconColor}"` : ''}>${escapeHtml(item.customIcon)}</div>`;
+    const bg = item.iconColor || 'rgba(255,255,255,.1)';
+    return `<div class="icon emoji-only" style="background:${bg}">${escapeHtml(item.customIcon)}</div>`;
   }
   // Фото
   if (item.type === 'image' && item.image){
-    return `<div class="icon img"${item.iconColor ? ` style="background:${item.iconColor}"` : ''}><img src="${escapeHtml(item.image)}" onerror="this.parentElement.innerHTML='🖼️'"></div>`;
+    const bg = item.iconColor || '';
+    return `<div class="icon img"${bg ? ` style="background:${bg}"` : ''}><img src="${escapeHtml(item.image)}" onerror="this.parentElement.innerHTML='🖼️'"></div>`;
   }
   // Файл
   if (item.type === 'file'){
-    return `<div class="icon file"${item.iconColor ? ` style="background:${item.iconColor}"` : ''}>📄</div>`;
+    const bg = item.iconColor || '';
+    return `<div class="icon file"${bg ? ` style="background:${bg}"` : ''}>📄</div>`;
   }
-  // Стандартные
+  // Стандартная иконка — если есть свой цвет, применяем его поверх
   const key = item.icon || 'custom';
   const sym = ICON_SYMBOLS[key] || '✦';
-  if (key === 'custom'){
-    return `<div class="icon emoji-only"${item.iconColor ? ` style="background:${item.iconColor}"` : ''}>✦</div>`;
+  if (item.iconColor){
+    return `<div class="icon" style="background:${item.iconColor}">${sym}</div>`;
   }
-  return `<div class="icon ${key}"${item.iconColor ? ` style="background:${item.iconColor} !important"` : ''}>${sym}</div>`;
+  if (key === 'custom'){
+    return `<div class="icon emoji-only" style="background:rgba(255,255,255,.1)">✦</div>`;
+  }
+  return `<div class="icon ${key}">${sym}</div>`;
 }
 
 function getIconHtmlSmall(item){
-  if (item.customIcon) return `<div class="icon emoji-only"${item.iconColor?` style="background:${item.iconColor}"`:''}>${escapeHtml(item.customIcon)}</div>`;
-  if (item.type === 'image' && item.image) return `<div class="icon img"><img src="${escapeHtml(item.image)}" onerror="this.parentElement.innerHTML='🖼️'"></div>`;
-  if (item.type === 'file') return `<div class="icon file">📄</div>`;
+  if (item.customIcon){
+    const bg = item.iconColor || 'rgba(255,255,255,.1)';
+    return `<div class="icon emoji-only" style="background:${bg}">${escapeHtml(item.customIcon)}</div>`;
+  }
+  if (item.type === 'image' && item.image){
+    return `<div class="icon img"><img src="${escapeHtml(item.image)}" onerror="this.parentElement.innerHTML='🖼️'"></div>`;
+  }
+  if (item.type === 'file'){
+    const bg = item.iconColor || '';
+    return `<div class="icon file"${bg ? ` style="background:${bg}"` : ''}>📄</div>`;
+  }
   const key = item.icon || 'custom';
   const sym = ICON_SYMBOLS[key] || '✦';
-  if (key === 'custom') return `<div class="icon emoji-only">✦</div>`;
-  return `<div class="icon ${key}"${item.iconColor?` style="background:${item.iconColor} !important"`:''}>${sym}</div>`;
+  if (item.iconColor){
+    return `<div class="icon" style="background:${item.iconColor}">${sym}</div>`;
+  }
+  if (key === 'custom') return `<div class="icon emoji-only" style="background:rgba(255,255,255,.1)">✦</div>`;
+  return `<div class="icon ${key}">${sym}</div>`;
 }
 
 function createListLink(item){
@@ -1021,6 +1018,7 @@ function checkPassword(){
     renderAdminProfile(); renderStats(); updateSwitches();
     $('effectSelect').value = siteData.settings.effect || 'bubbles';
     initIconPicker('iconPicker', 'add');
+    initPalettes();
   } else err.textContent='❌ Неверный пароль';
 }
 $('pwdInput').addEventListener('keypress', e => { if (e.key==='Enter') checkPassword(); });
@@ -1031,6 +1029,29 @@ function switchTab(t){
   $('pane-'+t).classList.add('active');
   if (t==='stats') renderStats();
   if (t==='profile') renderAdminProfile();
+}
+
+/* ═══════ ПАЛИТРЫ ЦВЕТОВ ═══════ */
+function initPalettes(){
+  ['btnPaletteAdd','iconPaletteAdd','btnPaletteEdit','iconPaletteEdit'].forEach(id => {
+    const c = $(id); if (!c) return;
+    c.innerHTML = '';
+    QUICK_COLORS.forEach(col => {
+      const s = document.createElement('div');
+      s.className = 'color-swatch';
+      s.style.background = col;
+      s.onclick = () => {
+        if (id === 'btnPaletteAdd'){ $('newBtnColor').value = col; currentBtnColor = col; checkColorFill('newBtnColor', col); }
+        if (id === 'iconPaletteAdd'){ $('newIconColor').value = col; currentIconColor = col; checkColorFill('newIconColor', col); }
+        if (id === 'btnPaletteEdit'){ $('editBtnColor').value = col; editBtnColor = col; checkColorFill('editBtnColor', col); }
+        if (id === 'iconPaletteEdit'){ $('editIconColor').value = col; editIconColor = col; checkColorFill('editIconColor', col); }
+        // Подсветка активного
+        c.querySelectorAll('.color-swatch').forEach(x => x.classList.remove('active'));
+        s.classList.add('active');
+      };
+      c.appendChild(s);
+    });
+  });
 }
 
 /* ФОНЫ */
@@ -1055,8 +1076,7 @@ async function changeBg(k){
   siteData.lastUpdated = Date.now();
   applyBackground(k);
   renderBgGrid();
-  saveToCache();
-  pendingChanges = false;
+  saveToCache(); pendingChanges = false;
   if (saveTimer){ clearTimeout(saveTimer); saveTimer = null; }
   await doSave();
 }
@@ -1082,22 +1102,18 @@ async function changeTheme(k){
   applyTheme(k);
   applyBackground(siteData.settings.bg || 'classic');
   renderThemeGrid();
-  saveToCache();
-  pendingChanges = false;
+  saveToCache(); pendingChanges = false;
   if (saveTimer){ clearTimeout(saveTimer); saveTimer = null; }
   await doSave();
 }
-
 async function changeEffect(v){
   siteData.settings.effect = v;
   siteData.lastUpdated = Date.now();
   renderEffect(v);
-  saveToCache();
-  pendingChanges = false;
+  saveToCache(); pendingChanges = false;
   if (saveTimer){ clearTimeout(saveTimer); saveTimer = null; }
   await doSave();
 }
-
 function updateSwitches(){
   const s = siteData.settings;
   $('swLight').classList.toggle('on', !!s.lightMode);
@@ -1143,7 +1159,6 @@ function getIconBg(k){
   return map[k] || 'rgba(255,255,255,.1)';
 }
 
-/* ЦВЕТА */
 function clearColor(inputId){
   const el = $(inputId);
   if (inputId === 'newBtnColor') currentBtnColor = '';
@@ -1151,16 +1166,16 @@ function clearColor(inputId){
   if (inputId === 'editBtnColor') editBtnColor = '';
   if (inputId === 'editIconColor') editIconColor = '';
   el.value = '#7c3aed';
-  el.parentElement.classList.add('empty');
-  el.parentElement.querySelector('label').style.opacity = '0.3';
+  checkColorFill(inputId, '');
 }
 function checkColorFill(inputId, val){
-  const el = $(inputId);
-  el.parentElement.classList.toggle('empty', !val);
-  el.parentElement.querySelector('label').style.opacity = val ? '1' : '0.3';
+  const el = $(inputId); if (!el) return;
+  const field = el.closest('.color-field');
+  if (!field) return;
+  const label = field.querySelector('label');
+  if (label) label.style.opacity = val ? '1' : '0.4';
 }
 
-/* ТИП */
 function selectType(t){
   currentType = t;
   document.querySelectorAll('.type-btn[data-type]').forEach(b => b.classList.toggle('active', b.dataset.type===t));
@@ -1199,8 +1214,8 @@ function addItem(){
   const customIcon = $('newCustomIcon').value.trim();
   const btnColorEl = $('newBtnColor');
   const iconColorEl = $('newIconColor');
-  const btnColor = btnColorEl.parentElement.classList.contains('empty') ? '' : btnColorEl.value;
-  const iconColor = iconColorEl.parentElement.classList.contains('empty') ? '' : iconColorEl.value;
+  const btnColor = btnColorEl.closest('.color-field').querySelector('label').style.opacity === '0.4' ? '' : btnColorEl.value;
+  const iconColor = iconColorEl.closest('.color-field').querySelector('label').style.opacity === '0.4' ? '' : iconColorEl.value;
 
   const err = $('addError'), succ = $('addSuccess');
   err.textContent=''; succ.textContent='';
@@ -1241,6 +1256,7 @@ function addItem(){
   $('newSectionName').value=''; $('newCustomIcon').value='';
   $('newTarget').value='__new__'; $('newSectionWrap').style.display='none';
   clearColor('newBtnColor'); clearColor('newIconColor');
+  document.querySelectorAll('.color-palette .color-swatch').forEach(x => x.classList.remove('active'));
   succ.textContent='✅ Добавлено!';
   setTimeout(()=>succ.textContent='',2000);
 }
@@ -1251,7 +1267,6 @@ function makeGroupTitle(sec){
   div.innerHTML = `<span>${sec.layout==='grid'?'▦':'📋'} ${escapeHtml(sec.title)} <span style="opacity:.5;font-size:9px">(${sec.items.length})</span></span><div class="sec-btns"><button onclick="renameSection('${sec.id}')">✏️</button><button class="del" onclick="deleteSection('${sec.id}')">🗑</button></div>`;
   return div;
 }
-
 function makeAdminItem(item){
   const div = document.createElement('div');
   div.className='admin-item';
@@ -1293,7 +1308,6 @@ function editItem(id){
   const it = found.item;
   editType = it.type || 'link';
   editIcon = it.icon || 'custom';
-  editCustomIcon = it.customIcon || '';
   editBtnColor = it.btnBg || '';
   editIconColor = it.iconColor || '';
 
@@ -1305,22 +1319,21 @@ function editItem(id){
   $('editError').textContent = '';
   $('editSuccess').textContent = '';
 
-  // Цвета
   const btnEl = $('editBtnColor'), iconEl = $('editIconColor');
-  if (editBtnColor){ btnEl.value = editBtnColor; btnEl.parentElement.classList.remove('empty'); btnEl.parentElement.querySelector('label').style.opacity='1'; }
-  else { btnEl.value = '#7c3aed'; btnEl.parentElement.classList.add('empty'); btnEl.parentElement.querySelector('label').style.opacity='0.3'; }
-  if (editIconColor){ iconEl.value = editIconColor; iconEl.parentElement.classList.remove('empty'); iconEl.parentElement.querySelector('label').style.opacity='1'; }
-  else { iconEl.value = '#7c3aed'; iconEl.parentElement.classList.add('empty'); iconEl.parentElement.querySelector('label').style.opacity='0.3'; }
+  if (editBtnColor){ btnEl.value = editBtnColor; checkColorFill('editBtnColor', editBtnColor); }
+  else { btnEl.value = '#7c3aed'; checkColorFill('editBtnColor', ''); }
+  if (editIconColor){ iconEl.value = editIconColor; checkColorFill('editIconColor', editIconColor); }
+  else { iconEl.value = '#7c3aed'; checkColorFill('editIconColor', ''); }
 
   document.querySelectorAll('.type-btn[data-edit-type]').forEach(b => b.classList.toggle('active', b.dataset.editType===editType));
   $('editImageWrap').style.display = editType==='image' ? 'block' : 'none';
   $('editIconWrap').style.display = editType==='link' ? 'block' : 'none';
 
   initIconPicker('editIconPicker', 'edit');
+  initPalettes();
   closeModal('adminModal');
   openModal('editModal');
 }
-
 async function saveEdit(){
   if (!editingItemId) return;
   const found = findItem(editingItemId);
@@ -1332,8 +1345,8 @@ async function saveEdit(){
   const customIcon = $('editCustomIcon').value.trim();
   const btnColorEl = $('editBtnColor');
   const iconColorEl = $('editIconColor');
-  const btnColor = btnColorEl.parentElement.classList.contains('empty') ? '' : btnColorEl.value;
-  const iconColor = iconColorEl.parentElement.classList.contains('empty') ? '' : iconColorEl.value;
+  const btnColor = btnColorEl.closest('.color-field').querySelector('label').style.opacity === '0.4' ? '' : btnColorEl.value;
+  const iconColor = iconColorEl.closest('.color-field').querySelector('label').style.opacity === '0.4' ? '' : iconColorEl.value;
 
   const err = $('editError'), succ = $('editSuccess');
   err.textContent=''; succ.textContent='';
@@ -1370,7 +1383,6 @@ async function saveEdit(){
   succ.textContent = '✅ Сохранено!';
   setTimeout(() => { closeModal('editModal'); openModal('adminModal'); }, 800);
 }
-
 async function deleteFromEdit(){
   if (!editingItemId) return;
   if (!confirm('Удалить эту кнопку?')) return;
@@ -1385,7 +1397,6 @@ async function deleteFromEdit(){
   openModal('adminModal');
 }
 
-/* ОСТАЛЬНОЕ */
 function deleteItem(id){
   if (!confirm('Удалить?')) return;
   for (const sec of siteData.sections){
@@ -1431,7 +1442,7 @@ function renderAdminProfile(){
   $('schedList').innerHTML = (s.schedule||[]).map((x,i)=>`
     <div class="admin-item"><div class="info"><b>${escapeHtml(x.day)}</b><span>${escapeHtml(x.time||'')} • ${escapeHtml(x.game||'')}</span></div><button class="btn-del" onclick="delSchedule(${i})">✕</button></div>`).join('') || '<div style="text-align:center;opacity:.6;font-size:12px;padding:8px">Пусто</div>';
   $('achListAdmin').innerHTML = (s.achievements||[]).map((x,i)=>`
-    <div class="admin-item"><div class="icon emoji-only" style="font-size:20px">${escapeHtml(x.emoji||'🏆')}</div><div class="info"><b>${escapeHtml(x.name)}</b></div><button class="btn-del" onclick="delAch(${i})">✕</button></div>`).join('') || '<div style="text-align:center;opacity:.6;font-size:12px;padding:8px">Пусто</div>';
+    <div class="admin-item"><div class="icon emoji-only" style="background:rgba(255,255,255,.1);font-size:20px">${escapeHtml(x.emoji||'🏆')}</div><div class="info"><b>${escapeHtml(x.name)}</b></div><button class="btn-del" onclick="delAch(${i})">✕</button></div>`).join('') || '<div style="text-align:center;opacity:.6;font-size:12px;padding:8px">Пусто</div>';
 }
 function saveAbout(){ siteData.settings.about = $('inpAbout').value; siteData.lastUpdated=Date.now(); applySettings(); scheduleSave(); alert('✅'); }
 function saveMusic(){ siteData.settings.musicUrl = $('inpMusic').value.trim(); siteData.lastUpdated=Date.now(); applySettings(); scheduleSave(); alert('✅'); }
@@ -1549,11 +1560,13 @@ document.querySelectorAll('.modal-overlay').forEach(m => {
   m.addEventListener('click', e => { if (e.target===m) m.classList.remove('active'); });
 });
 
-// Следим за цветами — обновляем прозрачность label
 ['newBtnColor','newIconColor','editBtnColor','editIconColor'].forEach(id => {
   document.addEventListener('DOMContentLoaded', () => {
     const el = document.getElementById(id);
-    if (el) el.addEventListener('input', () => checkColorFill(id, el.value));
+    if (el){
+      el.addEventListener('input', () => checkColorFill(id, el.value));
+      if (el.closest('.color-field')) checkColorFill(id, '');
+    }
   });
 });
 
