@@ -479,8 +479,8 @@ const THEME_KEY = 'educanal_theme';
 const BG_KEY = 'educanal_bg';
 const LAST_SPLASH_KEY = 'educanal_last_splash';
 
-/* ПАРОЛЬ В ХЕШЕ — в открытом виде не виден */
-let ADMIN_PASSWORD_HASH = localStorage.getItem('educanal_admin_hash') || '';
+/* ✅ ПАРОЛЬ В ВИДЕ ХЕША — открытый пароль нигде не хранится */
+let ADMIN_PASSWORD_HASH = '6d0fefa95f77a539a9bff7547b0cb8772b02e7a808f7239613c017489a100892';
 
 const QUICK_COLORS = [
   '#ef4444','#dc2626','#f97316','#ea580c','#f59e0b',
@@ -1032,18 +1032,6 @@ async function checkPassword(){
   const err = $('pwdError');
   const hash = await sha256(input);
 
-  if (!ADMIN_PASSWORD_HASH){
-    localStorage.setItem('educanal_admin_hash', hash);
-    ADMIN_PASSWORD_HASH = hash;
-    err.textContent = '';
-    $('pwdInput').value = '';
-    openAdmin();
-    setTimeout(() => {
-      alert('✅ Пароль установлен!\n\nТвой хеш:\n\n' + hash + '\n\nСкопируй его и вставь в код в переменную ADMIN_PASSWORD_HASH, чтобы пароль работал после очистки кеша.');
-    }, 500);
-    return;
-  }
-
   if (hash === ADMIN_PASSWORD_HASH){
     err.textContent = '';
     $('pwdInput').value = '';
@@ -1063,13 +1051,12 @@ async function changePassword(){
     return;
   }
   const hash = await sha256(pwd);
-  localStorage.setItem('educanal_admin_hash', hash);
   ADMIN_PASSWORD_HASH = hash;
   $('inpNewPwd').value = '';
   status.style.color = '#4ade80';
   status.textContent = '✅ Пароль изменён!';
   setTimeout(() => {
-    alert('🔑 Твой новый хеш:\n\n' + hash + '\n\n⚠️ Вставь его в код в переменную ADMIN_PASSWORD_HASH, чтобы пароль работал после очистки кеша.');
+    alert('🔑 Твой новый хеш:\n\n' + hash + '\n\n⚠️ Вставь его в код в переменную ADMIN_PASSWORD_HASH, чтобы пароль работал после очистки кеша и на других устройствах.');
   }, 300);
 }
 
