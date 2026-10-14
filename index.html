@@ -52,7 +52,7 @@
   .link:hover,.link:active{transform:translateY(-2px) scale(1.02);box-shadow:0 10px 30px rgba(var(--glow),.5)}
   .link .icon{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;font-weight:700;color:#fff;overflow:hidden;background:linear-gradient(135deg,var(--a2),var(--a2))}
   .link .icon.emoji-only{font-size:24px}
-  .link .icon img{width:100%;height:100%;object-fit:cover;display:block}
+  .link .icon img{width:100%;height:100%;object-fit:cover;display:block;border-radius:11px}
   .link .text{display:flex;flex-direction:column;line-height:1.2;flex:1;min-width:0}
   .link .text small{font-size:11px;font-weight:400;color:rgba(var(--tint),.7);margin-top:2px}
   body.light .link .text small{color:#6a6a8a}
@@ -65,7 +65,7 @@
   .p-btn:hover,.p-btn:active{transform:translateY(-3px);box-shadow:0 10px 25px rgba(var(--glow),.5)}
   .p-btn .icon{width:40px;height:40px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;overflow:hidden;background:linear-gradient(135deg,var(--a2),var(--a2))}
   .p-btn .icon.emoji-only{font-size:26px}
-  .p-btn .icon img{width:100%;height:100%;object-fit:cover;display:block}
+  .p-btn .icon img{width:100%;height:100%;object-fit:cover;display:block;border-radius:13px}
   .empty-box{width:100%;padding:22px 18px;text-align:center;color:rgba(var(--tint),.6);font-size:13px}
   body.light .empty-box{color:#6a6a8a}
   .footer{margin-top:8px;font-size:11px;color:rgba(var(--tint),.5);letter-spacing:1px;text-align:center;user-select:none;cursor:pointer;padding:10px}
@@ -133,7 +133,7 @@
   .admin-item{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;background:var(--glass-btn);border:1px solid var(--glass-border);margin-bottom:8px}
   .admin-item .icon{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0;overflow:hidden;color:#fff;background:linear-gradient(135deg,var(--a2),var(--a2))}
   .admin-item .icon.emoji-only{font-size:22px}
-  .admin-item .icon img{width:100%;height:100%;object-fit:cover;display:block}
+  .admin-item .icon img{width:100%;height:100%;object-fit:cover;display:block;border-radius:9px}
   .admin-item .info{flex:1;min-width:0}
   .admin-item .info b{font-size:14px;display:block}
   .admin-item .info span{font-size:11px;color:rgba(var(--tint),.6);display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -165,15 +165,13 @@
   .icon-opt{aspect-ratio:1;border-radius:10px;background:var(--glass-btn);border:2px solid var(--glass-border);display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;color:var(--text);transition:.15s;overflow:hidden}
   .icon-opt:hover{transform:scale(1.05)}
   .icon-opt.active{border-color:#fff;background:rgba(139,92,246,.4)}
-  .icon-opt img{width:100%;height:100%;object-fit:cover;display:block}
+  .icon-opt img{width:100%;height:100%;object-fit:cover;display:block;border-radius:8px}
   .bg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
   .bg-opt{aspect-ratio:1.4;border-radius:12px;cursor:pointer;border:2px solid rgba(255,255,255,.15);position:relative;overflow:hidden;transition:.15s}
   .bg-opt:hover{transform:scale(1.04)}
   .bg-opt.active{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.3)}
   .bg-opt.active::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:900;text-shadow:0 2px 8px rgba(0,0,0,.7)}
   .bg-name{font-size:9px;text-align:center;color:rgba(var(--tint),.7);margin-top:-4px;margin-bottom:6px}
-
-  /* ═══ ЦВЕТА ═══ */
   .color-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}
   .color-field{background:var(--glass-btn);border:1px solid var(--glass-border);border-radius:12px;padding:8px 10px;display:flex;align-items:center;gap:8px}
   .color-field label{font-size:11px;opacity:.8;flex:1}
@@ -327,6 +325,7 @@
         <span class="label-small">🎨 Иконка</span>
         <div class="icon-picker" id="iconPicker"></div>
         <input type="text" id="newCustomIcon" placeholder="Или свой эмодзи (🔥 ⚡ 🎮)" maxlength="4">
+        <input type="url" id="newIconImage" placeholder="Или URL фото-иконки (https://...jpg)">
       </div>
 
       <span class="label-small">🎨 Цвет фона кнопки</span>
@@ -436,6 +435,7 @@
       <span class="label-small">🎨 Иконка</span>
       <div class="icon-picker" id="editIconPicker"></div>
       <input type="text" id="editCustomIcon" placeholder="Свой эмодзи (🔥 ⚡ 🎮)" maxlength="4">
+      <input type="url" id="editIconImage" placeholder="Или URL фото-иконки (https://...jpg)">
     </div>
 
     <span class="label-small">🎨 Цвет фона кнопки</span>
@@ -475,7 +475,6 @@ const THEME_KEY = 'educanal_theme';
 const BG_KEY = 'educanal_bg';
 const LAST_SPLASH_KEY = 'educanal_last_splash';
 
-/* 30 быстрых цветов */
 const QUICK_COLORS = [
   '#ef4444','#dc2626','#f97316','#ea580c','#f59e0b',
   '#fbbf24','#eab308','#84cc16','#22c55e','#10b981',
@@ -597,7 +596,6 @@ function showSplash(){
   localStorage.setItem(LAST_SPLASH_KEY, Date.now().toString());
   setTimeout(()=>$('splash').classList.add('hide'), 2000);
 }
-
 function applyTheme(name){
   const t = THEMES[name] || THEMES.purple;
   const r = document.documentElement.style;
@@ -610,7 +608,6 @@ function applyTheme(name){
   }
   try { localStorage.setItem(THEME_KEY, JSON.stringify(t)); } catch(e){}
 }
-
 function applyBackground(id){
   const b = BACKGROUNDS[id];
   if (!b) return;
@@ -647,7 +644,6 @@ function applyBackground(id){
   }
   try { localStorage.setItem(BG_KEY, id); } catch(e){}
 }
-
 function renderEffect(type){
   const layer = $('fxLayer'); layer.innerHTML = '';
   if (!type || type==='none') return;
@@ -692,14 +688,12 @@ function renderEffect(type){
     }
   }
 }
-
 function saveToCache(){
   try { localStorage.setItem(CACHE_KEY, JSON.stringify(siteData)); } catch(e){}
 }
 function loadFromCache(){
   try { const raw = localStorage.getItem(CACHE_KEY); return raw ? JSON.parse(raw) : null; } catch(e){ return null; }
 }
-
 function migrateRecord(rec){
   if (!rec) return null;
   if (Array.isArray(rec.sections)) return rec;
@@ -731,12 +725,10 @@ async function loadData(){
     if (!res.ok) throw new Error('HTTP '+res.status);
     const data = await res.json();
     let rec = migrateRecord(data.record);
-
     if (rec && Array.isArray(rec.sections)){
       const serverTime = rec.lastUpdated || 0;
       const localTime = siteData.lastUpdated || 0;
       const keepLocalTheme = cached && localTime > serverTime;
-
       siteData.sections = rec.sections;
       if (!keepLocalTheme) siteData.theme = rec.theme || 'purple';
       siteData.views = rec.views || 0;
@@ -756,7 +748,6 @@ async function loadData(){
     applySettings();
     updateViewsDisplay();
     renderAll();
-
     const counted = sessionStorage.getItem('educanal_counted');
     if (!counted){
       siteData.views = (siteData.views||0)+1;
@@ -777,7 +768,6 @@ async function loadData(){
     if (!cached) showSplash();
   }
 }
-
 function scheduleSave(){
   pendingChanges = true;
   saveToCache();
@@ -789,7 +779,6 @@ function scheduleSave(){
     await doSave();
   }, 1500);
 }
-
 async function doSave(){
   isSyncing = true;
   setSyncStatus('saving');
@@ -814,7 +803,6 @@ window.addEventListener('beforeunload', () => {
     try { navigator.sendBeacon(API_URL, new Blob([JSON.stringify(siteData)],{type:'application/json'})); } catch(e){}
   }
 });
-
 function trackView(){
   const d = today();
   if (!siteData.stats.viewsByDay) siteData.stats.viewsByDay = {};
@@ -840,14 +828,12 @@ setInterval(() => {
   if (!initialized) return;
   trackOnline(); saveToCache(); scheduleSave();
 }, 120000);
-
 function trackClick(itemId){
   if (!siteData.stats.clicks) siteData.stats.clicks = {};
   siteData.stats.clicks[itemId] = (siteData.stats.clicks[itemId]||0)+1;
   saveToCache();
   scheduleSave();
 }
-
 function playClickSound(){
   if (!siteData.settings.sound) return;
   try {
@@ -860,7 +846,6 @@ function playClickSound(){
     o.start(); o.stop(ctx.currentTime+0.1);
   } catch(e){}
 }
-
 function applySettings(){
   const s = siteData.settings;
   renderEffect(s.effect);
@@ -873,45 +858,46 @@ function applySettings(){
   else $('musicBtn').style.display = 'none';
   $('aboutSection').style.display = s.about ? 'block' : 'none';
   $('aboutText').textContent = s.about || '';
-
   if (s.schedule && s.schedule.length){
     $('scheduleSection').style.display = 'block';
     $('scheduleList').innerHTML = s.schedule.map(x => `
       <div class="sched-row"><span class="day">${escapeHtml(x.day)}</span><span class="game">${escapeHtml(x.game||'')}</span><span class="time">${escapeHtml(x.time||'')}</span></div>`).join('');
   } else $('scheduleSection').style.display = 'none';
-
   if (s.achievements && s.achievements.length){
     $('achSection').style.display = 'block';
     $('achList').innerHTML = s.achievements.map(a => `
       <div class="ach-item"><div class="emoji">${escapeHtml(a.emoji||'🏆')}</div><div class="name">${escapeHtml(a.name)}</div>${a.date?`<div class="date">${escapeHtml(a.date)}</div>`:''}</div>`).join('');
   } else $('achSection').style.display = 'none';
-
   if (s.donateUrl){ $('donateBtn').style.display = 'flex'; $('donateBtn').href = s.donateUrl; }
   else $('donateBtn').style.display = 'none';
 }
-
 function updateViewsDisplay(){
   $('viewsCount').textContent = (siteData.views||0).toLocaleString('ru-RU');
 }
 
-/* ═══════ ИКОНКИ — теперь цвет ВСЕГДА применяется ═══════ */
+/* ИКОНКИ */
 function getIconHtml(item){
-  // Кастомный эмодзи
-  if (item.customIcon){
-    const bg = item.iconColor || 'rgba(255,255,255,.1)';
-    return `<div class="icon emoji-only" style="background:${bg}">${escapeHtml(item.customIcon)}</div>`;
+  // 1. Фото-иконка через iconImage (для любого типа)
+  if (item.iconImage){
+    const bg = item.iconColor || '';
+    return `<div class="icon img"${bg ? ` style="background:${bg}"` : ''}><img src="${escapeHtml(item.iconImage)}" onerror="this.parentElement.innerHTML='🖼️'"></div>`;
   }
-  // Фото
+  // 2. Тип "С фото" — большая картинка
   if (item.type === 'image' && item.image){
     const bg = item.iconColor || '';
     return `<div class="icon img"${bg ? ` style="background:${bg}"` : ''}><img src="${escapeHtml(item.image)}" onerror="this.parentElement.innerHTML='🖼️'"></div>`;
   }
-  // Файл
+  // 3. Свой эмодзи
+  if (item.customIcon){
+    const bg = item.iconColor || 'rgba(255,255,255,.1)';
+    return `<div class="icon emoji-only" style="background:${bg}">${escapeHtml(item.customIcon)}</div>`;
+  }
+  // 4. Файл
   if (item.type === 'file'){
     const bg = item.iconColor || '';
     return `<div class="icon file"${bg ? ` style="background:${bg}"` : ''}>📄</div>`;
   }
-  // Стандартная иконка — если есть свой цвет, применяем его поверх
+  // 5. Стандартная иконка
   const key = item.icon || 'custom';
   const sym = ICON_SYMBOLS[key] || '✦';
   if (item.iconColor){
@@ -922,14 +908,16 @@ function getIconHtml(item){
   }
   return `<div class="icon ${key}">${sym}</div>`;
 }
-
 function getIconHtmlSmall(item){
-  if (item.customIcon){
-    const bg = item.iconColor || 'rgba(255,255,255,.1)';
-    return `<div class="icon emoji-only" style="background:${bg}">${escapeHtml(item.customIcon)}</div>`;
+  if (item.iconImage){
+    return `<div class="icon img"><img src="${escapeHtml(item.iconImage)}" onerror="this.parentElement.innerHTML='🖼️'"></div>`;
   }
   if (item.type === 'image' && item.image){
     return `<div class="icon img"><img src="${escapeHtml(item.image)}" onerror="this.parentElement.innerHTML='🖼️'"></div>`;
+  }
+  if (item.customIcon){
+    const bg = item.iconColor || 'rgba(255,255,255,.1)';
+    return `<div class="icon emoji-only" style="background:${bg}">${escapeHtml(item.customIcon)}</div>`;
   }
   if (item.type === 'file'){
     const bg = item.iconColor || '';
@@ -1031,7 +1019,6 @@ function switchTab(t){
   if (t==='profile') renderAdminProfile();
 }
 
-/* ═══════ ПАЛИТРЫ ЦВЕТОВ ═══════ */
 function initPalettes(){
   ['btnPaletteAdd','iconPaletteAdd','btnPaletteEdit','iconPaletteEdit'].forEach(id => {
     const c = $(id); if (!c) return;
@@ -1045,7 +1032,6 @@ function initPalettes(){
         if (id === 'iconPaletteAdd'){ $('newIconColor').value = col; currentIconColor = col; checkColorFill('newIconColor', col); }
         if (id === 'btnPaletteEdit'){ $('editBtnColor').value = col; editBtnColor = col; checkColorFill('editBtnColor', col); }
         if (id === 'iconPaletteEdit'){ $('editIconColor').value = col; editIconColor = col; checkColorFill('editIconColor', col); }
-        // Подсветка активного
         c.querySelectorAll('.color-swatch').forEach(x => x.classList.remove('active'));
         s.classList.add('active');
       };
@@ -1054,7 +1040,6 @@ function initPalettes(){
   });
 }
 
-/* ФОНЫ */
 function renderBgGrid(){
   const g = $('bgGrid'); g.innerHTML='';
   const currentBg = siteData.settings.bg || 'classic';
@@ -1080,7 +1065,6 @@ async function changeBg(k){
   if (saveTimer){ clearTimeout(saveTimer); saveTimer = null; }
   await doSave();
 }
-
 function renderThemeGrid(){
   const g = $('themeGrid'); g.innerHTML='';
   Object.keys(THEMES).forEach(k => {
@@ -1130,7 +1114,6 @@ async function toggleSwitch(key){
   await doSave();
 }
 
-/* ИКОНКИ */
 function initIconPicker(containerId, mode){
   const c = $(containerId); c.innerHTML = '';
   const activeIcon = mode === 'add' ? currentIcon : editIcon;
@@ -1158,7 +1141,6 @@ function getIconBg(k){
   };
   return map[k] || 'rgba(255,255,255,.1)';
 }
-
 function clearColor(inputId){
   const el = $(inputId);
   if (inputId === 'newBtnColor') currentBtnColor = '';
@@ -1175,7 +1157,6 @@ function checkColorFill(inputId, val){
   const label = field.querySelector('label');
   if (label) label.style.opacity = val ? '1' : '0.4';
 }
-
 function selectType(t){
   currentType = t;
   document.querySelectorAll('.type-btn[data-type]').forEach(b => b.classList.toggle('active', b.dataset.type===t));
@@ -1190,7 +1171,6 @@ function selectEditType(t){
   $('editImageWrap').style.display = t==='image' ? 'block' : 'none';
   $('editIconWrap').style.display = t==='link' ? 'block' : 'none';
 }
-
 function renderSectionsDropdown(){
   const grp = $('sectionsOptgroup'); grp.innerHTML='';
   siteData.sections.forEach(s => {
@@ -1204,7 +1184,6 @@ function renderSectionsDropdown(){
 $('newTarget').addEventListener('change', e => {
   $('newSectionWrap').style.display = e.target.value==='__new__' ? 'block' : 'none';
 });
-
 function addItem(){
   const target = $('newTarget').value;
   const name = $('newName').value.trim();
@@ -1212,31 +1191,28 @@ function addItem(){
   const url = $('newUrl').value.trim();
   const image = $('newImage').value.trim();
   const customIcon = $('newCustomIcon').value.trim();
+  const iconImage = $('newIconImage').value.trim();
   const btnColorEl = $('newBtnColor');
   const iconColorEl = $('newIconColor');
   const btnColor = btnColorEl.closest('.color-field').querySelector('label').style.opacity === '0.4' ? '' : btnColorEl.value;
   const iconColor = iconColorEl.closest('.color-field').querySelector('label').style.opacity === '0.4' ? '' : iconColorEl.value;
-
   const err = $('addError'), succ = $('addSuccess');
   err.textContent=''; succ.textContent='';
-
   if (!name){ err.textContent='⚠️ Введи название'; return; }
   if (!url){ err.textContent='⚠️ Введи ссылку'; return; }
   if (!/^https?:\/\//i.test(url)){ err.textContent='⚠️ Ссылка должна начинаться с https://'; return; }
   if (currentType==='image' && !image){ err.textContent='⚠️ Введи URL картинки'; return; }
-
   const total = siteData.sections.reduce((s,x)=>s+x.items.length,0);
   if (total >= MAX_ITEMS){ err.textContent=`⚠️ Максимум ${MAX_ITEMS}`; return; }
-
   const item = {id:genId(),type:currentType,name,sub,url};
   if (currentType==='link'){
     item.icon = currentIcon;
     if (customIcon) item.customIcon = customIcon;
   }
   if (currentType==='image') item.image = image;
+  if (iconImage) item.iconImage = iconImage;
   if (btnColor) item.btnBg = btnColor;
   if (iconColor) item.iconColor = iconColor;
-
   if (target==='__new__'){
     const title = $('newSectionName').value.trim();
     const layout = $('newSectionLayout').value;
@@ -1248,19 +1224,16 @@ function addItem(){
     if (!sec){ err.textContent='⚠️ Секция не найдена'; return; }
     sec.items.push(item);
   }
-
   siteData.lastUpdated = Date.now();
   renderAll(); renderSectionsDropdown(); renderAdminList(); scheduleSave();
-
   $('newName').value=''; $('newSub').value=''; $('newUrl').value=''; $('newImage').value='';
-  $('newSectionName').value=''; $('newCustomIcon').value='';
+  $('newSectionName').value=''; $('newCustomIcon').value=''; $('newIconImage').value='';
   $('newTarget').value='__new__'; $('newSectionWrap').style.display='none';
   clearColor('newBtnColor'); clearColor('newIconColor');
   document.querySelectorAll('.color-palette .color-swatch').forEach(x => x.classList.remove('active'));
   succ.textContent='✅ Добавлено!';
   setTimeout(()=>succ.textContent='',2000);
 }
-
 function makeGroupTitle(sec){
   const div = document.createElement('div');
   div.className='admin-group-title';
@@ -1292,8 +1265,6 @@ function renderAdminList(){
     } else sec.items.forEach(it => list.appendChild(makeAdminItem(it)));
   });
 }
-
-/* РЕДАКТИРОВАНИЕ */
 function findItem(id){
   for (const sec of siteData.sections){
     const idx = sec.items.findIndex(x=>x.id===id);
@@ -1310,25 +1281,22 @@ function editItem(id){
   editIcon = it.icon || 'custom';
   editBtnColor = it.btnBg || '';
   editIconColor = it.iconColor || '';
-
   $('editName').value = it.name || '';
   $('editSub').value = it.sub || '';
   $('editUrl').value = it.url || '';
   $('editImage').value = it.image || '';
   $('editCustomIcon').value = it.customIcon || '';
+  $('editIconImage').value = it.iconImage || '';
   $('editError').textContent = '';
   $('editSuccess').textContent = '';
-
   const btnEl = $('editBtnColor'), iconEl = $('editIconColor');
   if (editBtnColor){ btnEl.value = editBtnColor; checkColorFill('editBtnColor', editBtnColor); }
   else { btnEl.value = '#7c3aed'; checkColorFill('editBtnColor', ''); }
   if (editIconColor){ iconEl.value = editIconColor; checkColorFill('editIconColor', editIconColor); }
   else { iconEl.value = '#7c3aed'; checkColorFill('editIconColor', ''); }
-
   document.querySelectorAll('.type-btn[data-edit-type]').forEach(b => b.classList.toggle('active', b.dataset.editType===editType));
   $('editImageWrap').style.display = editType==='image' ? 'block' : 'none';
   $('editIconWrap').style.display = editType==='link' ? 'block' : 'none';
-
   initIconPicker('editIconPicker', 'edit');
   initPalettes();
   closeModal('adminModal');
@@ -1343,38 +1311,36 @@ async function saveEdit(){
   const url = $('editUrl').value.trim();
   const image = $('editImage').value.trim();
   const customIcon = $('editCustomIcon').value.trim();
+  const iconImage = $('editIconImage').value.trim();
   const btnColorEl = $('editBtnColor');
   const iconColorEl = $('editIconColor');
   const btnColor = btnColorEl.closest('.color-field').querySelector('label').style.opacity === '0.4' ? '' : btnColorEl.value;
   const iconColor = iconColorEl.closest('.color-field').querySelector('label').style.opacity === '0.4' ? '' : iconColorEl.value;
-
   const err = $('editError'), succ = $('editSuccess');
   err.textContent=''; succ.textContent='';
   if (!name){ err.textContent='⚠️ Введи название'; return; }
   if (!url){ err.textContent='⚠️ Введи ссылку'; return; }
   if (!/^https?:\/\//i.test(url)){ err.textContent='⚠️ Ссылка должна начинаться с https://'; return; }
   if (editType==='image' && !image){ err.textContent='⚠️ Введи URL картинки'; return; }
-
   const it = found.item;
   it.type = editType;
   it.name = name;
   it.sub = sub;
   it.url = url;
-
   delete it.customIcon;
   delete it.image;
   delete it.iconColor;
   delete it.btnBg;
-
+  delete it.iconImage;
   if (editType === 'link'){
     it.icon = editIcon;
     if (customIcon) it.customIcon = customIcon;
   } else if (editType === 'image'){
     it.image = image;
   }
+  if (iconImage) it.iconImage = iconImage;
   if (btnColor) it.btnBg = btnColor;
   if (iconColor) it.iconColor = iconColor;
-
   siteData.lastUpdated = Date.now();
   renderAll(); renderSectionsDropdown(); renderAdminList();
   saveToCache(); pendingChanges = false;
@@ -1396,7 +1362,6 @@ async function deleteFromEdit(){
   closeModal('editModal');
   openModal('adminModal');
 }
-
 function deleteItem(id){
   if (!confirm('Удалить?')) return;
   for (const sec of siteData.sections){
@@ -1430,7 +1395,6 @@ function clearAll(){
   siteData.lastUpdated = Date.now();
   renderAll(); renderSectionsDropdown(); renderAdminList(); scheduleSave();
 }
-
 function renderAdminProfile(){
   const s = siteData.settings;
   $('inpAbout').value = s.about || '';
@@ -1477,7 +1441,6 @@ function addAch(){
   $('achEmoji').value=''; $('achName').value='';
 }
 function delAch(i){ siteData.settings.achievements.splice(i,1); siteData.lastUpdated=Date.now(); renderAdminProfile(); applySettings(); scheduleSave(); }
-
 function renderStats(){
   $('statViews').textContent = (siteData.views||0).toLocaleString('ru-RU');
   const days=[]; for (let i=6;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i); days.push(d.toISOString().slice(0,10)); }
@@ -1485,7 +1448,6 @@ function renderStats(){
   const max = Math.max(...vals,1);
   $('viewsChart').innerHTML = vals.map(v=>`<div class="bar" style="height:${Math.max(3,(v/max)*100)}%" title="${v}"></div>`).join('');
   $('chartLabels').innerHTML = days.map(d=>{ const [,m,dd]=d.split('-'); return `<div>${dd}.${m}</div>`; }).join('');
-
   const clicks = siteData.stats.clicks||{};
   const allItems=[];
   siteData.sections.forEach(sec=>sec.items.forEach(it=>allItems.push({id:it.id,name:it.name,count:clicks[it.id]||0})));
@@ -1494,7 +1456,6 @@ function renderStats(){
   $('top5').innerHTML = top.length ? top.map((x,i)=>`
     <div class="top-item"><div class="top-rank">${i+1}</div><div class="top-name">${escapeHtml(x.name)}</div><div class="top-count">${x.count}</div></div>`).join('')
     : '<div style="text-align:center;opacity:.6;font-size:12px;padding:8px">Пока нет кликов</div>';
-
   const d = siteData.stats.devices || {mobile:0,desktop:0,tablet:0};
   const total = (d.mobile+d.desktop+d.tablet)||1;
   const mp = Math.round(d.mobile/total*100), dp = Math.round(d.desktop/total*100), tp = 100-mp-dp;
@@ -1511,7 +1472,6 @@ function resetStats(){
   siteData.lastUpdated=Date.now();
   renderStats(); updateViewsDisplay(); scheduleSave();
 }
-
 async function requestNotifications(){
   if (!('Notification' in window)){ $('notifStatus').textContent = '❌ Не поддерживается'; return; }
   const perm = await Notification.requestPermission();
@@ -1520,7 +1480,6 @@ async function requestNotifications(){
     new Notification('EDUCANAL_ GAMES', {body:'Ты будешь получать уведомления!'});
   } else $('notifStatus').textContent = '❌ Отклонено';
 }
-
 function exportData(){
   const blob = new Blob([JSON.stringify(siteData,null,2)],{type:'application/json'});
   const a = document.createElement('a');
@@ -1548,18 +1507,15 @@ function importData(e){
   };
   r.readAsText(f);
 }
-
 let musicPlaying = false;
 function toggleMusic(){
   const a = $('bgMusic');
   if (musicPlaying){ a.pause(); musicPlaying=false; $('musicBtn').classList.remove('playing'); }
   else { a.play().catch(()=>{}); musicPlaying=true; $('musicBtn').classList.add('playing'); }
 }
-
 document.querySelectorAll('.modal-overlay').forEach(m => {
   m.addEventListener('click', e => { if (e.target===m) m.classList.remove('active'); });
 });
-
 ['newBtnColor','newIconColor','editBtnColor','editIconColor'].forEach(id => {
   document.addEventListener('DOMContentLoaded', () => {
     const el = document.getElementById(id);
@@ -1569,7 +1525,6 @@ document.querySelectorAll('.modal-overlay').forEach(m => {
     }
   });
 });
-
 loadData();
 </script>
 
