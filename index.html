@@ -5,11 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>EDUCANAL_ GAMES</title>
 <style>
-  :root{--c1:#2a0a4a;--c2:#4b1a8a;--c3:#8b5cf6;--a1:#b794f6;--a2:#7c3aed;--glow:180,130,255;--tint:230,210,255;--text:#fff;--glass:rgba(255,255,255,0.12);--glass-border:rgba(255,255,255,0.22);--glass-btn:rgba(255,255,255,0.08)}
+  :root{--c1:#2a0a4a;--c2:#4b1a8a;--c3:#8b5cf6;--a1:#b794f6;--a2:#7c3aed;--glow:180,130,255;--tint:230,210,255;--text:#fff;--glass:rgba(255,255,255,0.12);--glass-border:rgba(255,255,255,0.22);--glass-btn:rgba(255,255,255,0.08);--bg-overlay:none}
   body.light{--text:#1a1a2e;--glass:rgba(255,255,255,0.55);--glass-border:rgba(0,0,0,0.12);--glass-btn:rgba(255,255,255,0.5)}
   *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;-webkit-tap-highlight-color:transparent}
   html,body{min-height:100vh;overflow-x:hidden}
   body{background:linear-gradient(135deg,var(--c1) 0%,var(--c2) 40%,var(--c3) 100%);background-attachment:fixed;position:relative;display:flex;justify-content:center;padding:30px 16px 60px;transition:background .5s;color:var(--text)}
+  #bgLayer{position:fixed;inset:0;z-index:-1;pointer-events:none}
   #splash{position:fixed;inset:0;background:linear-gradient(135deg,var(--c1) 0%,var(--c2) 40%,var(--c3) 100%);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transition:opacity .8s,visibility .8s}
   #splash.hide{opacity:0;visibility:hidden;pointer-events:none}
   #splash .sp-avatar{width:140px;height:140px;border-radius:50%;padding:5px;background:linear-gradient(135deg,rgba(255,255,255,.6),rgba(var(--glow),.5));box-shadow:0 0 60px rgba(var(--glow),.9);animation:spIn .8s cubic-bezier(.2,.9,.3,1.2);overflow:hidden}
@@ -20,7 +21,7 @@
   @keyframes spIn{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
   @keyframes spText{to{opacity:1}}
   @keyframes spLoad{to{transform:translateX(100%)}}
-  .fx-layer{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  .fx-layer{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
   .fx-rain{position:absolute;top:-10%;width:2px;height:60px;background:linear-gradient(transparent,rgba(180,220,255,.7));animation:fxFall linear infinite}
   .fx-snow{position:absolute;top:-5%;color:#fff;font-size:18px;opacity:.85;animation:fxSnow linear infinite}
   @keyframes fxFall{to{transform:translateY(120vh)}}
@@ -36,41 +37,49 @@
   .avatar img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
   .nick-wrap{display:flex;align-items:center;gap:10px}
   .nickname{font-size:28px;font-weight:800;color:var(--text);text-align:center;letter-spacing:1px;text-shadow:0 0 20px rgba(var(--glow),.9),0 2px 4px rgba(0,0,0,.3)}
+  body.light .nickname{text-shadow:0 2px 6px rgba(0,0,0,.15)}
   .live-badge{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,#ff1e1e,#c00);color:#fff;font-size:10px;font-weight:800;padding:4px 9px;border-radius:20px;letter-spacing:1.5px;text-transform:uppercase;box-shadow:0 0 15px rgba(255,30,30,.8);animation:livePulse 1.5s ease-in-out infinite}
   .live-badge .dot{width:6px;height:6px;background:#fff;border-radius:50%;animation:dotBlink 1s ease-in-out infinite}
   @keyframes livePulse{0%,100%{box-shadow:0 0 15px rgba(255,30,30,.8)}50%{box-shadow:0 0 25px rgba(255,30,30,1)}}
   @keyframes dotBlink{0%,100%{opacity:1}50%{opacity:.3}}
   .subtitle{font-size:13px;color:rgba(var(--tint),.8);letter-spacing:3px;text-transform:uppercase;margin-top:-10px;font-weight:500}
+  body.light .subtitle{color:#4a4a6a}
   .glass{background:var(--glass);border:1px solid var(--glass-border);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-radius:22px;box-shadow:0 8px 32px rgba(var(--glow),.35),inset 0 1px 0 rgba(255,255,255,.3);color:var(--text)}
   .links{width:100%;display:flex;flex-direction:column;gap:10px;padding:12px}
   .link{display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:18px;text-decoration:none;color:var(--text);font-weight:600;font-size:15px;background:var(--glass-btn);border:1px solid var(--glass-border);backdrop-filter:blur(10px);transition:all .25s cubic-bezier(.2,.7,.3,1);position:relative;overflow:hidden}
   .link::before{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.25),transparent 70%);transform:translateX(-100%);transition:transform .6s}
   .link:hover::before,.link:active::before{transform:translateX(100%)}
-  .link:hover,.link:active{transform:translateY(-2px) scale(1.02);background:rgba(255,255,255,.16);box-shadow:0 10px 30px rgba(var(--glow),.5)}
+  .link:hover,.link:active{transform:translateY(-2px) scale(1.02);box-shadow:0 10px 30px rgba(var(--glow),.5)}
   .link .icon{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;font-weight:700;color:#fff;overflow:hidden;background:linear-gradient(135deg,var(--a2),var(--a2))}
   .link .icon.emoji-only{background:rgba(255,255,255,.1)!important;font-size:24px}
   .link .icon img{width:100%;height:100%;object-fit:cover;display:block}
   .link .text{display:flex;flex-direction:column;line-height:1.2;flex:1;min-width:0}
   .link .text small{font-size:11px;font-weight:400;color:rgba(var(--tint),.7);margin-top:2px}
+  body.light .link .text small{color:#6a6a8a}
   .link .arrow{margin-left:auto;opacity:.5;font-size:18px;flex-shrink:0}
   .yt{background:linear-gradient(135deg,#ff0000,#cc0000)}.tg{background:linear-gradient(135deg,#2aabee,#229ed9)}.tt{background:linear-gradient(135deg,#25f4ee,#fe2c55)}.tw{background:linear-gradient(135deg,#9146ff,#6441a5)}.dc{background:linear-gradient(135deg,#5865f2,#4752c4)}.ig{background:linear-gradient(135deg,#feda75,#d62976,#962fbf)}.vk{background:linear-gradient(135deg,#0077ff,#005ccc)}.rbx{background:linear-gradient(135deg,#e2231a,#b81a12)}.mc{background:linear-gradient(135deg,#62b47a,#3a7d44)}.bs{background:linear-gradient(135deg,#ffcb2b,#ff8a00)}.custom{background:linear-gradient(135deg,var(--a2),var(--a2))}.file{background:linear-gradient(135deg,#6b7280,#374151)}.img{background:linear-gradient(135deg,#0ea5e9,#0284c7)}
   .section-title{width:100%;text-align:center;font-size:13px;letter-spacing:5px;text-transform:uppercase;color:rgba(var(--tint),.85);margin:12px 0 -4px;font-weight:600;text-shadow:0 0 12px rgba(var(--glow),.7)}
+  body.light .section-title{color:#4a4a6a;text-shadow:none}
   .personal-row{width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:12px}
   .p-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:16px 8px;border-radius:18px;text-decoration:none;color:var(--text);font-weight:600;font-size:12px;background:var(--glass-btn);border:1px solid var(--glass-border);backdrop-filter:blur(10px);transition:all .25s ease;text-align:center}
-  .p-btn:hover,.p-btn:active{transform:translateY(-3px);background:rgba(255,255,255,.18);box-shadow:0 10px 25px rgba(var(--glow),.5)}
+  .p-btn:hover,.p-btn:active{transform:translateY(-3px);box-shadow:0 10px 25px rgba(var(--glow),.5)}
   .p-btn .icon{width:40px;height:40px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;overflow:hidden;background:linear-gradient(135deg,var(--a2),var(--a2))}
   .p-btn .icon.emoji-only{background:rgba(255,255,255,.1)!important;font-size:26px}
   .p-btn .icon img{width:100%;height:100%;object-fit:cover;display:block}
   .empty-box{width:100%;padding:22px 18px;text-align:center;color:rgba(var(--tint),.6);font-size:13px}
+  body.light .empty-box{color:#6a6a8a}
   .footer{margin-top:8px;font-size:11px;color:rgba(var(--tint),.5);letter-spacing:1px;text-align:center;user-select:none;cursor:pointer;padding:10px}
+  body.light .footer{color:#8a8aa8}
   .info-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:6px}
   .info-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:20px;background:var(--glass-btn);border:1px solid var(--glass-border);backdrop-filter:blur(10px);font-size:13px;color:rgba(var(--tint),.85);font-weight:500}
+  body.light .info-badge{color:#4a4a6a}
   .info-badge b{color:var(--text);font-weight:700}
   .online-dot{width:7px;height:7px;background:#22c55e;border-radius:50%;box-shadow:0 0 8px #22c55e;animation:dotBlink 1.5s ease-in-out infinite}
   .about-box{padding:18px;font-size:14px;line-height:1.5;color:var(--text);white-space:pre-wrap;text-align:center}
   .sched-row{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-radius:12px;background:var(--glass-btn);border:1px solid var(--glass-border);margin-bottom:8px;font-size:13px}
   .sched-row .day{font-weight:700;color:var(--text);min-width:80px}
   .sched-row .game{flex:1;color:rgba(var(--tint),.85);font-size:12px;text-align:center}
+  body.light .sched-row .game{color:#5a5a7a}
   .sched-row .time{font-weight:700;color:var(--a1);font-size:13px}
   .ach-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:12px}
   .ach-item{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 10px;border-radius:16px;background:var(--glass-btn);border:1px solid var(--glass-border);text-align:center}
@@ -123,7 +132,7 @@
   .type-btn .em{display:block;font-size:18px;margin-bottom:2px}
   .admin-list{max-height:320px;overflow-y:auto;margin:14px 0;padding-right:4px}
   .admin-item{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;background:var(--glass-btn);border:1px solid var(--glass-border);margin-bottom:8px}
-  .admin-item .icon{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0;overflow:hidden;background:linear-gradient(135deg,var(--a2),var(--a2));color:#fff}
+  .admin-item .icon{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0;overflow:hidden;color:#fff}
   .admin-item .icon.emoji-only{background:rgba(255,255,255,.1)!important;font-size:22px}
   .admin-item .icon img{width:100%;height:100%;object-fit:cover;display:block}
   .admin-item .info{flex:1;min-width:0}
@@ -158,7 +167,20 @@
   .icon-opt:hover{transform:scale(1.05)}
   .icon-opt.active{border-color:#fff;background:rgba(139,92,246,.4)}
   .icon-opt img{width:100%;height:100%;object-fit:cover;display:block}
-  @media (max-width:380px){.nickname{font-size:24px}.avatar-wrap{width:110px;height:110px}.link{padding:12px 14px;font-size:14px}.link .icon{width:34px;height:34px;font-size:18px}.p-btn{font-size:11px;padding:14px 6px}.theme-grid{grid-template-columns:repeat(4,1fr)}.icon-picker{grid-template-columns:repeat(5,1fr)}}
+  .bg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
+  .bg-opt{aspect-ratio:1.4;border-radius:12px;cursor:pointer;border:2px solid rgba(255,255,255,.15);position:relative;overflow:hidden;transition:.15s}
+  .bg-opt:hover{transform:scale(1.04)}
+  .bg-opt.active{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.3)}
+  .bg-opt.active::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:900;text-shadow:0 2px 8px rgba(0,0,0,.7)}
+  .bg-name{font-size:9px;text-align:center;color:rgba(var(--tint),.7);margin-top:-4px;margin-bottom:6px}
+  .color-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+  .color-field{background:var(--glass-btn);border:1px solid var(--glass-border);border-radius:12px;padding:8px 10px;display:flex;align-items:center;gap:8px}
+  .color-field label{font-size:11px;opacity:.8;flex:1}
+  .color-field input[type=color]{width:36px;height:36px;border:none;border-radius:10px;cursor:pointer;background:transparent;padding:0;margin:0}
+  .color-field input[type=color]::-webkit-color-swatch-wrapper{padding:0}
+  .color-field input[type=color]::-webkit-color-swatch{border:none;border-radius:8px}
+  .color-field .clear-btn{background:rgba(255,255,255,.1);border:none;color:var(--text);font-size:11px;padding:4px 8px;border-radius:8px;cursor:pointer}
+  @media (max-width:380px){.nickname{font-size:24px}.avatar-wrap{width:110px;height:110px}.link{padding:12px 14px;font-size:14px}.link .icon{width:34px;height:34px;font-size:18px}.p-btn{font-size:11px;padding:14px 6px}.theme-grid{grid-template-columns:repeat(4,1fr)}.icon-picker{grid-template-columns:repeat(5,1fr)}.bg-grid{grid-template-columns:repeat(2,1fr)}}
 </style>
 <script>
 (function(){
@@ -172,11 +194,51 @@
       r.setProperty('--glow',x.glow); r.setProperty('--tint',x.tint);
       if(x.light) document.addEventListener('DOMContentLoaded',()=>document.body.classList.add('light'));
     }
+    const bg = localStorage.getItem('educanal_bg');
+    if (bg && bg !== 'classic'){
+      document.addEventListener('DOMContentLoaded',()=>{
+        const b = document.getElementById('bgLayer');
+        if (b) applyBgToLayer(b, bg);
+      });
+    }
   }catch(e){}
 })();
+function applyBgToLayer(el, id){
+  const BGS = {
+    stars:{bg:'radial-gradient(2px 2px at 20px 30px,#fff,transparent),radial-gradient(2px 2px at 60px 70px,#fff,transparent),radial-gradient(1px 1px at 130px 80px,#fff,transparent),radial-gradient(1px 1px at 90px 20px,#fff,transparent),radial-gradient(2px 2px at 250px 50px,#fff,transparent),#0a0a1f',size:'300px 200px',color:'#0a0a1f'},
+    sunset:{bg:'linear-gradient(180deg,#ff6b6b 0%,#feca57 50%,#ff9ff3 100%)',color:'#ff6b6b'},
+    ocean:{bg:'linear-gradient(180deg,#0a2540 0%,#1a4a7a 40%,#0ea5e9 100%)',color:'#0a2540'},
+    aurora:{bg:'linear-gradient(135deg,#0a3d20 0%,#1a6b3a 25%,#0ea5e9 50%,#8b5cf6 75%,#ec4899 100%)',color:'#1a6b3a'},
+    fire:{bg:'linear-gradient(180deg,#3d0808 0%,#7a1a08 40%,#f59e0b 80%,#fbbf24 100%)',color:'#3d0808'},
+    cyber:{bg:'linear-gradient(135deg,#1a0033 0%,#4a0080 30%,#ec4899 70%,#22d3ee 100%)',color:'#1a0033'},
+    forest:{bg:'linear-gradient(180deg,#0a1f0a 0%,#1a3d1a 50%,#2a5a2a 100%)',color:'#0a1f0a'},
+    royal:{bg:'linear-gradient(135deg,#1a0a4a 0%,#4a1a8a 40%,#d4af37 100%)',color:'#1a0a4a'},
+    graphite:{bg:'linear-gradient(180deg,#0a0a0f 0%,#1a1a2e 60%,#2a2a3e 100%)',color:'#0a0a0f'},
+    clean:{bg:'linear-gradient(135deg,#f0f2f8 0%,#e0e5f0 50%,#c8d0e0 100%)',color:'#e0e5f0',light:true},
+    rose:{bg:'linear-gradient(135deg,#ffe4e6 0%,#fda4af 50%,#f43f5e 100%)',color:'#fda4af',light:true},
+    mint:{bg:'linear-gradient(135deg,#e0f7f4 0%,#a7f3d0 50%,#34d399 100%)',color:'#a7f3d0',light:true},
+    lavender:{bg:'linear-gradient(135deg,#e9d5ff 0%,#c4b5fd 50%,#a855f7 100%)',color:'#c4b5fd',light:true},
+    mesh:{bg:'radial-gradient(circle at 20% 30%,#8b5cf6 0%,transparent 40%),radial-gradient(circle at 80% 70%,#ec4899 0%,transparent 40%),radial-gradient(circle at 50% 50%,#06b6d4 0%,transparent 50%),linear-gradient(135deg,#1a0a4a,#0a2540)',color:'#1a0a4a'}
+  };
+  const b = BGS[id];
+  if (!b) return;
+  el.style.background = b.bg;
+  if (b.size) el.style.backgroundSize = b.size;
+  if (id === 'classic'){
+    el.style.background = '';
+  } else {
+    document.body.style.background = b.bg;
+    if (b.size) document.body.style.backgroundSize = b.size;
+    document.body.style.backgroundAttachment = 'fixed';
+    if (b.light) document.body.classList.add('light');
+    else document.body.classList.remove('light');
+  }
+}
 </script>
 </head>
 <body>
+
+<div id="bgLayer"></div>
 
 <div id="splash">
   <div class="sp-avatar"><img id="spImg" src="https://i.ibb.co/gbQ2fbQj/IMG-20260110-221321-022.jpg" alt=""></div>
@@ -244,9 +306,15 @@
       <div class="tab" data-tab="stats" onclick="switchTab('stats')"><span class="em">📊</span>Статистика</div>
       <div class="tab" data-tab="notif" onclick="switchTab('notif')"><span class="em">🔔</span>Связь</div>
     </div>
+
     <div class="tab-pane active" id="pane-look">
-      <span class="label-small">🎨 Тема</span>
+      <span class="label-small">🖼️ Фон сайта</span>
+      <div class="bg-grid" id="bgGrid"></div>
+
+      <div class="divider"></div>
+      <span class="label-small">🎨 Цветовая тема</span>
       <div class="theme-grid" id="themeGrid"></div>
+
       <div class="divider"></div>
       <span class="label-small">✨ Фоновый эффект</span>
       <select id="effectSelect" onchange="changeEffect(this.value)">
@@ -258,12 +326,14 @@
         <option value="particles">✨ Частицы</option>
         <option value="matrix">💚 Матрица</option>
       </select>
+
       <div class="divider"></div>
       <div class="switch-row"><span>🌙 Светлая тема</span><div class="switch" id="swLight" onclick="toggleSwitch('lightMode')"></div></div>
       <div class="switch-row"><span>🔴 Режим LIVE</span><div class="switch" id="swLive" onclick="toggleSwitch('live')"></div></div>
       <div class="switch-row"><span>🔊 Звук при клике</span><div class="switch" id="swSound" onclick="toggleSwitch('sound')"></div></div>
       <div class="switch-row"><span>🚀 Заставка при входе</span><div class="switch" id="swSplash" onclick="toggleSwitch('showSplash')"></div></div>
     </div>
+
     <div class="tab-pane" id="pane-content">
       <div class="counter" id="counter">Всего: 0 / 500</div>
       <span class="label-small">➕ Тип кнопки</span>
@@ -290,7 +360,23 @@
       <div id="iconFieldWrap">
         <span class="label-small">🎨 Иконка</span>
         <div class="icon-picker" id="iconPicker"></div>
+        <input type="text" id="newCustomIcon" placeholder="Или свой эмодзи (🔥 ⚡ 🎮)" maxlength="4">
       </div>
+
+      <span class="label-small">🎨 Цвета кнопки (необязательно)</span>
+      <div class="color-row">
+        <div class="color-field">
+          <label>Фон</label>
+          <input type="color" id="newBtnColor" value="#7c3aed">
+          <button class="clear-btn" onclick="clearColor('newBtnColor')">✕</button>
+        </div>
+        <div class="color-field">
+          <label>Иконка</label>
+          <input type="color" id="newIconColor" value="#7c3aed">
+          <button class="clear-btn" onclick="clearColor('newIconColor')">✕</button>
+        </div>
+      </div>
+
       <div class="error" id="addError"></div>
       <div class="success" id="addSuccess"></div>
       <button class="modal-btn" id="addBtn" onclick="addItem()">Добавить</button>
@@ -299,6 +385,7 @@
       <div class="admin-list" id="adminList"><div class="loading">Загрузка…</div></div>
       <button class="modal-btn danger" onclick="clearAll()">🗑 Удалить ВСЁ</button>
     </div>
+
     <div class="tab-pane" id="pane-profile">
       <span class="label-small">📝 Обо мне</span>
       <textarea id="inpAbout" placeholder="Напиши о себе..."></textarea>
@@ -331,6 +418,7 @@
       <input type="url" id="inpAvatar" placeholder="URL аватарки">
       <button class="modal-btn" onclick="saveProfile()">Сохранить профиль</button>
     </div>
+
     <div class="tab-pane" id="pane-stats">
       <div class="stat-card"><div class="stat-big" id="statViews">0</div><div class="stat-sub">Всего просмотров</div></div>
       <div class="stat-card"><div class="stat-sub" style="text-align:left;margin-bottom:6px">📅 За 7 дней</div><div class="chart" id="viewsChart"></div><div class="bar-labels" id="chartLabels"></div></div>
@@ -338,6 +426,7 @@
       <div class="stat-card"><div class="stat-sub" style="text-align:left;margin-bottom:6px">📱 Устройства</div><div id="devices"></div></div>
       <button class="modal-btn danger" onclick="resetStats()">🔄 Сбросить статистику</button>
     </div>
+
     <div class="tab-pane" id="pane-notif">
       <p style="font-size:13px;opacity:.85;line-height:1.5;margin-bottom:12px">Разреши уведомления — узнаешь когда я в эфире.</p>
       <button class="modal-btn" onclick="requestNotifications()">🔔 Включить уведомления</button>
@@ -348,17 +437,17 @@
       <button class="modal-btn cancel" style="margin-top:8px" onclick="document.getElementById('importFile').click()">📥 Загрузить JSON</button>
       <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
     </div>
+
     <button class="modal-btn cancel" style="margin-top:16px" onclick="closeModal('adminModal')">Закрыть</button>
   </div>
 </div>
 
-<!-- МОДАЛКА РЕДАКТИРОВАНИЯ -->
 <div class="modal-overlay" id="editModal">
   <div class="modal glass">
     <button class="modal-close" onclick="closeModal('editModal')">✕</button>
     <h2>✏️ Редактировать</h2>
 
-    <span class="label-small">➕ Тип</span>
+    <span class="label-small">Тип</span>
     <div class="type-row">
       <div class="type-btn" data-edit-type="link" onclick="selectEditType('link')"><span class="em">📋</span>Обычная</div>
       <div class="type-btn" data-edit-type="file" onclick="selectEditType('file')"><span class="em">📄</span>Файл</div>
@@ -376,13 +465,27 @@
     <div id="editIconWrap">
       <span class="label-small">🎨 Иконка</span>
       <div class="icon-picker" id="editIconPicker"></div>
-      <input type="text" id="editCustomIcon" placeholder="Или свой символ/эмодзи (напр. 🔥)" maxlength="4">
+      <input type="text" id="editCustomIcon" placeholder="Свой эмодзи (🔥 ⚡ 🎮)" maxlength="4">
+    </div>
+
+    <span class="label-small">🎨 Цвета кнопки</span>
+    <div class="color-row">
+      <div class="color-field">
+        <label>Фон</label>
+        <input type="color" id="editBtnColor" value="#7c3aed">
+        <button class="clear-btn" onclick="clearColor('editBtnColor')">✕</button>
+      </div>
+      <div class="color-field">
+        <label>Иконка</label>
+        <input type="color" id="editIconColor" value="#7c3aed">
+        <button class="clear-btn" onclick="clearColor('editIconColor')">✕</button>
+      </div>
     </div>
 
     <div class="error" id="editError"></div>
     <div class="success" id="editSuccess"></div>
-    <button class="modal-btn" onclick="saveEdit()">💾 Сохранить изменения</button>
-    <button class="modal-btn danger" style="margin-top:8px" onclick="deleteFromEdit()">🗑 Удалить кнопку</button>
+    <button class="modal-btn" onclick="saveEdit()">💾 Сохранить</button>
+    <button class="modal-btn danger" style="margin-top:8px" onclick="deleteFromEdit()">🗑 Удалить</button>
     <button class="modal-btn cancel" style="margin-top:8px" onclick="closeModal('editModal')">Отмена</button>
   </div>
 </div>
@@ -395,11 +498,29 @@ const MAX_ITEMS = 500;
 const API_URL = 'https://api.jsonbin.io/v3/b/' + JSONBIN_BIN_ID;
 const CACHE_KEY = 'educanal_cache_v1';
 const THEME_KEY = 'educanal_theme';
+const BG_KEY = 'educanal_bg';
 const LAST_SPLASH_KEY = 'educanal_last_splash';
 
-/* Символы иконок */
 const ICON_SYMBOLS = {yt:'▶',tg:'➤',tt:'♪',tw:'⌘',dc:'◇',ig:'◉',vk:'VK',rbx:'◈',mc:'▣',bs:'★'};
 const ICON_LIST = ['custom','yt','tg','tt','tw','dc','ig','vk','rbx','mc','bs'];
+
+const BACKGROUNDS = {
+  classic:  {name:'Классика', preview:'linear-gradient(135deg,#2a0a4a,#8b5cf6)'},
+  stars:    {name:'Космос',  preview:'radial-gradient(2px 2px at 20px 30px,#fff,transparent),#0a0a1f'},
+  sunset:   {name:'Закат',   preview:'linear-gradient(180deg,#ff6b6b,#feca57,#ff9ff3)'},
+  ocean:    {name:'Океан',   preview:'linear-gradient(180deg,#0a2540,#1a4a7a,#0ea5e9)'},
+  aurora:   {name:'Сияние',  preview:'linear-gradient(135deg,#0a3d20,#0ea5e9,#8b5cf6,#ec4899)'},
+  fire:     {name:'Огонь',   preview:'linear-gradient(180deg,#3d0808,#7a1a08,#f59e0b)'},
+  cyber:    {name:'Кибер',   preview:'linear-gradient(135deg,#1a0033,#4a0080,#ec4899,#22d3ee)'},
+  forest:   {name:'Лес',     preview:'linear-gradient(180deg,#0a1f0a,#1a3d1a,#2a5a2a)'},
+  royal:    {name:'Королева',preview:'linear-gradient(135deg,#1a0a4a,#4a1a8a,#d4af37)'},
+  graphite: {name:'Графит',  preview:'linear-gradient(180deg,#0a0a0f,#1a1a2e,#2a2a3e)'},
+  clean:    {name:'Светлый', preview:'linear-gradient(135deg,#f0f2f8,#e0e5f0,#c8d0e0)', light:true},
+  rose:     {name:'Роза',    preview:'linear-gradient(135deg,#ffe4e6,#fda4af,#f43f5e)', light:true},
+  mint:     {name:'Мята',    preview:'linear-gradient(135deg,#e0f7f4,#a7f3d0,#34d399)', light:true},
+  lavender: {name:'Лаванда', preview:'linear-gradient(135deg,#e9d5ff,#c4b5fd,#a855f7)', light:true},
+  mesh:     {name:'Меш',     preview:'radial-gradient(circle at 20% 30%,#8b5cf6,transparent 40%),radial-gradient(circle at 80% 70%,#ec4899,transparent 40%),linear-gradient(135deg,#1a0a4a,#0a2540)'}
+};
 
 const THEMES = {
   purple:{name:'Фиолет',c1:'#2a0a4a',c2:'#4b1a8a',c3:'#8b5cf6',a1:'#b794f6',a2:'#7c3aed',glow:'180,130,255',tint:'230,210,255',preview:'linear-gradient(135deg,#2a0a4a,#8b5cf6)'},
@@ -420,8 +541,7 @@ const THEMES = {
   matrix:{name:'Матрица',c1:'#000a00',c2:'#001a00',c3:'#00ff41',a1:'#7dff7d',a2:'#00cc33',glow:'0,255,100',tint:'180,255,200',preview:'linear-gradient(135deg,#000a00,#00ff41)'},
   rainbow:{name:'Радуга',c1:'#3a0a4a',c2:'#8a1a6a',c3:'#3b82f6',a1:'#fbbf24',a2:'#ec4899',glow:'200,130,255',tint:'240,220,255',preview:'linear-gradient(135deg,#ef4444,#fbbf24,#22c55e,#3b82f6,#8b5cf6)'},
   blood:{name:'Кровь',c1:'#1a0000',c2:'#4a0000',c3:'#8a0000',a1:'#dc2626',a2:'#7f1d1d',glow:'180,20,20',tint:'255,180,180',preview:'linear-gradient(135deg,#1a0000,#8a0000)'},
-  dark:{name:'Тёмная',c1:'#0a0a0f',c2:'#1a1a2e',c3:'#4a4a6a',a1:'#94a3b8',a2:'#475569',glow:'150,170,200',tint:'200,210,230',preview:'linear-gradient(135deg,#0a0a0f,#4a4a6a)'},
-  white:{name:'Белая',c1:'#c8d0e0',c2:'#e0e5f0',c3:'#f0f2f8',a1:'#7c3aed',a2:'#5b21b6',glow:'180,180,220',tint:'100,100,140',preview:'linear-gradient(135deg,#e8eaf0,#ffffff)',light:true}
+  dark:{name:'Тёмная',c1:'#0a0a0f',c2:'#1a1a2e',c3:'#4a4a6a',a1:'#94a3b8',a2:'#475569',glow:'150,170,200',tint:'200,210,230',preview:'linear-gradient(135deg,#0a0a0f,#4a4a6a)'}
 };
 
 const DEFAULT_SECTIONS = [
@@ -451,7 +571,7 @@ const DEFAULT_SECTIONS = [
 
 const DEFAULT_SETTINGS = {
   effect:'bubbles',sound:false,live:false,lightMode:false,musicUrl:'',showSplash:true,
-  about:'',donateUrl:'',achievements:[],schedule:[],
+  about:'',donateUrl:'',achievements:[],schedule:[],bg:'classic',
   nickname:'EDUCANAL_ GAMES',subtitle:'Gaming • Content',avatar:'https://i.ibb.co/gbQ2fbQj/IMG-20260110-221321-022.jpg'
 };
 
@@ -462,9 +582,13 @@ let initialized = false;
 let currentType = 'link';
 let currentIcon = 'custom';
 let currentCustomIcon = '';
+let currentBtnColor = '';
+let currentIconColor = '';
 let editType = 'link';
 let editIcon = 'custom';
 let editCustomIcon = '';
+let editBtnColor = '';
+let editIconColor = '';
 let editingItemId = null;
 let sessionId = Math.random().toString(36).slice(2,10);
 let saveTimer = null;
@@ -482,7 +606,6 @@ function setSyncStatus(status){
   if (status==='saving') d.classList.add('saving');
   else if (status==='error') d.classList.add('error');
 }
-
 function shouldShowSplash(){
   const last = parseInt(localStorage.getItem(LAST_SPLASH_KEY)||'0');
   return Date.now() - last > 30*60*1000;
@@ -499,8 +622,48 @@ function applyTheme(name){
   r.setProperty('--c1',t.c1); r.setProperty('--c2',t.c2); r.setProperty('--c3',t.c3);
   r.setProperty('--a1',t.a1); r.setProperty('--a2',t.a2);
   r.setProperty('--glow',t.glow); r.setProperty('--tint',t.tint);
-  document.body.classList.toggle('light', !!t.light);
+  if (siteData.settings.bg === 'classic' || !siteData.settings.bg){
+    document.body.style.background = '';
+    document.body.classList.toggle('light', !!t.light);
+  }
   try { localStorage.setItem(THEME_KEY, JSON.stringify(t)); } catch(e){}
+}
+
+function applyBackground(id){
+  const b = BACKGROUNDS[id];
+  if (!b) return;
+  if (id === 'classic'){
+    document.body.style.background = '';
+    document.body.style.backgroundSize = '';
+    document.body.style.backgroundAttachment = 'fixed';
+    const t = THEMES[siteData.theme] || THEMES.purple;
+    document.body.classList.toggle('light', !!t.light);
+  } else {
+    const styles = {
+      stars:{bg:'radial-gradient(2px 2px at 20px 30px,#fff,transparent),radial-gradient(2px 2px at 60px 70px,#fff,transparent),radial-gradient(1px 1px at 130px 80px,#fff,transparent),radial-gradient(1px 1px at 90px 20px,#fff,transparent),radial-gradient(2px 2px at 250px 50px,#fff,transparent),#0a0a1f',size:'300px 200px'},
+      sunset:{bg:'linear-gradient(180deg,#ff6b6b 0%,#feca57 50%,#ff9ff3 100%)'},
+      ocean:{bg:'linear-gradient(180deg,#0a2540 0%,#1a4a7a 40%,#0ea5e9 100%)'},
+      aurora:{bg:'linear-gradient(135deg,#0a3d20 0%,#1a6b3a 25%,#0ea5e9 50%,#8b5cf6 75%,#ec4899 100%)'},
+      fire:{bg:'linear-gradient(180deg,#3d0808 0%,#7a1a08 40%,#f59e0b 80%,#fbbf24 100%)'},
+      cyber:{bg:'linear-gradient(135deg,#1a0033 0%,#4a0080 30%,#ec4899 70%,#22d3ee 100%)'},
+      forest:{bg:'linear-gradient(180deg,#0a1f0a 0%,#1a3d1a 50%,#2a5a2a 100%)'},
+      royal:{bg:'linear-gradient(135deg,#1a0a4a 0%,#4a1a8a 40%,#d4af37 100%)'},
+      graphite:{bg:'linear-gradient(180deg,#0a0a0f 0%,#1a1a2e 60%,#2a2a3e 100%)'},
+      clean:{bg:'linear-gradient(135deg,#f0f2f8 0%,#e0e5f0 50%,#c8d0e0 100%)'},
+      rose:{bg:'linear-gradient(135deg,#ffe4e6 0%,#fda4af 50%,#f43f5e 100%)'},
+      mint:{bg:'linear-gradient(135deg,#e0f7f4 0%,#a7f3d0 50%,#34d399 100%)'},
+      lavender:{bg:'linear-gradient(135deg,#e9d5ff 0%,#c4b5fd 50%,#a855f7 100%)'},
+      mesh:{bg:'radial-gradient(circle at 20% 30%,#8b5cf6 0%,transparent 40%),radial-gradient(circle at 80% 70%,#ec4899 0%,transparent 40%),radial-gradient(circle at 50% 50%,#06b6d4 0%,transparent 50%),linear-gradient(135deg,#1a0a4a,#0a2540)'}
+    };
+    const s = styles[id];
+    if (s){
+      document.body.style.background = s.bg;
+      if (s.size) document.body.style.backgroundSize = s.size;
+      document.body.style.backgroundAttachment = 'fixed';
+    }
+    document.body.classList.toggle('light', !!b.light);
+  }
+  try { localStorage.setItem(BG_KEY, id); } catch(e){}
 }
 
 function renderEffect(type){
@@ -573,6 +736,7 @@ async function loadData(){
     siteData = cached;
     siteData.settings = Object.assign({}, DEFAULT_SETTINGS, siteData.settings||{});
     applyTheme(siteData.theme);
+    applyBackground(siteData.settings.bg || 'classic');
     applySettings();
     updateViewsDisplay();
     renderAll();
@@ -592,7 +756,9 @@ async function loadData(){
       const keepLocalTheme = cached && localTime > serverTime;
 
       siteData.sections = rec.sections;
-      if (!keepLocalTheme) siteData.theme = rec.theme || 'purple';
+      if (!keepLocalTheme){
+        siteData.theme = rec.theme || 'purple';
+      }
       siteData.views = rec.views || 0;
       siteData.stats = rec.stats || {viewsByDay:{},devices:{mobile:0,desktop:0,tablet:0},clicks:{}};
       siteData.settings = Object.assign({}, DEFAULT_SETTINGS, rec.settings||{});
@@ -604,10 +770,9 @@ async function loadData(){
       initialized = true;
     }
     setSyncStatus('ok');
-
     if (!cached) showSplash();
-
     applyTheme(siteData.theme);
+    applyBackground(siteData.settings.bg || 'classic');
     applySettings();
     updateViewsDisplay();
     renderAll();
@@ -620,7 +785,6 @@ async function loadData(){
     }
     trackOnline();
     scheduleSave();
-
   } catch(e){
     console.error('Загрузка:',e);
     setSyncStatus('error');
@@ -665,7 +829,6 @@ async function doSave(){
     isSyncing = false;
   }
 }
-
 window.addEventListener('beforeunload', () => {
   if (pendingChanges){
     try { navigator.sendBeacon(API_URL, new Blob([JSON.stringify(siteData)],{type:'application/json'})); } catch(e){}
@@ -695,9 +858,7 @@ function updateOnlineDisplay(){
 }
 setInterval(() => {
   if (!initialized) return;
-  trackOnline();
-  saveToCache();
-  scheduleSave();
+  trackOnline(); saveToCache(); scheduleSave();
 }, 120000);
 
 function trackClick(itemId){
@@ -727,15 +888,9 @@ function applySettings(){
   $('mainNick').textContent = s.nickname || 'EDUCANAL_ GAMES';
   $('spNick').textContent = s.nickname || 'EDUCANAL_ GAMES';
   $('subtitleText').textContent = s.subtitle || '';
-  if (s.avatar){
-    $('mainAvatar').src = s.avatar;
-    $('spImg').src = s.avatar;
-  }
-  if (s.musicUrl){
-    $('musicBtn').style.display = 'flex';
-    $('bgMusic').src = s.musicUrl;
-  } else $('musicBtn').style.display = 'none';
-
+  if (s.avatar){ $('mainAvatar').src = s.avatar; $('spImg').src = s.avatar; }
+  if (s.musicUrl){ $('musicBtn').style.display = 'flex'; $('bgMusic').src = s.musicUrl; }
+  else $('musicBtn').style.display = 'none';
   $('aboutSection').style.display = s.about ? 'block' : 'none';
   $('aboutText').textContent = s.about || '';
 
@@ -751,56 +906,47 @@ function applySettings(){
       <div class="ach-item"><div class="emoji">${escapeHtml(a.emoji||'🏆')}</div><div class="name">${escapeHtml(a.name)}</div>${a.date?`<div class="date">${escapeHtml(a.date)}</div>`:''}</div>`).join('');
   } else $('achSection').style.display = 'none';
 
-  if (s.donateUrl){
-    $('donateBtn').style.display = 'flex';
-    $('donateBtn').href = s.donateUrl;
-  } else $('donateBtn').style.display = 'none';
+  if (s.donateUrl){ $('donateBtn').style.display = 'flex'; $('donateBtn').href = s.donateUrl; }
+  else $('donateBtn').style.display = 'none';
 }
 
 function updateViewsDisplay(){
   $('viewsCount').textContent = (siteData.views||0).toLocaleString('ru-RU');
 }
 
-/* ═════════ ИКОНКИ ═════════ */
+/* Иконка */
 function getIconHtml(item){
-  // Если кастомный символ/эмодзи
+  // Кастомный эмодзи/символ — приоритет
   if (item.customIcon){
-    return `<div class="icon emoji-only">${escapeHtml(item.customIcon)}</div>`;
+    return `<div class="icon emoji-only"${item.iconColor ? ` style="background:${item.iconColor}"` : ''}>${escapeHtml(item.customIcon)}</div>`;
   }
-  // Если фото
+  // Фото
   if (item.type === 'image' && item.image){
-    return `<div class="icon img"><img src="${escapeHtml(item.image)}" onerror="this.parentElement.innerHTML='🖼️'"></div>`;
+    return `<div class="icon img"${item.iconColor ? ` style="background:${item.iconColor}"` : ''}><img src="${escapeHtml(item.image)}" onerror="this.parentElement.innerHTML='🖼️'"></div>`;
   }
   // Файл
   if (item.type === 'file'){
-    return `<div class="icon file">📄</div>`;
+    return `<div class="icon file"${item.iconColor ? ` style="background:${item.iconColor}"` : ''}>📄</div>`;
   }
-  // Стандартные иконки
+  // Стандартные
   const key = item.icon || 'custom';
   const sym = ICON_SYMBOLS[key] || '✦';
   if (key === 'custom'){
-    return `<div class="icon emoji-only">✦</div>`;
+    return `<div class="icon emoji-only"${item.iconColor ? ` style="background:${item.iconColor}"` : ''}>✦</div>`;
   }
-  return `<div class="icon ${key}">${sym}</div>`;
+  return `<div class="icon ${key}"${item.iconColor ? ` style="background:${item.iconColor} !important"` : ''}>${sym}</div>`;
 }
 
 function getIconHtmlSmall(item){
-  if (item.customIcon){
-    return `<div class="icon emoji-only">${escapeHtml(item.customIcon)}</div>`;
-  }
-  if (item.type === 'image' && item.image){
-    return `<div class="icon img"><img src="${escapeHtml(item.image)}" onerror="this.parentElement.innerHTML='🖼️'"></div>`;
-  }
-  if (item.type === 'file'){
-    return `<div class="icon file">📄</div>`;
-  }
+  if (item.customIcon) return `<div class="icon emoji-only"${item.iconColor?` style="background:${item.iconColor}"`:''}>${escapeHtml(item.customIcon)}</div>`;
+  if (item.type === 'image' && item.image) return `<div class="icon img"><img src="${escapeHtml(item.image)}" onerror="this.parentElement.innerHTML='🖼️'"></div>`;
+  if (item.type === 'file') return `<div class="icon file">📄</div>`;
   const key = item.icon || 'custom';
   const sym = ICON_SYMBOLS[key] || '✦';
   if (key === 'custom') return `<div class="icon emoji-only">✦</div>`;
-  return `<div class="icon ${key}">${sym}</div>`;
+  return `<div class="icon ${key}"${item.iconColor?` style="background:${item.iconColor} !important"`:''}>${sym}</div>`;
 }
 
-/* ═════════ РЕНДЕР САЙТА ═════════ */
 function createListLink(item){
   const a = document.createElement('a');
   a.className='link'; a.href=item.url; a.target='_blank';
@@ -808,6 +954,7 @@ function createListLink(item){
   const arrow = item.type==='file' ? '⬇' : '›';
   const sub = item.type==='file' && !item.sub ? 'Нажми чтобы скачать' : item.sub;
   a.innerHTML = `${getIconHtml(item)}<div class="text">${escapeHtml(item.name)}${sub?`<small>${escapeHtml(sub)}</small>`:''}</div><div class="arrow">${arrow}</div>`;
+  if (item.btnBg) a.style.background = item.btnBg;
   a.addEventListener('click', () => { playClickSound(); trackClick(item.id); });
   return a;
 }
@@ -816,6 +963,7 @@ function createGridBtn(item){
   a.className='p-btn'; a.href=item.url; a.target='_blank';
   if (item.type==='file') a.setAttribute('download','');
   a.innerHTML = `${getIconHtml(item)}${escapeHtml(item.name)}`;
+  if (item.btnBg) a.style.background = item.btnBg;
   a.addEventListener('click', () => { playClickSound(); trackClick(item.id); });
   return a;
 }
@@ -844,7 +992,6 @@ function renderAll(){
   });
 }
 
-/* ═════════ МОДАЛКИ ═════════ */
 function openModal(id){ $(id).classList.add('active'); }
 function closeModal(id){ $(id).classList.remove('active'); }
 
@@ -870,7 +1017,7 @@ function checkPassword(){
     $('pwdInput').value='';
     closeModal('pwdModal');
     openModal('adminModal');
-    renderThemeGrid(); renderSectionsDropdown(); renderAdminList();
+    renderBgGrid(); renderThemeGrid(); renderSectionsDropdown(); renderAdminList();
     renderAdminProfile(); renderStats(); updateSwitches();
     $('effectSelect').value = siteData.settings.effect || 'bubbles';
     initIconPicker('iconPicker', 'add');
@@ -884,6 +1031,34 @@ function switchTab(t){
   $('pane-'+t).classList.add('active');
   if (t==='stats') renderStats();
   if (t==='profile') renderAdminProfile();
+}
+
+/* ФОНЫ */
+function renderBgGrid(){
+  const g = $('bgGrid'); g.innerHTML='';
+  const currentBg = siteData.settings.bg || 'classic';
+  Object.keys(BACKGROUNDS).forEach(k => {
+    const b = BACKGROUNDS[k];
+    const wrap = document.createElement('div');
+    const sw = document.createElement('div');
+    sw.className='bg-opt'+(currentBg===k?' active':'');
+    sw.style.background = b.preview;
+    sw.onclick = () => changeBg(k);
+    const nm = document.createElement('div'); nm.className='bg-name'; nm.textContent = b.name;
+    wrap.appendChild(sw); wrap.appendChild(nm);
+    g.appendChild(wrap);
+  });
+}
+async function changeBg(k){
+  if (!BACKGROUNDS[k]) return;
+  siteData.settings.bg = k;
+  siteData.lastUpdated = Date.now();
+  applyBackground(k);
+  renderBgGrid();
+  saveToCache();
+  pendingChanges = false;
+  if (saveTimer){ clearTimeout(saveTimer); saveTimer = null; }
+  await doSave();
 }
 
 function renderThemeGrid(){
@@ -900,12 +1075,12 @@ function renderThemeGrid(){
     g.appendChild(wrap);
   });
 }
-
 async function changeTheme(k){
   if (!THEMES[k]) return;
   siteData.theme = k;
   siteData.lastUpdated = Date.now();
   applyTheme(k);
+  applyBackground(siteData.settings.bg || 'classic');
   renderThemeGrid();
   saveToCache();
   pendingChanges = false;
@@ -930,35 +1105,28 @@ function updateSwitches(){
   $('swSound').classList.toggle('on', !!s.sound);
   $('swSplash').classList.toggle('on', !!s.showSplash);
 }
-
 async function toggleSwitch(key){
   siteData.settings[key] = !siteData.settings[key];
   siteData.lastUpdated = Date.now();
-  updateSwitches();
-  applySettings();
-  saveToCache();
-  pendingChanges = false;
+  updateSwitches(); applySettings();
+  saveToCache(); pendingChanges = false;
   if (saveTimer){ clearTimeout(saveTimer); saveTimer = null; }
   await doSave();
 }
 
-/* ═════════ ИКОНКИ-ПИКЕР ═════════ */
+/* ИКОНКИ */
 function initIconPicker(containerId, mode){
   const c = $(containerId); c.innerHTML = '';
   const activeIcon = mode === 'add' ? currentIcon : editIcon;
   ICON_LIST.forEach(k => {
     const d = document.createElement('div');
     d.className = 'icon-opt' + (activeIcon === k ? ' active' : '');
-    const sym = ICON_SYMBOLS[k];
-    d.textContent = sym || '✦';
-    if (k !== 'custom'){
-      d.style.background = getIconBg(k);
-    } else {
-      d.style.background = 'rgba(255,255,255,.1)';
-    }
+    d.textContent = ICON_SYMBOLS[k] || '✦';
+    if (k !== 'custom') d.style.background = getIconBg(k);
+    else d.style.background = 'rgba(255,255,255,.1)';
     d.onclick = () => {
-      if (mode === 'add'){ currentIcon = k; }
-      else { editIcon = k; }
+      if (mode === 'add') currentIcon = k;
+      else editIcon = k;
       initIconPicker(containerId, mode);
     };
     c.appendChild(d);
@@ -966,21 +1134,33 @@ function initIconPicker(containerId, mode){
 }
 function getIconBg(k){
   const map = {
-    yt:'linear-gradient(135deg,#ff0000,#cc0000)',
-    tg:'linear-gradient(135deg,#2aabee,#229ed9)',
-    tt:'linear-gradient(135deg,#25f4ee,#fe2c55)',
-    tw:'linear-gradient(135deg,#9146ff,#6441a5)',
-    dc:'linear-gradient(135deg,#5865f2,#4752c4)',
-    ig:'linear-gradient(135deg,#feda75,#d62976,#962fbf)',
-    vk:'linear-gradient(135deg,#0077ff,#005ccc)',
-    rbx:'linear-gradient(135deg,#e2231a,#b81a12)',
-    mc:'linear-gradient(135deg,#62b47a,#3a7d44)',
-    bs:'linear-gradient(135deg,#ffcb2b,#ff8a00)'
+    yt:'linear-gradient(135deg,#ff0000,#cc0000)',tg:'linear-gradient(135deg,#2aabee,#229ed9)',
+    tt:'linear-gradient(135deg,#25f4ee,#fe2c55)',tw:'linear-gradient(135deg,#9146ff,#6441a5)',
+    dc:'linear-gradient(135deg,#5865f2,#4752c4)',ig:'linear-gradient(135deg,#feda75,#d62976,#962fbf)',
+    vk:'linear-gradient(135deg,#0077ff,#005ccc)',rbx:'linear-gradient(135deg,#e2231a,#b81a12)',
+    mc:'linear-gradient(135deg,#62b47a,#3a7d44)',bs:'linear-gradient(135deg,#ffcb2b,#ff8a00)'
   };
   return map[k] || 'rgba(255,255,255,.1)';
 }
 
-/* ═════════ ТИП ═════════ */
+/* ЦВЕТА */
+function clearColor(inputId){
+  const el = $(inputId);
+  if (inputId === 'newBtnColor') currentBtnColor = '';
+  if (inputId === 'newIconColor') currentIconColor = '';
+  if (inputId === 'editBtnColor') editBtnColor = '';
+  if (inputId === 'editIconColor') editIconColor = '';
+  el.value = '#7c3aed';
+  el.parentElement.classList.add('empty');
+  el.parentElement.querySelector('label').style.opacity = '0.3';
+}
+function checkColorFill(inputId, val){
+  const el = $(inputId);
+  el.parentElement.classList.toggle('empty', !val);
+  el.parentElement.querySelector('label').style.opacity = val ? '1' : '0.3';
+}
+
+/* ТИП */
 function selectType(t){
   currentType = t;
   document.querySelectorAll('.type-btn[data-type]').forEach(b => b.classList.toggle('active', b.dataset.type===t));
@@ -989,7 +1169,6 @@ function selectType(t){
   const u = $('newUrl');
   u.placeholder = t==='file' ? 'Ссылка на файл (https://...)' : t==='image' ? 'Ссылка при клике' : 'Ссылка (https://...)';
 }
-
 function selectEditType(t){
   editType = t;
   document.querySelectorAll('.type-btn[data-edit-type]').forEach(b => b.classList.toggle('active', b.dataset.editType===t));
@@ -997,7 +1176,6 @@ function selectEditType(t){
   $('editIconWrap').style.display = t==='link' ? 'block' : 'none';
 }
 
-/* ═════════ ДРОПДАУН ═════════ */
 function renderSectionsDropdown(){
   const grp = $('sectionsOptgroup'); grp.innerHTML='';
   siteData.sections.forEach(s => {
@@ -1012,15 +1190,19 @@ $('newTarget').addEventListener('change', e => {
   $('newSectionWrap').style.display = e.target.value==='__new__' ? 'block' : 'none';
 });
 
-/* ═════════ ДОБАВЛЕНИЕ ═════════ */
 function addItem(){
   const target = $('newTarget').value;
   const name = $('newName').value.trim();
   const sub = $('newSub').value.trim();
   const url = $('newUrl').value.trim();
   const image = $('newImage').value.trim();
-  const err = $('addError'), succ = $('addSuccess');
+  const customIcon = $('newCustomIcon').value.trim();
+  const btnColorEl = $('newBtnColor');
+  const iconColorEl = $('newIconColor');
+  const btnColor = btnColorEl.parentElement.classList.contains('empty') ? '' : btnColorEl.value;
+  const iconColor = iconColorEl.parentElement.classList.contains('empty') ? '' : iconColorEl.value;
 
+  const err = $('addError'), succ = $('addSuccess');
   err.textContent=''; succ.textContent='';
 
   if (!name){ err.textContent='⚠️ Введи название'; return; }
@@ -1034,9 +1216,11 @@ function addItem(){
   const item = {id:genId(),type:currentType,name,sub,url};
   if (currentType==='link'){
     item.icon = currentIcon;
-    // если "custom" — берём кастомный символ если введён
+    if (customIcon) item.customIcon = customIcon;
   }
   if (currentType==='image') item.image = image;
+  if (btnColor) item.btnBg = btnColor;
+  if (iconColor) item.iconColor = iconColor;
 
   if (target==='__new__'){
     const title = $('newSectionName').value.trim();
@@ -1054,13 +1238,13 @@ function addItem(){
   renderAll(); renderSectionsDropdown(); renderAdminList(); scheduleSave();
 
   $('newName').value=''; $('newSub').value=''; $('newUrl').value=''; $('newImage').value='';
-  $('newSectionName').value='';
+  $('newSectionName').value=''; $('newCustomIcon').value='';
   $('newTarget').value='__new__'; $('newSectionWrap').style.display='none';
+  clearColor('newBtnColor'); clearColor('newIconColor');
   succ.textContent='✅ Добавлено!';
   setTimeout(()=>succ.textContent='',2000);
 }
 
-/* ═════════ УПРАВЛЕНИЕ ═════════ */
 function makeGroupTitle(sec){
   const div = document.createElement('div');
   div.className='admin-group-title';
@@ -1079,7 +1263,6 @@ function makeAdminItem(item){
   `;
   return div;
 }
-
 function renderAdminList(){
   const list = $('adminList'); list.innerHTML='';
   const total = siteData.sections.reduce((s,x)=>s+x.items.length,0);
@@ -1095,7 +1278,7 @@ function renderAdminList(){
   });
 }
 
-/* ═════════ РЕДАКТИРОВАНИЕ ═════════ */
+/* РЕДАКТИРОВАНИЕ */
 function findItem(id){
   for (const sec of siteData.sections){
     const idx = sec.items.findIndex(x=>x.id===id);
@@ -1103,16 +1286,16 @@ function findItem(id){
   }
   return null;
 }
-
 function editItem(id){
   const found = findItem(id);
   if (!found) return;
   editingItemId = id;
   const it = found.item;
-
   editType = it.type || 'link';
   editIcon = it.icon || 'custom';
   editCustomIcon = it.customIcon || '';
+  editBtnColor = it.btnBg || '';
+  editIconColor = it.iconColor || '';
 
   $('editName').value = it.name || '';
   $('editSub').value = it.sub || '';
@@ -1121,6 +1304,13 @@ function editItem(id){
   $('editCustomIcon').value = it.customIcon || '';
   $('editError').textContent = '';
   $('editSuccess').textContent = '';
+
+  // Цвета
+  const btnEl = $('editBtnColor'), iconEl = $('editIconColor');
+  if (editBtnColor){ btnEl.value = editBtnColor; btnEl.parentElement.classList.remove('empty'); btnEl.parentElement.querySelector('label').style.opacity='1'; }
+  else { btnEl.value = '#7c3aed'; btnEl.parentElement.classList.add('empty'); btnEl.parentElement.querySelector('label').style.opacity='0.3'; }
+  if (editIconColor){ iconEl.value = editIconColor; iconEl.parentElement.classList.remove('empty'); iconEl.parentElement.querySelector('label').style.opacity='1'; }
+  else { iconEl.value = '#7c3aed'; iconEl.parentElement.classList.add('empty'); iconEl.parentElement.querySelector('label').style.opacity='0.3'; }
 
   document.querySelectorAll('.type-btn[data-edit-type]').forEach(b => b.classList.toggle('active', b.dataset.editType===editType));
   $('editImageWrap').style.display = editType==='image' ? 'block' : 'none';
@@ -1135,16 +1325,18 @@ async function saveEdit(){
   if (!editingItemId) return;
   const found = findItem(editingItemId);
   if (!found) return;
-
   const name = $('editName').value.trim();
   const sub = $('editSub').value.trim();
   const url = $('editUrl').value.trim();
   const image = $('editImage').value.trim();
   const customIcon = $('editCustomIcon').value.trim();
+  const btnColorEl = $('editBtnColor');
+  const iconColorEl = $('editIconColor');
+  const btnColor = btnColorEl.parentElement.classList.contains('empty') ? '' : btnColorEl.value;
+  const iconColor = iconColorEl.parentElement.classList.contains('empty') ? '' : iconColorEl.value;
+
   const err = $('editError'), succ = $('editSuccess');
-
   err.textContent=''; succ.textContent='';
-
   if (!name){ err.textContent='⚠️ Введи название'; return; }
   if (!url){ err.textContent='⚠️ Введи ссылку'; return; }
   if (!/^https?:\/\//i.test(url)){ err.textContent='⚠️ Ссылка должна начинаться с https://'; return; }
@@ -1156,55 +1348,44 @@ async function saveEdit(){
   it.sub = sub;
   it.url = url;
 
+  delete it.customIcon;
+  delete it.image;
+  delete it.iconColor;
+  delete it.btnBg;
+
   if (editType === 'link'){
     it.icon = editIcon;
-    if (customIcon){
-      it.customIcon = customIcon;
-    } else {
-      delete it.customIcon;
-    }
-    delete it.image;
+    if (customIcon) it.customIcon = customIcon;
   } else if (editType === 'image'){
     it.image = image;
-    delete it.icon;
-    delete it.customIcon;
-  } else if (editType === 'file'){
-    delete it.image;
-    delete it.customIcon;
   }
+  if (btnColor) it.btnBg = btnColor;
+  if (iconColor) it.iconColor = iconColor;
 
   siteData.lastUpdated = Date.now();
   renderAll(); renderSectionsDropdown(); renderAdminList();
-  saveToCache();
-  pendingChanges = false;
+  saveToCache(); pendingChanges = false;
   if (saveTimer){ clearTimeout(saveTimer); saveTimer = null; }
   await doSave();
-
   succ.textContent = '✅ Сохранено!';
-  setTimeout(() => {
-    closeModal('editModal');
-    openModal('adminModal');
-  }, 800);
+  setTimeout(() => { closeModal('editModal'); openModal('adminModal'); }, 800);
 }
 
 async function deleteFromEdit(){
   if (!editingItemId) return;
   if (!confirm('Удалить эту кнопку?')) return;
   const found = findItem(editingItemId);
-  if (found){
-    found.sec.items.splice(found.idx, 1);
-  }
+  if (found) found.sec.items.splice(found.idx, 1);
   siteData.lastUpdated = Date.now();
   renderAll(); renderSectionsDropdown(); renderAdminList();
-  saveToCache();
-  pendingChanges = false;
+  saveToCache(); pendingChanges = false;
   if (saveTimer){ clearTimeout(saveTimer); saveTimer = null; }
   await doSave();
   closeModal('editModal');
   openModal('adminModal');
 }
 
-/* ═════════ ОСТАЛЬНОЕ ═════════ */
+/* ОСТАЛЬНОЕ */
 function deleteItem(id){
   if (!confirm('Удалить?')) return;
   for (const sec of siteData.sections){
@@ -1347,8 +1528,9 @@ function importData(e){
       siteData.settings = Object.assign({}, DEFAULT_SETTINGS, siteData.settings||{});
       siteData.lastUpdated = Date.now();
       applyTheme(siteData.theme||'purple');
+      applyBackground(siteData.settings.bg || 'classic');
       applySettings(); renderAll(); updateViewsDisplay();
-      renderThemeGrid(); renderSectionsDropdown(); renderAdminList();
+      renderBgGrid(); renderThemeGrid(); renderSectionsDropdown(); renderAdminList();
       scheduleSave();
       alert('✅ Импорт успешен');
     } catch(err){ alert('❌ Ошибка: '+err.message); }
@@ -1365,6 +1547,14 @@ function toggleMusic(){
 
 document.querySelectorAll('.modal-overlay').forEach(m => {
   m.addEventListener('click', e => { if (e.target===m) m.classList.remove('active'); });
+});
+
+// Следим за цветами — обновляем прозрачность label
+['newBtnColor','newIconColor','editBtnColor','editIconColor'].forEach(id => {
+  document.addEventListener('DOMContentLoaded', () => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', () => checkColorFill(id, el.value));
+  });
 });
 
 loadData();
