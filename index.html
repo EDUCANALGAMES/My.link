@@ -256,7 +256,7 @@
   <div class="modal glass">
     <button class="modal-close" onclick="closeModal('pwdModal')">✕</button>
     <h2>🔒 Вход в админку</h2>
-    <input type="password" id="pwdInput" name="np-pwd-nofill" placeholder="Введи пароль" autocomplete="new-password" autocorrect="off" spellcheck="false">
+    <input type="password" id="pwdInput" placeholder="Введи пароль" autocomplete="new-password">
     <div class="error" id="pwdError"></div>
     <button class="modal-btn" onclick="checkPassword()">Войти</button>
   </div>
@@ -401,11 +401,6 @@
       <button class="modal-btn" onclick="requestNotifications()">🔔 Включить уведомления</button>
       <p class="success" id="notifStatus"></p>
       <div class="divider"></div>
-      <span class="label-small">🔐 Пароль админки</span>
-      <input type="password" id="inpNewPwd" placeholder="Новый пароль" autocomplete="new-password">
-      <button class="modal-btn" onclick="changePassword()">Сменить пароль</button>
-      <p class="success" id="pwdChangeStatus"></p>
-      <div class="divider"></div>
       <span class="label-small">💾 Резервная копия</span>
       <button class="modal-btn cancel" onclick="exportData()">📤 Скачать JSON</button>
       <button class="modal-btn cancel" style="margin-top:8px" onclick="document.getElementById('importFile').click()">📥 Загрузить JSON</button>
@@ -472,14 +467,13 @@
 <script>
 const JSONBIN_BIN_ID     = '6acded59ac6210605a2cf197';
 const JSONBIN_MASTER_KEY = '$2a$10$YB9ij5Y.Hr4QAWaNN.yejefrVlqeQ4Z16YdPc6AKIHhmZBRjznmAq';
+const ADMIN_PASSWORD = "sozjdho982+8#9_($;(299? '! V92(2;9\"";
 const MAX_ITEMS = 500;
 const API_URL = 'https://api.jsonbin.io/v3/b/' + JSONBIN_BIN_ID;
 const CACHE_KEY = 'educanal_cache_v1';
 const THEME_KEY = 'educanal_theme';
 const BG_KEY = 'educanal_bg';
 const LAST_SPLASH_KEY = 'educanal_last_splash';
-
-let ADMIN_PASSWORD_HASH = 'sozjdho982+8#9_($;(299? '! V92(2;9";
 
 const QUICK_COLORS = [
   '#ef4444','#dc2626','#f97316','#ea580c','#f59e0b',
@@ -586,12 +580,6 @@ const $ = id => document.getElementById(id);
 const genId = () => Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const escapeHtml = s => { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; };
 const today = () => new Date().toISOString().slice(0,10);
-
-async function sha256(str){
-  const buf = new TextEncoder().encode(str);
-  const h = await crypto.subtle.digest('SHA-256', buf);
-  return [...new Uint8Array(h)].map(b => b.toString(16).padStart(2,'0')).join('');
-}
 
 function setSyncStatus(status){
   const d = $('syncDot');
@@ -1024,13 +1012,11 @@ function openAdmin(){
   initPalettes();
 }
 
-async function checkPassword(){
+function checkPassword(){
   const input = $('pwdInput').value;
   if (!input) return;
   const err = $('pwdError');
-  const hash = await sha256(input);
-
-  if (hash === ADMIN_PASSWORD_HASH){
+  if (input === ADMIN_PASSWORD){
     err.textContent = '';
     $('pwdInput').value = '';
     openAdmin();
@@ -1039,24 +1025,6 @@ async function checkPassword(){
   }
 }
 $('pwdInput').addEventListener('keypress', e => { if (e.key==='Enter') checkPassword(); });
-
-async function changePassword(){
-  const pwd = $('inpNewPwd').value;
-  const status = $('pwdChangeStatus');
-  if (!pwd || pwd.length < 4){
-    status.style.color = '#ff6b7a';
-    status.textContent = '❌ Минимум 4 символа';
-    return;
-  }
-  const hash = await sha256(pwd);
-  ADMIN_PASSWORD_HASH = hash;
-  $('inpNewPwd').value = '';
-  status.style.color = '#4ade80';
-  status.textContent = '✅ Пароль изменён!';
-  setTimeout(() => {
-    alert('🔑 Твой новый хеш:\n\n' + hash + '\n\n⚠️ Вставь его в код в переменную ADMIN_PASSWORD_HASH, чтобы пароль работал после очистки кеша и на других устройствах.');
-  }, 300);
-}
 
 function switchTab(t){
   document.querySelectorAll('.tab').forEach(x => x.classList.toggle('active', x.dataset.tab===t));
