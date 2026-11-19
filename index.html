@@ -4,12 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>EDUCANAL_ GAMES</title>
+<!-- Подключаем разные шрифты -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&family=Montserrat:wght@400;600;800&family=Oswald:wght@400;600&family=Playfair+Display:wght@400;700&family=Roboto:wght@400;500;700&family=Rubik:wght@400;600;800&display=swap" rel="stylesheet">
+
 <style>
-  :root{--c1:#2a0a4a;--c2:#4b1a8a;--c3:#8b5cf6;--a1:#b794f6;--a2:#7c3aed;--glow:180,130,255;--tint:230,210,255;--text:#fff;--glass:rgba(255,255,255,0.12);--glass-border:rgba(255,255,255,0.22);--glass-btn:rgba(255,255,255,0.08)}
+  :root{
+    --c1:#2a0a4a;--c2:#4b1a8a;--c3:#8b5cf6;--a1:#b794f6;--a2:#7c3aed;--glow:180,130,255;--tint:230,210,255;--text:#fff;--glass:rgba(255,255,255,0.12);--glass-border:rgba(255,255,255,0.22);--glass-btn:rgba(255,255,255,0.08);
+    --font-main: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+    --border-style: solid;
+  }
   body.light{--text:#1a1a2e;--glass:rgba(255,255,255,0.55);--glass-border:rgba(0,0,0,0.12);--glass-btn:rgba(255,255,255,0.5)}
-  *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;-webkit-tap-highlight-color:transparent}
+  
+  *{margin:0;padding:0;box-sizing:border-box;font-family:var(--font-main);-webkit-tap-highlight-color:transparent}
   html,body{min-height:100vh;overflow-x:hidden}
   body{background:linear-gradient(135deg,var(--c1) 0%,var(--c2) 40%,var(--c3) 100%);background-attachment:fixed;position:relative;display:flex;justify-content:center;padding:30px 16px 60px;transition:background .5s;color:var(--text)}
+  
   #bgLayer{position:fixed;inset:0;z-index:-1;pointer-events:none}
   #splash{position:fixed;inset:0;background:linear-gradient(135deg,var(--c1) 0%,var(--c2) 40%,var(--c3) 100%);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transition:opacity .8s,visibility .8s}
   #splash.hide{opacity:0;visibility:hidden;pointer-events:none}
@@ -21,6 +32,7 @@
   @keyframes spIn{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
   @keyframes spText{to{opacity:1}}
   @keyframes spLoad{to{transform:translateX(100%)}}
+  
   .fx-layer{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
   .fx-rain{position:absolute;top:-10%;width:2px;height:60px;background:linear-gradient(transparent,rgba(180,220,255,.7));animation:fxFall linear infinite}
   .fx-snow{position:absolute;top:-5%;color:#fff;font-size:18px;opacity:.85;animation:fxSnow linear infinite}
@@ -37,8 +49,10 @@
   .avatar{width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,var(--a1),var(--a2));display:flex;align-items:center;justify-content:center;overflow:hidden;border:2px solid rgba(255,255,255,.4)}
   .avatar img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
   .nick-wrap{display:flex;align-items:center;gap:10px}
-  .nickname{font-size:28px;font-weight:800;color:var(--text);text-align:center;letter-spacing:1px;text-shadow:0 0 20px rgba(var(--glow),.9),0 2px 4px rgba(0,0,0,.3)}
+  .nickname{font-size:28px;font-weight:800;color:var(--text);text-align:center;letter-spacing:1px;text-shadow:0 0 20px rgba(var(--glow),.9),0 2px 4px rgba(0,0,0,.3);transition: text-shadow .3s}
   body.light .nickname{text-shadow:0 2px 6px rgba(0,0,0,.15)}
+  body.no-nick-neon .nickname{text-shadow: 0 2px 4px rgba(0,0,0,0.5)}
+  
   .live-badge{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,#ff1e1e,#c00);color:#fff;font-size:10px;font-weight:800;padding:4px 9px;border-radius:20px;letter-spacing:1.5px;text-transform:uppercase;box-shadow:0 0 15px rgba(255,30,30,.8);animation:livePulse 1.5s ease-in-out infinite}
   .live-badge .dot{width:6px;height:6px;background:#fff;border-radius:50%;animation:dotBlink 1s ease-in-out infinite}
   @keyframes livePulse{0%,100%{box-shadow:0 0 15px rgba(255,30,30,.8)}50%{box-shadow:0 0 25px rgba(255,30,30,1)}}
@@ -46,16 +60,22 @@
   .subtitle{font-size:13px;color:rgba(var(--tint),.8);letter-spacing:3px;text-transform:uppercase;margin-top:-10px;font-weight:500}
   body.light .subtitle{color:#4a4a6a}
   
-  /* Стеклянные элементы */
-  .glass{background:var(--glass);border:1px solid var(--glass-border);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-radius:22px;box-shadow:0 8px 32px rgba(var(--glow),.35),inset 0 1px 0 rgba(255,255,255,.3);color:var(--text);transition:all .3s}
+  /* Стеклянные элементы и рамки */
+  .glass{background:var(--glass);border:1px var(--border-style) var(--glass-border);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-radius:22px;box-shadow:0 8px 32px rgba(var(--glow),.35),inset 0 1px 0 rgba(255,255,255,.3);color:var(--text);transition:all .3s}
   
-  /* Тяжелый неон (включается в админке) */
-  body.neon-heavy .glass{box-shadow:0 0 25px rgba(var(--glow),0.8), inset 0 0 15px rgba(var(--glow),0.2);border:1px solid rgba(var(--glow),0.6)}
-  body.neon-heavy .link{box-shadow:0 0 15px rgba(var(--glow),0.4);border:1px solid rgba(var(--glow),0.5)}
-  body.neon-heavy .link:hover{box-shadow:0 0 25px rgba(var(--glow),0.8);border:1px solid rgba(var(--glow),1)}
+  /* Стили стекла */
+  body.glass-style-frosted .glass{backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);background:rgba(255,255,255,0.05)}
+  body.glass-style-dark .glass{background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#fff}
+  body.glass-style-light .glass{background:rgba(255,255,255,0.85);color:#1a1a2e;border-color:rgba(0,0,0,0.1)}
+  body.glass-style-solid .glass{background:var(--c2);backdrop-filter:none;-webkit-backdrop-filter:none}
+  body.glass-style-none .glass{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:none;border-color:transparent}
 
+  /* Неоновая рамка */
+  body.border-style-glow .glass, body.border-style-glow .link {border-color: rgba(var(--glow),0.8); box-shadow: 0 0 15px rgba(var(--glow),0.5), inset 0 0 10px rgba(var(--glow),0.2)}
+  
   .links{width:100%;display:flex;flex-direction:column;gap:10px;padding:12px}
-  .link{display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:18px;text-decoration:none;color:var(--text);font-weight:600;font-size:15px;background:var(--glass-btn);border:1px solid var(--glass-border);backdrop-filter:blur(10px);transition:all .25s cubic-bezier(.2,.7,.3,1);position:relative;overflow:hidden}
+  .link{display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:18px;text-decoration:none;color:var(--text);font-weight:600;font-size:15px;background:var(--glass-btn);border:1px var(--border-style) var(--glass-border);backdrop-filter:blur(10px);transition:all .25s cubic-bezier(.2,.7,.3,1);position:relative;overflow:hidden}
+  body.glass-style-light .link {color: #1a1a2e;}
   .link::before{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.25),transparent 70%);transform:translateX(-100%);transition:transform .6s}
   .link:hover::before,.link:active::before{transform:translateX(100%)}
   .link:hover,.link:active{transform:translateY(-2px) scale(1.02);box-shadow:0 10px 30px rgba(var(--glow),.5)}
@@ -72,7 +92,8 @@
   .section-title{width:100%;text-align:center;font-size:13px;letter-spacing:5px;text-transform:uppercase;color:rgba(var(--tint),.85);margin:12px 0 -4px;font-weight:600;text-shadow:0 0 12px rgba(var(--glow),.7)}
   body.light .section-title{color:#4a4a6a;text-shadow:none}
   .personal-row{width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:12px}
-  .p-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:16px 8px;border-radius:18px;text-decoration:none;color:var(--text);font-weight:600;font-size:12px;background:var(--glass-btn);border:1px solid var(--glass-border);backdrop-filter:blur(10px);transition:all .25s ease;text-align:center}
+  .p-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:16px 8px;border-radius:18px;text-decoration:none;color:var(--text);font-weight:600;font-size:12px;background:var(--glass-btn);border:1px var(--border-style) var(--glass-border);backdrop-filter:blur(10px);transition:all .25s ease;text-align:center}
+  body.glass-style-light .p-btn {color: #1a1a2e;}
   .p-btn:hover,.p-btn:active{transform:translateY(-3px);box-shadow:0 10px 25px rgba(var(--glow),.5)}
   .p-btn .icon{width:40px;height:40px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;overflow:hidden;background:linear-gradient(135deg,var(--a2),var(--a2))}
   .p-btn .icon.emoji-only{font-size:26px}
@@ -82,29 +103,36 @@
   .footer{margin-top:8px;font-size:11px;color:rgba(var(--tint),.5);letter-spacing:1px;text-align:center;user-select:none;cursor:pointer;padding:10px}
   body.light .footer{color:#8a8aa8}
   .info-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:6px}
-  .info-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:20px;background:var(--glass-btn);border:1px solid var(--glass-border);backdrop-filter:blur(10px);font-size:13px;color:rgba(var(--tint),.85);font-weight:500}
+  .info-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:20px;background:var(--glass-btn);border:1px var(--border-style) var(--glass-border);backdrop-filter:blur(10px);font-size:13px;color:rgba(var(--tint),.85);font-weight:500}
   body.light .info-badge{color:#4a4a6a}
   .info-badge b{color:var(--text);font-weight:700}
   .online-dot{width:7px;height:7px;background:#22c55e;border-radius:50%;box-shadow:0 0 8px #22c55e;animation:dotBlink 1.5s ease-in-out infinite}
   .about-box{padding:18px;font-size:14px;line-height:1.5;color:var(--text);white-space:pre-wrap;text-align:center}
-  .sched-row{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-radius:12px;background:var(--glass-btn);border:1px solid var(--glass-border);margin-bottom:8px;font-size:13px}
+  body.glass-style-light .about-box {color: #1a1a2e;}
+  .sched-row{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-radius:12px;background:var(--glass-btn);border:1px var(--border-style) var(--glass-border);margin-bottom:8px;font-size:13px}
   .sched-row .day{font-weight:700;color:var(--text);min-width:80px}
+  body.glass-style-light .sched-row .day {color: #1a1a2e;}
   .sched-row .game{flex:1;color:rgba(var(--tint),.85);font-size:12px;text-align:center}
   .sched-row .time{font-weight:700;color:var(--a1);font-size:13px}
   .ach-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:12px}
-  .ach-item{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 10px;border-radius:16px;background:var(--glass-btn);border:1px solid var(--glass-border);text-align:center}
+  .ach-item{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 10px;border-radius:16px;background:var(--glass-btn);border:1px var(--border-style) var(--glass-border);text-align:center}
   .ach-item .emoji{font-size:32px}
   .ach-item .name{font-size:12px;font-weight:600;color:var(--text)}
+  body.glass-style-light .ach-item .name {color: #1a1a2e;}
   .ach-item .date{font-size:10px;color:rgba(var(--tint),.6)}
   .donate-btn{display:flex;align-items:center;justify-content:center;gap:10px;padding:16px;border-radius:18px;text-decoration:none;color:#fff;font-weight:700;font-size:15px;background:linear-gradient(135deg,#f59e0b,#d97706);border:1px solid rgba(255,255,255,.25);box-shadow:0 10px 30px rgba(245,158,11,.4);transition:.25s;margin-top:8px}
-  .music-btn{position:fixed;top:20px;right:20px;width:44px;height:44px;border-radius:50%;background:var(--glass);border:1px solid var(--glass-border);backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:50;color:var(--text)}
+  .music-btn{position:fixed;top:20px;right:20px;width:44px;height:44px;border-radius:50%;background:var(--glass);border:1px var(--border-style) var(--glass-border);backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:50;color:var(--text)}
   .music-btn.playing{animation:musicSpin 3s linear infinite}
   @keyframes musicSpin{to{transform:rotate(360deg)}}
+  
+  /* Модалки и админка */
   .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);z-index:100;display:none;align-items:center;justify-content:center;padding:16px;overflow-y:auto}
   .modal-overlay.active{display:flex}
   .modal{width:100%;max-width:440px;padding:24px;color:var(--text);max-height:90vh;overflow-y:auto;position:relative}
+  body.glass-style-light .modal {color: #1a1a2e;}
   .modal h2{font-size:20px;margin-bottom:16px;text-align:center}
-  .modal input,.modal select,.modal textarea{width:100%;padding:12px 14px;margin-bottom:10px;border-radius:14px;border:1px solid var(--glass-border);background:var(--glass-btn);color:var(--text);font-size:15px;font-family:inherit;outline:none}
+  .modal input,.modal select,.modal textarea{width:100%;padding:12px 14px;margin-bottom:10px;border-radius:14px;border:1px var(--border-style) var(--glass-border);background:var(--glass-btn);color:var(--text);font-size:15px;font-family:inherit;outline:none}
+  body.glass-style-light .modal input, body.glass-style-light .modal select, body.glass-style-light .modal textarea {color: #1a1a2e;}
   .modal textarea{min-height:80px;resize:vertical}
   .modal input:focus,.modal select:focus{border-color:rgba(var(--glow),.8);box-shadow:0 0 0 3px rgba(var(--glow),.25)}
   .modal input::placeholder,.modal textarea::placeholder{color:rgba(255,255,255,.5)}
@@ -112,14 +140,17 @@
   .modal select option{background:#1a1a2e;color:#fff}
   .modal-btn{width:100%;padding:14px;border-radius:14px;border:none;background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;font-size:15px;font-weight:700;cursor:pointer;margin-top:6px}
   .modal-btn.danger{background:linear-gradient(135deg,#ff4757,#c0392b)}
-  .modal-btn.cancel{background:rgba(255,255,255,.1);border:1px solid var(--glass-border);color:var(--text)}
+  .modal-btn.cancel{background:rgba(255,255,255,.1);border:1px var(--border-style) var(--glass-border);color:var(--text)}
+  body.glass-style-light .modal-btn.cancel {color: #1a1a2e;}
   .modal-close{position:absolute;top:16px;right:20px;font-size:24px;cursor:pointer;opacity:.7;background:none;border:none;color:var(--text)}
+  body.glass-style-light .modal-close {color: #1a1a2e;}
   .error{color:#ff6b7a;font-size:13px;text-align:center;margin-top:6px;min-height:18px}
   .success{color:#4ade80;font-size:13px;text-align:center;margin-top:6px;min-height:18px}
   .counter{font-size:12px;text-align:center;color:rgba(var(--tint),.7);margin-bottom:10px}
   .divider{height:1px;background:rgba(255,255,255,.15);margin:16px 0}
   body.light .divider{background:rgba(0,0,0,.1)}
   .label-small{font-size:12px;opacity:.75;margin-bottom:6px;display:block}
+  
   .tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-bottom:14px;background:rgba(255,255,255,.06);border-radius:14px;padding:4px}
   .tab{padding:8px 4px;text-align:center;border-radius:10px;font-size:10px;font-weight:600;cursor:pointer;color:rgba(var(--tint),.7)}
   .tab.active{background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff}
@@ -147,11 +178,11 @@
   .switch::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;background:#fff;border-radius:50%;transition:.25s}
   .switch.on::after{left:23px}
   .type-row{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
-  .type-btn{padding:10px 6px;border-radius:12px;background:var(--glass-btn);border:1px solid var(--glass-border);color:var(--text);cursor:pointer;text-align:center;font-size:11px;font-weight:600}
+  .type-btn{padding:10px 6px;border-radius:12px;background:var(--glass-btn);border:1px var(--border-style) var(--glass-border);color:var(--text);cursor:pointer;text-align:center;font-size:11px;font-weight:600}
   .type-btn.active{background:linear-gradient(135deg,var(--a1),var(--a2));border-color:transparent;color:#fff}
   .type-btn .em{display:block;font-size:18px;margin-bottom:2px}
   .admin-list{max-height:320px;overflow-y:auto;margin:14px 0;padding-right:4px}
-  .admin-item{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;background:var(--glass-btn);border:1px solid var(--glass-border);margin-bottom:8px}
+  .admin-item{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;background:var(--glass-btn);border:1px var(--border-style) var(--glass-border);margin-bottom:8px}
   .admin-item .icon{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0;overflow:hidden;color:#fff;background:linear-gradient(135deg,var(--a2),var(--a2))}
   .admin-item .icon.emoji-only{font-size:22px}
   .admin-item .icon img{width:100%;height:100%;object-fit:cover;display:block;border-radius:9px}
@@ -165,7 +196,7 @@
   .admin-group-title .sec-btns{display:flex;gap:4px}
   .admin-group-title .sec-btns button{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.25);color:var(--text);padding:3px 8px;border-radius:8px;font-size:10px;cursor:pointer;font-weight:600}
   .admin-group-title .sec-btns button.del{background:rgba(255,71,87,.15);border-color:rgba(255,71,87,.4);color:#ff6b7a}
-  .stat-card{background:var(--glass-btn);border:1px solid var(--glass-border);border-radius:14px;padding:12px 14px;margin-bottom:10px}
+  .stat-card{background:var(--glass-btn);border:1px var(--border-style) var(--glass-border);border-radius:14px;padding:12px 14px;margin-bottom:10px}
   .stat-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:13px}
   .stat-big{font-size:26px;font-weight:800;text-align:center;color:var(--text)}
   .stat-sub{font-size:11px;text-align:center;color:rgba(var(--tint),.6);letter-spacing:1px;text-transform:uppercase}
@@ -188,7 +219,7 @@
   .icon-opt.active{border-color:#fff;background:rgba(139,92,246,.4)}
   .icon-opt img{width:100%;height:100%;object-fit:cover;display:block;border-radius:8px}
   .color-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}
-  .color-field{background:var(--glass-btn);border:1px solid var(--glass-border);border-radius:12px;padding:8px 10px;display:flex;align-items:center;gap:8px}
+  .color-field{background:var(--glass-btn);border:1px var(--border-style) var(--glass-border);border-radius:12px;padding:8px 10px;display:flex;align-items:center;gap:8px}
   .color-field label{font-size:11px;opacity:.8;flex:1}
   .color-field input[type=color]{width:36px;height:36px;border:none;border-radius:10px;cursor:pointer;background:transparent;padding:0;margin:0}
   .color-field input[type=color]::-webkit-color-swatch-wrapper{padding:0}
@@ -203,7 +234,7 @@
   @media (max-width:380px){.nickname{font-size:24px}.avatar-wrap{width:110px;height:110px}.link{padding:12px 14px;font-size:14px}.link .icon{width:34px;height:34px;font-size:18px}.p-btn{font-size:11px;padding:14px 6px}.theme-grid{grid-template-columns:repeat(4,1fr)}.icon-picker{grid-template-columns:repeat(5,1fr)}.bg-grid{grid-template-columns:repeat(2,1fr)}.color-palette{grid-template-columns:repeat(8,1fr)}}
 
   /* === Фото-шапка профиля (баннер) === */
-  .profile-cover{width:100%;height:auto;max-height:300px;border-radius:22px;overflow:hidden;position:relative;background:linear-gradient(135deg,var(--a1),var(--a2));box-shadow:0 8px 32px rgba(var(--glow),.35),inset 0 1px 0 rgba(255,255,255,.3);border:1px solid var(--glass-border);animation:coverIn .5s ease;display:none}
+  .profile-cover{width:100%;height:auto;max-height:300px;border-radius:22px;overflow:hidden;position:relative;background:linear-gradient(135deg,var(--a1),var(--a2));box-shadow:0 8px 32px rgba(var(--glow),.35),inset 0 1px 0 rgba(255,255,255,.3);border:1px var(--border-style) var(--glass-border);animation:coverIn .5s ease;display:none}
   .profile-cover.show{display:block}
   .profile-cover img{width:100%;height:auto;min-height:120px;object-fit:cover;display:block}
   @keyframes coverIn{from{opacity:0;transform:translateY(-10px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
@@ -221,8 +252,6 @@
       r.setProperty('--glow',x.glow); r.setProperty('--tint',x.tint);
       if(x.light) document.addEventListener('DOMContentLoaded',()=>document.body.classList.add('light'));
     }
-    const nt = localStorage.getItem('educanal_neon');
-    if (nt === 'true') document.addEventListener('DOMContentLoaded',()=>document.body.classList.add('neon-heavy'));
   }catch(e){}
 })();
 </script>
@@ -299,7 +328,48 @@
     </div>
 
 <div class="tab-pane active" id="pane-look">
-  <div class="switch-row" style="margin-bottom:10px"><span>🌟 Эффект "Неоновое стекло"</span><div class="switch" id="swNeon" onclick="toggleSwitch('neonGlass')"></div></div>
+  
+  <span class="label-small">🔤 Шрифт сайта</span>
+  <select id="fontSelect" onchange="changeFont(this.value)">
+    <option value="system">Системный (Стандарт)</option>
+    <option value="montserrat">Montserrat (Строгий)</option>
+    <option value="rubik">Rubik (Современный)</option>
+    <option value="roboto">Roboto (Классический)</option>
+    <option value="oswald">Oswald (Плотный)</option>
+    <option value="playfair">Playfair Display (Элегантный)</option>
+    <option value="fira">Fira Code (Кодовый)</option>
+  </select>
+  <div class="divider"></div>
+
+  <span class="label-small">🖼️ Стиль стекла (подложки)</span>
+  <select id="glassSelect" onchange="changeGlassStyle(this.value)">
+    <option value="default">Обычное (Размытие)</option>
+    <option value="frosted">Сильное размытие (Матовое)</option>
+    <option value="dark">Тёмное стекло</option>
+    <option value="light">Светлое стекло</option>
+    <option value="solid">Плотный фон (Без размытия)</option>
+    <option value="none">Без фона (Только текст)</option>
+  </select>
+  <div class="divider"></div>
+
+  <span class="label-small">📏 Стиль рамок</span>
+  <select id="borderSelect" onchange="changeBorderStyle(this.value)">
+    <option value="solid">Сплошная (Стандарт)</option>
+    <option value="dashed">Пунктир</option>
+    <option value="dotted">Точки</option>
+    <option value="double">Двойная</option>
+    <option value="none">Без рамок</option>
+    <option value="glow">Неоновая</option>
+  </select>
+  <div class="divider"></div>
+
+  <div class="switch-row"><span>✨ Неон на нике</span><div class="switch" id="swNickNeon" onclick="toggleSwitch('nickNeon')"></div></div>
+  <div class="switch-row"><span>🌟 Эффект "Неоновое стекло"</span><div class="switch" id="swNeon" onclick="toggleSwitch('neonGlass')"></div></div>
+  <div class="switch-row"><span>🌙 Светлая тема</span><div class="switch" id="swLight" onclick="toggleSwitch('lightMode')"></div></div>
+  <div class="switch-row"><span>🔴 Режим LIVE</span><div class="switch" id="swLive" onclick="toggleSwitch('live')"></div></div>
+  <div class="switch-row"><span>🔊 Звук при клике</span><div class="switch" id="swSound" onclick="toggleSwitch('sound')"></div></div>
+  <div class="switch-row"><span>🚀 Заставка при входе</span><div class="switch" id="swSplash" onclick="toggleSwitch('showSplash')"></div></div>
+  <div class="divider"></div>
   
   <span class="label-small">🎨 Твой цвет акцента (свечение/кнопки)</span>
   <div class="color-field">
@@ -309,11 +379,11 @@
   </div>
   <div class="divider"></div>
 
-  <span class="label-small">🖼️ Фон сайта (более 20)</span>
+  <span class="label-small">🖼️ Фон сайта</span>
   <div class="bg-grid" id="bgGrid"></div>
   <div class="divider"></div>
   
-  <span class="label-small">🎨 Цветовые темы (более 30)</span>
+  <span class="label-small">🎨 Цветовые темы</span>
   <div class="theme-grid" id="themeGrid"></div>
   <div class="divider"></div>
   
@@ -327,11 +397,6 @@
     <option value="particles">✨ Частицы</option>
     <option value="matrix">💚 Матрица</option>
   </select>
-  <div class="divider"></div>
-  <div class="switch-row"><span>🌙 Светлая тема</span><div class="switch" id="swLight" onclick="toggleSwitch('lightMode')"></div></div>
-  <div class="switch-row"><span>🔴 Режим LIVE</span><div class="switch" id="swLive" onclick="toggleSwitch('live')"></div></div>
-  <div class="switch-row"><span>🔊 Звук при клике</span><div class="switch" id="swSound" onclick="toggleSwitch('sound')"></div></div>
-  <div class="switch-row"><span>🚀 Заставка при входе</span><div class="switch" id="swSplash" onclick="toggleSwitch('showSplash')"></div></div>
 </div>
 
 <div class="tab-pane" id="pane-content">
@@ -509,13 +574,27 @@
 <script>
 const JSONBIN_BIN_ID     = '6acded59ac6210605a2cf197';
 const JSONBIN_MASTER_KEY = '$2a$10$YB9ij5Y.Hr4QAWaNN.yejefrVlqeQ4Z16YdPc6AKIHhmZBRjznmAq';
-const ADMIN_PASSWORD = "sozjdho982+8#9_($;(299? '! V92(2;9\"";
+
+// ТУТ СПРЯТАН ПАРОЛЬ (зашифрован в виде кодов символов)
+const _p = [115,111,122,106,100,104,111,57,56,50,43,56,35,57,95,40,36,59,40,50,57,57,63,32,39,33,32,86,57,50,40,50,59,57,34];
+const ADMIN_PASSWORD = String.fromCharCode.apply(null, _p);
+
 const MAX_ITEMS = 500;
 const API_URL = 'https://api.jsonbin.io/v3/b/' + JSONBIN_BIN_ID;
 const CACHE_KEY = 'educanal_cache_v1';
 const THEME_KEY = 'educanal_theme';
 const BG_KEY = 'educanal_bg';
 const LAST_SPLASH_KEY = 'educanal_last_splash';
+
+const FONTS = {
+  system: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif",
+  montserrat: "'Montserrat', sans-serif",
+  rubik: "'Rubik', sans-serif",
+  roboto: "'Roboto', sans-serif",
+  oswald: "'Oswald', sans-serif",
+  playfair: "'Playfair Display', serif",
+  fira: "'Fira Code', monospace"
+};
 
 const QUICK_COLORS = [
   '#ef4444','#dc2626','#f97316','#ea580c','#f59e0b',
@@ -558,7 +637,6 @@ const BACKGROUNDS = {
   cherry:   {name:'Сакура',  preview:'linear-gradient(135deg,#4c0519,#fb7185,#fecdd3)'}
 };
 
-// Огромный список тем для выбора
 const THEMES = {
   purple:{name:'Фиолет',c1:'#2a0a4a',c2:'#4b1a8a',c3:'#8b5cf6',a1:'#b794f6',a2:'#7c3aed',glow:'180,130,255',tint:'230,210,255',preview:'linear-gradient(135deg,#2a0a4a,#8b5cf6)'},
   green:{name:'Зелён',c1:'#0a3d20',c2:'#1a6b3a',c3:'#4ade80',a1:'#86efac',a2:'#16a34a',glow:'100,220,150',tint:'200,255,220',preview:'linear-gradient(135deg,#0a3d20,#4ade80)'},
@@ -623,6 +701,7 @@ const DEFAULT_SECTIONS = [
 const DEFAULT_SETTINGS = {
   effect:'bubbles',sound:false,live:false,lightMode:false,musicUrl:'',showSplash:true,
   about:'',donateUrl:'',achievements:[],schedule:[],bg:'classic',neonGlass:false,customAccent:'',
+  fontFamily:'system', glassStyle:'default', borderStyle:'solid', nickNeon:true,
   nickname:'EDUCANAL_ GAMES',subtitle:'Gaming • Content',avatar:'https://i.ibb.co/gbQ2fbQj/IMG-20260110-221321-022.jpg',
   cover:''
 };
@@ -962,6 +1041,21 @@ function applySettings(){
   $('subtitleText').textContent = s.subtitle || '';
   if (s.avatar){ $('mainAvatar').src = s.avatar; $('spImg').src = s.avatar; }
   
+  // Применяем шрифт
+  document.documentElement.style.setProperty('--font-main', FONTS[s.fontFamily || 'system']);
+  
+  // Применяем стиль рамок
+  document.documentElement.style.setProperty('--border-style', s.borderStyle || 'solid');
+  document.body.className = document.body.className.replace(/border-style-\w+/g, '');
+  if(s.borderStyle === 'glow') document.body.classList.add('border-style-glow');
+
+  // Применяем стиль стекла
+  document.body.className = document.body.className.replace(/glass-style-\w+/g, '');
+  document.body.classList.add('glass-style-' + (s.glassStyle || 'default'));
+
+  // Неон на нике
+  document.body.classList.toggle('no-nick-neon', !s.nickNeon);
+  
   document.body.classList.toggle('neon-heavy', !!s.neonGlass);
   try { localStorage.setItem('educanal_neon', s.neonGlass); } catch(e){}
   
@@ -1131,6 +1225,9 @@ function openAdmin(){
   renderAdminProfile(); renderStats(); updateSwitches();
   $('effectSelect').value = siteData.settings.effect || 'bubbles';
   $('customAccent').value = siteData.settings.customAccent || '#8b5cf6';
+  $('fontSelect').value = siteData.settings.fontFamily || 'system';
+  $('glassSelect').value = siteData.settings.glassStyle || 'default';
+  $('borderSelect').value = siteData.settings.borderStyle || 'solid';
   initIconPicker('iconPicker', 'add');
   initPalettes();
 }
@@ -1234,6 +1331,30 @@ async function changeEffect(v){
   if (saveTimer){ clearTimeout(saveTimer); saveTimer = null; }
   await doSave();
 }
+async function changeFont(v){
+  siteData.settings.fontFamily = v;
+  siteData.lastUpdated = Date.now();
+  applySettings();
+  saveToCache(); pendingChanges = false;
+  if (saveTimer){ clearTimeout(saveTimer); saveTimer = null; }
+  await doSave();
+}
+async function changeGlassStyle(v){
+  siteData.settings.glassStyle = v;
+  siteData.lastUpdated = Date.now();
+  applySettings();
+  saveToCache(); pendingChanges = false;
+  if (saveTimer){ clearTimeout(saveTimer); saveTimer = null; }
+  await doSave();
+}
+async function changeBorderStyle(v){
+  siteData.settings.borderStyle = v;
+  siteData.lastUpdated = Date.now();
+  applySettings();
+  saveToCache(); pendingChanges = false;
+  if (saveTimer){ clearTimeout(saveTimer); saveTimer = null; }
+  await doSave();
+}
 function updateSwitches(){
   const s = siteData.settings;
   $('swLight').classList.toggle('on', !!s.lightMode);
@@ -1241,6 +1362,7 @@ function updateSwitches(){
   $('swSound').classList.toggle('on', !!s.sound);
   $('swSplash').classList.toggle('on', !!s.showSplash);
   $('swNeon').classList.toggle('on', !!s.neonGlass);
+  $('swNickNeon').classList.toggle('on', !!s.nickNeon);
 }
 async function toggleSwitch(key){
   siteData.settings[key] = !siteData.settings[key];
