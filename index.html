@@ -188,11 +188,11 @@
   @media (max-width:380px){.nickname{font-size:24px}.avatar-wrap{width:110px;height:110px}.link{padding:12px 14px;font-size:14px}.link .icon{width:34px;height:34px;font-size:18px}.p-btn{font-size:11px;padding:14px 6px}.theme-grid{grid-template-columns:repeat(4,1fr)}.icon-picker{grid-template-columns:repeat(5,1fr)}.bg-grid{grid-template-columns:repeat(2,1fr)}.color-palette{grid-template-columns:repeat(8,1fr)}}
 
   /* === Фото-шапка профиля (баннер) === */
-  .profile-cover{width:100%;height:150px;border-radius:22px;overflow:hidden;position:relative;background:linear-gradient(135deg,var(--a1),var(--a2));box-shadow:0 8px 32px rgba(var(--glow),.35),inset 0 1px 0 rgba(255,255,255,.3);border:1px solid var(--glass-border);animation:coverIn .5s ease;display:none}
+  .profile-cover{width:100%;height:auto;max-height:300px;border-radius:22px;overflow:hidden;position:relative;background:linear-gradient(135deg,var(--a1),var(--a2));box-shadow:0 8px 32px rgba(var(--glow),.35),inset 0 1px 0 rgba(255,255,255,.3);border:1px solid var(--glass-border);animation:coverIn .5s ease;display:none}
   .profile-cover.show{display:block}
-  .profile-cover img{width:100%;height:100%;object-fit:cover;display:block}
+  .profile-cover img{width:100%;height:auto;min-height:120px;object-fit:cover;display:block}
   @keyframes coverIn{from{opacity:0;transform:translateY(-10px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
-  @media (max-width:380px){.profile-cover{height:110px;border-radius:18px}}
+  @media (max-width:380px){.profile-cover{max-height:200px;border-radius:18px}}
 </style>
 <script>
 (function(){
@@ -867,11 +867,17 @@ function applySettings(){
   $('spNick').textContent = s.nickname || 'EDUCANAL_ GAMES';
   $('subtitleText').textContent = s.subtitle || '';
   if (s.avatar){ $('mainAvatar').src = s.avatar; $('spImg').src = s.avatar; }
+  
   const cov = $('profileCover');
   if (cov){
-    if (s.cover){ cov.classList.add('show'); $('coverImg').src = s.cover; }
+    if (s.cover){ 
+      cov.classList.add('show'); 
+      $('coverImg').src = s.cover; 
+      $('coverImg').onerror = function() { cov.classList.remove('show'); }; 
+    }
     else { cov.classList.remove('show'); $('coverImg').removeAttribute('src'); }
   }
+
   if (s.musicUrl){ $('musicBtn').style.display = 'flex'; $('bgMusic').src = s.musicUrl; }
   else $('musicBtn').style.display = 'none';
   $('aboutSection').style.display = s.about ? 'block' : 'none';
