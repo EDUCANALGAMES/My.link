@@ -30,6 +30,7 @@
   @keyframes fxFloat{0%,100%{transform:translate(0,0);opacity:.3}50%{transform:translate(30px,-50px);opacity:.9}}
   .fx-star{position:absolute;color:#fff;animation:fxTwinkle ease-in-out infinite}
   @keyframes fxTwinkle{0%,100%{opacity:.2;transform:scale(.7)}50%{opacity:1;transform:scale(1.2)}}
+  
   .container{width:100%;max-width:460px;position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:18px}
   .avatar-wrap{width:130px;height:130px;border-radius:50%;padding:4px;background:linear-gradient(135deg,rgba(255,255,255,.5),rgba(var(--glow),.4));box-shadow:0 0 40px rgba(var(--glow),.7);animation:pulseGlow 3s ease-in-out infinite;cursor:pointer;user-select:none}
   @keyframes pulseGlow{0%,100%{box-shadow:0 0 40px rgba(var(--glow),.7)}50%{box-shadow:0 0 55px rgba(var(--glow),.9)}}
@@ -44,7 +45,15 @@
   @keyframes dotBlink{0%,100%{opacity:1}50%{opacity:.3}}
   .subtitle{font-size:13px;color:rgba(var(--tint),.8);letter-spacing:3px;text-transform:uppercase;margin-top:-10px;font-weight:500}
   body.light .subtitle{color:#4a4a6a}
-  .glass{background:var(--glass);border:1px solid var(--glass-border);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-radius:22px;box-shadow:0 8px 32px rgba(var(--glow),.35),inset 0 1px 0 rgba(255,255,255,.3);color:var(--text)}
+  
+  /* Стеклянные элементы */
+  .glass{background:var(--glass);border:1px solid var(--glass-border);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-radius:22px;box-shadow:0 8px 32px rgba(var(--glow),.35),inset 0 1px 0 rgba(255,255,255,.3);color:var(--text);transition:all .3s}
+  
+  /* Тяжелый неон (включается в админке) */
+  body.neon-heavy .glass{box-shadow:0 0 25px rgba(var(--glow),0.8), inset 0 0 15px rgba(var(--glow),0.2);border:1px solid rgba(var(--glow),0.6)}
+  body.neon-heavy .link{box-shadow:0 0 15px rgba(var(--glow),0.4);border:1px solid rgba(var(--glow),0.5)}
+  body.neon-heavy .link:hover{box-shadow:0 0 25px rgba(var(--glow),0.8);border:1px solid rgba(var(--glow),1)}
+
   .links{width:100%;display:flex;flex-direction:column;gap:10px;padding:12px}
   .link{display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:18px;text-decoration:none;color:var(--text);font-weight:600;font-size:15px;background:var(--glass-btn);border:1px solid var(--glass-border);backdrop-filter:blur(10px);transition:all .25s cubic-bezier(.2,.7,.3,1);position:relative;overflow:hidden}
   .link::before{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.25),transparent 70%);transform:translateX(-100%);transition:transform .6s}
@@ -57,7 +66,9 @@
   .link .text small{font-size:11px;font-weight:400;color:rgba(var(--tint),.7);margin-top:2px}
   body.light .link .text small{color:#6a6a8a}
   .link .arrow{margin-left:auto;opacity:.5;font-size:18px;flex-shrink:0}
+  
   .yt{background:linear-gradient(135deg,#ff0000,#cc0000)}.tg{background:linear-gradient(135deg,#2aabee,#229ed9)}.tt{background:linear-gradient(135deg,#25f4ee,#fe2c55)}.tw{background:linear-gradient(135deg,#9146ff,#6441a5)}.dc{background:linear-gradient(135deg,#5865f2,#4752c4)}.ig{background:linear-gradient(135deg,#feda75,#d62976,#962fbf)}.vk{background:linear-gradient(135deg,#0077ff,#005ccc)}.rbx{background:linear-gradient(135deg,#e2231a,#b81a12)}.mc{background:linear-gradient(135deg,#62b47a,#3a7d44)}.bs{background:linear-gradient(135deg,#ffcb2b,#ff8a00)}.custom{background:linear-gradient(135deg,var(--a2),var(--a2))}.file{background:linear-gradient(135deg,#6b7280,#374151)}.img{background:linear-gradient(135deg,#0ea5e9,#0284c7)}
+  
   .section-title{width:100%;text-align:center;font-size:13px;letter-spacing:5px;text-transform:uppercase;color:rgba(var(--tint),.85);margin:12px 0 -4px;font-weight:600;text-shadow:0 0 12px rgba(var(--glow),.7)}
   body.light .section-title{color:#4a4a6a;text-shadow:none}
   .personal-row{width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:12px}
@@ -115,11 +126,21 @@
   .tab .em{display:block;font-size:16px;margin-bottom:2px}
   .tab-pane{display:none}
   .tab-pane.active{display:block}
-  .theme-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:10px}
+  
+  .theme-grid,.bg-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:10px;max-height:180px;overflow-y:auto;padding-right:4px}
+  .bg-grid{grid-template-columns:repeat(3,1fr);max-height:220px}
+  
   .theme-swatch{aspect-ratio:1;border-radius:12px;cursor:pointer;border:2px solid rgba(255,255,255,.15);position:relative;overflow:hidden}
   .theme-swatch.active{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.3)}
   .theme-swatch.active::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;font-weight:900;text-shadow:0 2px 6px rgba(0,0,0,.6)}
   .theme-name{font-size:9px;text-align:center;color:rgba(var(--tint),.7);margin-top:-4px;margin-bottom:6px}
+  
+  .bg-opt{aspect-ratio:1.4;border-radius:12px;cursor:pointer;border:2px solid rgba(255,255,255,.15);position:relative;overflow:hidden;transition:.15s}
+  .bg-opt:hover{transform:scale(1.04)}
+  .bg-opt.active{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.3)}
+  .bg-opt.active::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:900;text-shadow:0 2px 8px rgba(0,0,0,.7)}
+  .bg-name{font-size:9px;text-align:center;color:rgba(var(--tint),.7);margin-top:-4px;margin-bottom:6px}
+  
   .switch-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;font-size:13px}
   .switch{position:relative;width:46px;height:26px;background:rgba(255,255,255,.15);border-radius:20px;cursor:pointer;transition:.25s;flex-shrink:0}
   .switch.on{background:linear-gradient(135deg,var(--a1),var(--a2))}
@@ -166,12 +187,6 @@
   .icon-opt:hover{transform:scale(1.05)}
   .icon-opt.active{border-color:#fff;background:rgba(139,92,246,.4)}
   .icon-opt img{width:100%;height:100%;object-fit:cover;display:block;border-radius:8px}
-  .bg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
-  .bg-opt{aspect-ratio:1.4;border-radius:12px;cursor:pointer;border:2px solid rgba(255,255,255,.15);position:relative;overflow:hidden;transition:.15s}
-  .bg-opt:hover{transform:scale(1.04)}
-  .bg-opt.active{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.3)}
-  .bg-opt.active::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:900;text-shadow:0 2px 8px rgba(0,0,0,.7)}
-  .bg-name{font-size:9px;text-align:center;color:rgba(var(--tint),.7);margin-top:-4px;margin-bottom:6px}
   .color-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}
   .color-field{background:var(--glass-btn);border:1px solid var(--glass-border);border-radius:12px;padding:8px 10px;display:flex;align-items:center;gap:8px}
   .color-field label{font-size:11px;opacity:.8;flex:1}
@@ -206,6 +221,8 @@
       r.setProperty('--glow',x.glow); r.setProperty('--tint',x.tint);
       if(x.light) document.addEventListener('DOMContentLoaded',()=>document.body.classList.add('light'));
     }
+    const nt = localStorage.getItem('educanal_neon');
+    if (nt === 'true') document.addEventListener('DOMContentLoaded',()=>document.body.classList.add('neon-heavy'));
   }catch(e){}
 })();
 </script>
@@ -256,7 +273,7 @@
     <div class="info-badge"><span class="online-dot"></span> <b id="onlineCount">1</b> онлайн</div>
   </div>
 
-  <div class="footer" id="footerTrigger">© EDUCANAL_ GAMES</div>
+  <div class="footer" id="footerTrigger">© EDUCANAL_GAMES</div>
 </div>
 
 <div class="modal-overlay" id="pwdModal">
@@ -282,12 +299,24 @@
     </div>
 
 <div class="tab-pane active" id="pane-look">
-  <span class="label-small">🖼️ Фон сайта</span>
+  <div class="switch-row" style="margin-bottom:10px"><span>🌟 Эффект "Неоновое стекло"</span><div class="switch" id="swNeon" onclick="toggleSwitch('neonGlass')"></div></div>
+  
+  <span class="label-small">🎨 Твой цвет акцента (свечение/кнопки)</span>
+  <div class="color-field">
+    <label>Выбрать цвет</label>
+    <input type="color" id="customAccent" value="#8b5cf6" onchange="applyCustomAccent(this.value)">
+    <button class="clear-btn" onclick="applyCustomAccent('')">Сброс</button>
+  </div>
+  <div class="divider"></div>
+
+  <span class="label-small">🖼️ Фон сайта (более 20)</span>
   <div class="bg-grid" id="bgGrid"></div>
   <div class="divider"></div>
-  <span class="label-small">🎨 Цветовая тема</span>
+  
+  <span class="label-small">🎨 Цветовые темы (более 30)</span>
   <div class="theme-grid" id="themeGrid"></div>
   <div class="divider"></div>
+  
   <span class="label-small">✨ Фоновый эффект</span>
   <select id="effectSelect" onchange="changeEffect(this.value)">
     <option value="none">❌ Без эффекта</option>
@@ -515,9 +544,21 @@ const BACKGROUNDS = {
   rose:     {name:'Роза',    preview:'linear-gradient(135deg,#ffe4e6,#fda4af,#f43f5e)', light:true},
   mint:     {name:'Мята',    preview:'linear-gradient(135deg,#e0f7f4,#a7f3d0,#34d399)', light:true},
   lavender: {name:'Лаванда', preview:'linear-gradient(135deg,#e9d5ff,#c4b5fd,#a855f7)', light:true},
-  mesh:     {name:'Меш',     preview:'radial-gradient(circle at 20% 30%,#8b5cf6,transparent 40%),radial-gradient(circle at 80% 70%,#ec4899,transparent 40%),linear-gradient(135deg,#1a0a4a,#0a2540)'}
+  mesh:     {name:'Меш',     preview:'radial-gradient(circle at 20% 30%,#8b5cf6,transparent 40%),radial-gradient(circle at 80% 70%,#ec4899,transparent 40%),linear-gradient(135deg,#1a0a4a,#0a2540)'},
+  toxic:    {name:'Токсик',  preview:'linear-gradient(135deg,#0a3d0a,#22c55e,#a3e635)'},
+  blood:    {name:'Кровь',   preview:'linear-gradient(180deg,#1a0000,#7f1d1d,#ef4444)'},
+  gold:     {name:'Золото',  preview:'linear-gradient(135deg,#3d2a00,#d97706,#fbbf24)'},
+  vapor:    {name:'Вейпор',  preview:'linear-gradient(180deg,#2d0a4e,#ff71ce,#01cdfe)'},
+  dark:     {name:'Тьма',    preview:'linear-gradient(135deg,#000000,#111827,#1f2937)'},
+  neon_pink:{name:'Неон Роз',preview:'linear-gradient(135deg,#1a001a,#d946ef,#f472b6)'},
+  ice:      {name:'Лёд',     preview:'linear-gradient(135deg,#0a2a3d,#06b6d4,#a5f3fc)'},
+  matrix:   {name:'Матрица', preview:'linear-gradient(135deg,#000a00,#00ff41,#7dff7d)'},
+  desert:   {name:'Пустыня', preview:'linear-gradient(135deg,#78350f,#f59e0b,#fef08a)'},
+  night:    {name:'Ночь',    preview:'linear-gradient(135deg,#020617,#1e1b4b,#3730a3)'},
+  cherry:   {name:'Сакура',  preview:'linear-gradient(135deg,#4c0519,#fb7185,#fecdd3)'}
 };
 
+// Огромный список тем для выбора
 const THEMES = {
   purple:{name:'Фиолет',c1:'#2a0a4a',c2:'#4b1a8a',c3:'#8b5cf6',a1:'#b794f6',a2:'#7c3aed',glow:'180,130,255',tint:'230,210,255',preview:'linear-gradient(135deg,#2a0a4a,#8b5cf6)'},
   green:{name:'Зелён',c1:'#0a3d20',c2:'#1a6b3a',c3:'#4ade80',a1:'#86efac',a2:'#16a34a',glow:'100,220,150',tint:'200,255,220',preview:'linear-gradient(135deg,#0a3d20,#4ade80)'},
@@ -537,7 +578,21 @@ const THEMES = {
   matrix:{name:'Матрица',c1:'#000a00',c2:'#001a00',c3:'#00ff41',a1:'#7dff7d',a2:'#00cc33',glow:'0,255,100',tint:'180,255,200',preview:'linear-gradient(135deg,#000a00,#00ff41)'},
   rainbow:{name:'Радуга',c1:'#3a0a4a',c2:'#8a1a6a',c3:'#3b82f6',a1:'#fbbf24',a2:'#ec4899',glow:'200,130,255',tint:'240,220,255',preview:'linear-gradient(135deg,#ef4444,#fbbf24,#22c55e,#3b82f6,#8b5cf6)'},
   blood:{name:'Кровь',c1:'#1a0000',c2:'#4a0000',c3:'#8a0000',a1:'#dc2626',a2:'#7f1d1d',glow:'180,20,20',tint:'255,180,180',preview:'linear-gradient(135deg,#1a0000,#8a0000)'},
-  dark:{name:'Тёмная',c1:'#0a0a0f',c2:'#1a1a2e',c3:'#4a4a6a',a1:'#94a3b8',a2:'#475569',glow:'150,170,200',tint:'200,210,230',preview:'linear-gradient(135deg,#0a0a0f,#4a4a6a)'}
+  dark:{name:'Тёмная',c1:'#0a0a0f',c2:'#1a1a2e',c3:'#4a4a6a',a1:'#94a3b8',a2:'#475569',glow:'150,170,200',tint:'200,210,230',preview:'linear-gradient(135deg,#0a0a0f,#4a4a6a)'},
+  cyber:{name:'Кибер',c1:'#0f0518',c2:'#2a0845',c3:'#ff00ff',a1:'#00ffff',a2:'#ff00ff',glow:'255,0,255',tint:'220,200,255',preview:'linear-gradient(135deg,#0f0518,#ff00ff)'},
+  lime:{name:'Лайм',c1:'#1a2e05',c2:'#3f6212',c3:'#a3e635',a1:'#bef264',a2:'#65a30d',glow:'163,230,53',tint:'230,255,180',preview:'linear-gradient(135deg,#1a2e05,#a3e635)'},
+  cobalt:{name:'Кобальт',c1:'#001233',c2:'#023e8a',c3:'#0096c7',a1:'#48cae4',a2:'#0077b6',glow:'0,150,199',tint:'180,230,255',preview:'linear-gradient(135deg,#001233,#0096c7)'},
+  crimson:{name:'Багровый',c1:'#2a0000',c2:'#660000',c3:'#ff0000',a1:'#ff4d4d',a2:'#b30000',glow:'255,50,50',tint:'255,200,200',preview:'linear-gradient(135deg,#2a0000,#ff0000)'},
+  toxic:{name:'Токсик',c1:'#0a1a00',c2:'#1a3a00',c3:'#39ff14',a1:'#7fff00',a2:'#008000',glow:'57,255,20',tint:'200,255,180',preview:'linear-gradient(135deg,#0a1a00,#39ff14)'},
+  vapor:{name:'Вейпор',c1:'#1a0b2e',c2:'#5b2a86',c3:'#ff71ce',a1:'#01cdfe',a2:'#ff71ce',glow:'255,113,206',tint:'255,200,240',preview:'linear-gradient(135deg,#1a0b2e,#ff71ce)'},
+  emerald:{name:'Изумруд',c1:'#022c22',c2:'#064e3b',c3:'#10b981',a1:'#6ee7b7',a2:'#059669',glow:'16,185,129',tint:'167,243,208',preview:'linear-gradient(135deg,#022c22,#10b981)'},
+  sunsetfire:{name:'Пламя',c1:'#2b0a00',c2:'#7c2d12',c3:'#f97316',a1:'#fbbf24',a2:'#ea580c',glow:'249,115,22',tint:'255,220,180',preview:'linear-gradient(135deg,#2b0a00,#f97316)'},
+  midnight:{name:'Полночь',c1:'#020617',c2:'#0f172a',c3:'#1e293b',a1:'#94a3b8',a2:'#475569',glow:'30,41,59',tint:'203,213,225',preview:'linear-gradient(135deg,#020617,#1e293b)'},
+  cherry:{name:'Сакура',c1:'#4c0519',c2:'#881337',c3:'#f43f5e',a1:'#fda4af',a2:'#e11d48',glow:'244,63,94',tint:'255,200,220',preview:'linear-gradient(135deg,#4c0519,#f43f5e)'},
+  sky:{name:'Небо',c1:'#082f49',c2:'#0c4a6e',c3:'#38bdf8',a1:'#bae6fd',a2:'#0284c7',glow:'56,189,248',tint:'224,242,254',preview:'linear-gradient(135deg,#082f49,#38bdf8)'},
+  rust:{name:'Ржавчина',c1:'#2a1205',c2:'#552008',c3:'#c2410c',a1:'#fdba74',a2:'#9a3412',glow:'194,65,12',tint:'254,215,170',preview:'linear-gradient(135deg,#2a1205,#c2410c)'},
+  galaxy:{name:'Галактика',c1:'#0a052e',c2:'#2e1065',c3:'#a855f7',a1:'#e879f9',a2:'#9333ea',glow:'168,85,247',tint:'233,213,255',preview:'linear-gradient(135deg,#0a052e,#a855f7)'},
+  deepsea:{name:'Глубина',c1:'#001a1a',c2:'#003333',c3:'#008080',a1:'#4dd0e1',a2:'#006666',glow:'0,128,128',tint:'178,235,242',preview:'linear-gradient(135deg,#001a1a,#008080)'}
 };
 
 const DEFAULT_SECTIONS = [
@@ -567,7 +622,7 @@ const DEFAULT_SECTIONS = [
 
 const DEFAULT_SETTINGS = {
   effect:'bubbles',sound:false,live:false,lightMode:false,musicUrl:'',showSplash:true,
-  about:'',donateUrl:'',achievements:[],schedule:[],bg:'classic',
+  about:'',donateUrl:'',achievements:[],schedule:[],bg:'classic',neonGlass:false,customAccent:'',
   nickname:'EDUCANAL_ GAMES',subtitle:'Gaming • Content',avatar:'https://i.ibb.co/gbQ2fbQj/IMG-20260110-221321-022.jpg',
   cover:''
 };
@@ -595,6 +650,28 @@ const genId = () => Date.now().toString(36)+Math.random().toString(36).slice(2,7
 const escapeHtml = s => { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; };
 const today = () => new Date().toISOString().slice(0,10);
 
+function hexToRgb(hex) {
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? `${parseInt(result[1], 16)},${parseInt(result[2], 16)},${parseInt(result[3], 16)}` : null;
+}
+
+function applyCustomAccent(color){
+  if(color){
+    const rgb = hexToRgb(color);
+    if(rgb){
+      const r = document.documentElement.style;
+      r.setProperty('--a2', color);
+      r.setProperty('--glow', rgb);
+      siteData.settings.customAccent = color;
+    }
+  } else {
+    siteData.settings.customAccent = '';
+    applyTheme(siteData.theme);
+  }
+  siteData.lastUpdated = Date.now();
+  scheduleSave();
+}
+
 function setSyncStatus(status){
   const d = $('syncDot');
   d.classList.remove('saving','error');
@@ -616,12 +693,18 @@ function applyTheme(name){
   r.setProperty('--c1',t.c1); r.setProperty('--c2',t.c2); r.setProperty('--c3',t.c3);
   r.setProperty('--a1',t.a1); r.setProperty('--a2',t.a2);
   r.setProperty('--glow',t.glow); r.setProperty('--tint',t.tint);
+  
+  if(siteData.settings.customAccent) {
+     applyCustomAccent(siteData.settings.customAccent);
+  }
+
   if (siteData.settings.bg === 'classic' || !siteData.settings.bg){
     document.body.style.background = '';
     document.body.classList.toggle('light', !!t.light);
   }
   try { localStorage.setItem(THEME_KEY, JSON.stringify(t)); } catch(e){}
 }
+
 function applyBackground(id){
   const b = BACKGROUNDS[id];
   if (!b) return;
@@ -646,7 +729,18 @@ function applyBackground(id){
       rose:{bg:'linear-gradient(135deg,#ffe4e6 0%,#fda4af 50%,#f43f5e 100%)'},
       mint:{bg:'linear-gradient(135deg,#e0f7f4 0%,#a7f3d0 50%,#34d399 100%)'},
       lavender:{bg:'linear-gradient(135deg,#e9d5ff 0%,#c4b5fd 50%,#a855f7 100%)'},
-      mesh:{bg:'radial-gradient(circle at 20% 30%,#8b5cf6 0%,transparent 40%),radial-gradient(circle at 80% 70%,#ec4899 0%,transparent 40%),radial-gradient(circle at 50% 50%,#06b6d4 0%,transparent 50%),linear-gradient(135deg,#1a0a4a,#0a2540)'}
+      mesh:{bg:'radial-gradient(circle at 20% 30%,#8b5cf6 0%,transparent 40%),radial-gradient(circle at 80% 70%,#ec4899 0%,transparent 40%),radial-gradient(circle at 50% 50%,#06b6d4 0%,transparent 50%),linear-gradient(135deg,#1a0a4a,#0a2540)'},
+      toxic:{bg:'linear-gradient(135deg,#0a3d0a,#22c55e,#a3e635)'},
+      blood:{bg:'linear-gradient(180deg,#1a0000,#7f1d1d,#ef4444)'},
+      gold:{bg:'linear-gradient(135deg,#3d2a00,#d97706,#fbbf24)'},
+      vapor:{bg:'linear-gradient(180deg,#2d0a4e,#ff71ce,#01cdfe)'},
+      dark:{bg:'linear-gradient(135deg,#000000,#111827,#1f2937)'},
+      neon_pink:{bg:'linear-gradient(135deg,#1a001a,#d946ef,#f472b6)'},
+      ice:{bg:'linear-gradient(135deg,#0a2a3d,#06b6d4,#a5f3fc)'},
+      matrix:{bg:'linear-gradient(135deg,#000a00,#00ff41,#7dff7d)'},
+      desert:{bg:'linear-gradient(135deg,#78350f,#f59e0b,#fef08a)'},
+      night:{bg:'linear-gradient(135deg,#020617,#1e1b4b,#3730a3)'},
+      cherry:{bg:'linear-gradient(135deg,#4c0519,#fb7185,#fecdd3)'}
     };
     const s = styles[id];
     if (s){
@@ -868,6 +962,9 @@ function applySettings(){
   $('subtitleText').textContent = s.subtitle || '';
   if (s.avatar){ $('mainAvatar').src = s.avatar; $('spImg').src = s.avatar; }
   
+  document.body.classList.toggle('neon-heavy', !!s.neonGlass);
+  try { localStorage.setItem('educanal_neon', s.neonGlass); } catch(e){}
+  
   const cov = $('profileCover');
   if (cov){
     if (s.cover){ 
@@ -1033,6 +1130,7 @@ function openAdmin(){
   renderBgGrid(); renderThemeGrid(); renderSectionsDropdown(); renderAdminList();
   renderAdminProfile(); renderStats(); updateSwitches();
   $('effectSelect').value = siteData.settings.effect || 'bubbles';
+  $('customAccent').value = siteData.settings.customAccent || '#8b5cf6';
   initIconPicker('iconPicker', 'add');
   initPalettes();
 }
@@ -1142,6 +1240,7 @@ function updateSwitches(){
   $('swLive').classList.toggle('on', !!s.live);
   $('swSound').classList.toggle('on', !!s.sound);
   $('swSplash').classList.toggle('on', !!s.showSplash);
+  $('swNeon').classList.toggle('on', !!s.neonGlass);
 }
 async function toggleSwitch(key){
   siteData.settings[key] = !siteData.settings[key];
