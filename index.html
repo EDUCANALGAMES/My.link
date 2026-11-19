@@ -33,11 +33,12 @@
   @keyframes fxTwinkle{0%,100%{opacity:.2;transform:scale(.7)}50%{opacity:1;transform:scale(1.2)}}  
   .container{width:100%;max-width:460px;position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:18px}  
   .profile-header{width:100%;border-radius:28px;padding:24px 18px 22px;display:flex;flex-direction:column;align-items:center;gap:12px;position:relative;overflow:hidden}  
-  .profile-header-bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity .35s ease;pointer-events:none;z-index:0}  
-  .profile-header.has-photo .profile-header-bg{opacity:.42}  
-  .profile-header-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.15) 0%,rgba(0,0,0,.45) 100%);pointer-events:none;z-index:1}  
+  .profile-header-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;z-index:0;pointer-events:none;border-radius:28px}  
+  .profile-header.has-photo .profile-header-img{display:block;opacity:.55}  
+  .profile-header-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.12) 0%,rgba(0,0,0,.45) 100%);pointer-events:none;z-index:1;display:none;border-radius:28px}  
+  .profile-header.has-photo .profile-header-overlay{display:block}  
   body.light .profile-header-overlay{background:linear-gradient(180deg,rgba(255,255,255,.15) 0%,rgba(255,255,255,.45) 100%)}  
-  .profile-header > *:not(.profile-header-bg):not(.profile-header-overlay){position:relative;z-index:2}  
+  .profile-header > *:not(.profile-header-img):not(.profile-header-overlay){position:relative;z-index:2}  
   .avatar-wrap{width:130px;height:130px;border-radius:50%;padding:4px;background:linear-gradient(135deg,rgba(255,255,255,.5),rgba(var(--glow),.4));box-shadow:0 0 40px rgba(var(--glow),.7);animation:pulseGlow 3s ease-in-out infinite;cursor:pointer;user-select:none}  
   @keyframes pulseGlow{0%,100%{box-shadow:0 0 40px rgba(var(--glow),.7)}50%{box-shadow:0 0 55px rgba(var(--glow),.9)}}  
   .avatar{width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,var(--a1),var(--a2));display:flex;align-items:center;justify-content:center;overflow:hidden;border:2px solid rgba(255,255,255,.4)}  
@@ -219,7 +220,7 @@
 <div class="music-btn" id="musicBtn" style="display:none" onclick="toggleMusic()">🎵</div>  
 <audio id="bgMusic" loop></audio>  <div class="container">  
   <div class="glass profile-header" id="profileHeader">
-    <div class="profile-header-bg" id="headerBgPhoto"></div>
+    <img class="profile-header-img" id="headerBgPhoto" alt="">
     <div class="profile-header-overlay"></div>
     <div class="avatar-wrap" id="avatarTrigger">  
       <div class="avatar"><img id="mainAvatar" src="https://i.ibb.co/gbQ2fbQj/IMG-20260110-221321-022.jpg" alt=""></div>  
@@ -347,6 +348,8 @@
 <div class="tab-pane" id="pane-profile">  
   <span class="label-small">🖼️ Своё фото в шапку профиля (по ссылке)</span>
   <input type="url" id="inpHeaderPhoto" placeholder="URL фото для шапки (https://...jpg)">
+  <div class="error" id="headerPhotoError"></div>
+  <div class="success" id="headerPhotoSuccess"></div>
   <button class="modal-btn" onclick="saveHeaderPhoto()">Сохранить фото шапки</button>
   <div class="divider"></div>
   <span class="label-small">📝 Обо мне</span>  
@@ -462,6 +465,7 @@ const API_URL = 'https://api.jsonbin.io/v3/b/' + JSONBIN_BIN_ID;
 const CACHE_KEY = 'educanal_cache_v1';  
 const THEME_KEY = 'educanal_theme';  
 const BG_KEY = 'educanal_bg';  
+const HEADER_PHOTO_KEY = 'educanal_header_photo';
 const LAST_SPLASH_KEY = 'educanal_last_splash';  
   
 const QUICK_COLORS = [  
@@ -696,9 +700,11 @@ function migrateRecord(rec){
 }  
 async function loadData(){  
   const cached = loadFromCache();  
+  const savedHeaderPhoto = localStorage.getItem(HEADER_PHOTO_KEY);
   if (cached && cached.sections){  
     siteData = cached;  
     siteData.settings = Object.assign({}, DEFAULT_SETTINGS, siteData.settings||{});  
+    if (savedHeaderPhoto !== null && !siteData.settings.headerPhoto) siteData.settings.headerPhoto = savedHeaderPhoto;
     applyTheme(siteData.theme);  
     applyBackground(siteData.settings.bg || 'classic');  
     applySettings();  
@@ -706,7 +712,10 @@ async function loadData(){
     renderAll();  
     initialized = true;  
     showSplash();  
-  }  
+  } else if (savedHeaderPhoto){
+    siteData.settings.headerPhoto = savedHeaderPhoto;
+    applySettings();
+  }
   try {  
     setSyncStatus('saving');  
     const res = await fetch(API_URL+'/latest',{headers:{'X-Master-Key':JSONBIN_MASTER_KEY}});  
@@ -716,13 +725,16 @@ async function loadData(){
     if (rec && Array.isArray(rec.sections)){  
       const serverTime = rec.lastUpdated || 0;  
       const localTime = siteData.lastUpdated || 0;  
-      const keepLocalTheme = cached && localTime > serverTime;  
-      siteData.sections = rec.sections;  
-      if (!keepLocalTheme) siteData.theme = rec.theme || 'purple';  
-      siteData.views = rec.views || 0;  
-      siteData.stats = rec.stats || {viewsByDay:{},devices:{mobile:0,desktop:0,tablet:0},clicks:{}};  
-      siteData.settings = Object.assign({}, DEFAULT_SETTINGS, rec.settings||{});  
-      siteData.online = rec.online || {};  
+      const keepLocal = cached && localTime > serverTime;  
+      if (!keepLocal){
+        siteData.sections = rec.sections;  
+        siteData.theme = rec.theme || 'purple';  
+        siteData.settings = Object.assign({}, DEFAULT_SETTINGS, rec.settings||{});  
+        if (!siteData.settings.headerPhoto && savedHeaderPhoto) siteData.settings.headerPhoto = savedHeaderPhoto;
+      }
+      siteData.views = Math.max(rec.views || 0, siteData.views || 0);  
+      siteData.stats = rec.stats || siteData.stats || {viewsByDay:{},devices:{mobile:0,desktop:0,tablet:0},clicks:{}};  
+      siteData.online = rec.online || siteData.online || {};  
       siteData.lastUpdated = Math.max(serverTime, localTime);  
       initialized = true;  
     } else if (!initialized){  
@@ -834,6 +846,26 @@ function playClickSound(){
     o.start(); o.stop(ctx.currentTime+0.1);  
   } catch(e){}  
 }  
+function applyHeaderPhoto(url){
+  const img = $('headerBgPhoto');
+  const box = $('profileHeader');
+  const cleanUrl = (url || '').trim();
+  if (!cleanUrl){
+    img.removeAttribute('src');
+    box.classList.remove('has-photo');
+    return;
+  }
+  img.onload = () => {
+    box.classList.add('has-photo');
+  };
+  img.onerror = () => {
+    box.classList.remove('has-photo');
+    const err = $('headerPhotoError');
+    if (err) err.textContent = '❌ Картинка не загрузилась — проверь прямую ссылку на фото';
+  };
+  img.src = cleanUrl;
+  box.classList.add('has-photo');
+}
 function applySettings(){  
   const s = siteData.settings;  
   renderEffect(s.effect);  
@@ -842,14 +874,7 @@ function applySettings(){
   $('spNick').textContent = s.nickname || 'EDUCANAL_ GAMES';  
   $('subtitleText').textContent = s.subtitle || '';  
   if (s.avatar){ $('mainAvatar').src = s.avatar; $('spImg').src = s.avatar; }  
-  const headerPhoto = (s.headerPhoto || '').trim();
-  if (headerPhoto){
-    $('headerBgPhoto').style.backgroundImage = `url("${headerPhoto.replace(/"/g, '%22')}")`;
-    $('profileHeader').classList.add('has-photo');
-  } else {
-    $('headerBgPhoto').style.backgroundImage = '';
-    $('profileHeader').classList.remove('has-photo');
-  }
+  applyHeaderPhoto(s.headerPhoto || '');
   if (s.musicUrl){ $('musicBtn').style.display = 'flex'; $('bgMusic').src = s.musicUrl; }  
   else $('musicBtn').style.display = 'none';  
   $('aboutSection').style.display = s.about ? 'block' : 'none';  
@@ -1406,6 +1431,8 @@ function clearAll(){
 function renderAdminProfile(){  
   const s = siteData.settings;  
   $('inpHeaderPhoto').value = s.headerPhoto || '';
+  $('headerPhotoError').textContent = '';
+  $('headerPhotoSuccess').textContent = '';
   $('inpAbout').value = s.about || '';  
   $('inpMusic').value = s.musicUrl || '';  
   $('inpDonate').value = s.donateUrl || '';  
@@ -1417,7 +1444,27 @@ function renderAdminProfile(){
   $('achListAdmin').innerHTML = (s.achievements||[]).map((x,i)=>`  
     <div class="admin-item"><div class="icon emoji-only" style="background:rgba(255,255,255,.1);font-size:20px">${escapeHtml(x.emoji||'🏆')}</div><div class="info"><b>${escapeHtml(x.name)}</b></div><button class="btn-del" onclick="delAch(${i})">✕</button></div>`).join('') || '<div style="text-align:center;opacity:.6;font-size:12px;padding:8px">Пусто</div>';  
 }  
-function saveHeaderPhoto(){ siteData.settings.headerPhoto = $('inpHeaderPhoto').value.trim(); siteData.lastUpdated=Date.now(); applySettings(); scheduleSave(); alert('✅'); }
+async function saveHeaderPhoto(){
+  const val = $('inpHeaderPhoto').value.trim();
+  const err = $('headerPhotoError');
+  const succ = $('headerPhotoSuccess');
+  err.textContent = '';
+  succ.textContent = '';
+  if (val && !/^https?:\/\//i.test(val)){
+    err.textContent = '⚠️ Ссылка должна начинаться с https:// или http://';
+    return;
+  }
+  siteData.settings.headerPhoto = val;
+  siteData.lastUpdated = Date.now();
+  try { localStorage.setItem(HEADER_PHOTO_KEY, val); } catch(e){}
+  applySettings();
+  saveToCache();
+  pendingChanges = false;
+  if (saveTimer){ clearTimeout(saveTimer); saveTimer = null; }
+  const ok = await doSave();
+  succ.textContent = ok ? '✅ Фото шапки сохранено!' : '✅ Сохранено локально';
+  setTimeout(() => { succ.textContent = ''; }, 2500);
+}
 function saveAbout(){ siteData.settings.about = $('inpAbout').value; siteData.lastUpdated=Date.now(); applySettings(); scheduleSave(); alert('✅'); }  
 function saveMusic(){ siteData.settings.musicUrl = $('inpMusic').value.trim(); siteData.lastUpdated=Date.now(); applySettings(); scheduleSave(); alert('✅'); }  
 function saveDonate(){ siteData.settings.donateUrl = $('inpDonate').value.trim(); siteData.lastUpdated=Date.now(); applySettings(); scheduleSave(); alert('✅'); }  
