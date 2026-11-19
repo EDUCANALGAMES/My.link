@@ -217,7 +217,7 @@
 <div class="music-btn" id="musicBtn" style="display:none" onclick="toggleMusic()">🎵</div>  
 <audio id="bgMusic" loop></audio>  <div class="container">  
   <div class="glass top-banner" id="topBanner">
-    <img id="headerBgPhoto" alt="">
+    <img id="headerBgPhoto" alt="" onerror="this.parentElement.classList.remove('has-photo')">
   </div>
   <div class="profile-block" id="profileHeader">
     <div class="avatar-wrap" id="avatarTrigger">  
@@ -855,12 +855,7 @@ function applyHeaderPhoto(url){
     banner.classList.remove('has-photo');  
     return;  
   }  
-  img.onload = () => {  
-    banner.classList.add('has-photo');  
-  };  
-  img.onerror = () => {  
-    banner.classList.remove('has-photo');  
-  };  
+  banner.classList.add('has-photo');  
   img.src = cleanUrl;  
 }  
 function applySettings(){  
